@@ -77,3 +77,20 @@ export class Shippers extends radweb.Entity<number> {
         this.initColumns();
     }
 }
+export class Products extends radweb.Entity<number> {
+    id = new radweb.NumberColumn('ProductID');
+    productName = new radweb.StringColumn();
+    supplierID = new radweb.NumberColumn();
+    categoryID = new radweb.NumberColumn();
+    quantityPerUnit = new radweb.StringColumn();
+    unitPrice = new radweb.NumberColumn();
+    unitsInStock = new radweb.NumberColumn();
+    unitsOnOrder = new radweb.NumberColumn();
+    reorderLevel = new radweb.NumberColumn();
+    discontinued = new radweb.BoolColumn();
+
+    constructor() {
+        super(() => new Products(), environment.dataSource, 'Products');
+        this.initColumns();
+    }
+}

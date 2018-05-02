@@ -27,5 +27,10 @@ namespace WebDemo.Controllers
 
             return View();
         }
+        [ENV.Web.PrintToPDF]
+        public void Print(int id)
+        {
+            new Northwind.Orders.Print_Order().Run(id);
+        }
     }
 }
