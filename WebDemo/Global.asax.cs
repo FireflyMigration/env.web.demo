@@ -40,7 +40,7 @@ namespace WebDemo
             //connection to sql server without a user and password requires giving permission to the iis user
             //Instead I use an sql server password for this demo
             // Add this row when you move to a regular IIS, as IIS Express allows anonimous authentication
-            // ConnectionManager.SetDefaultUserAndPassword("sa", "MASTERKEY");
+             ConnectionManager.SetDefaultUserAndPassword("sa", "MASTERKEY");
             
             // so that btrieve tables will have a primary key we can use.
             BtrieveEntity.UseBtrievePosition = true;
