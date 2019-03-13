@@ -27,7 +27,7 @@ export class HomeComponent {
       get: {
         limit: 25
       },
-      knowTotalRows: true,
+      
       numOfColumnsInGrid: 4,
       allowUpdate: true,
 
@@ -91,7 +91,7 @@ export class HomeComponent {
       allowUpdate: true,
       allowDelete: true,
       allowInsert: true,
-      knowTotalRows: true,
+      
       columnSettings: order_details => [
         {
           column: order_details.productID,
