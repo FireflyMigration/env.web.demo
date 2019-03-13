@@ -7,12 +7,16 @@ import { RadWebModule } from 'radweb';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { MaterialModule } from './material.module';
+import { CustomersComponent } from './customers/customers.component';
+import { ProductsComponent } from './products/products.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    CustomersComponent,
+    ProductsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,27 +1,30 @@
 <mat-toolbar color="primary">
-    <button mat-button class="sidenav-toggle" (click)="sidenav.toggle()">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span>{{currentTitle()}}</span>
-  </mat-toolbar>
+  <button mat-button class="sidenav-toggle" (click)="sidenav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>{{currentTitle()}}</span>
+</mat-toolbar>
 <mat-sidenav-container class="app-sidenav-container">
-  <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10" [opened]="!isScreenSmall()" [mode]="isScreenSmall()?'over':'side'">
+  <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10" [opened]="!isScreenSmall()"
+    [mode]="isScreenSmall()?'over':'side'">
     <img src="http://www.cbc.ca/northwind/assets_c/2010/12/sitenavlogo-thumb-268xauto-68304.jpg" style="width:225px">
     <mat-nav-list role="list">
       <ng-container *ngFor="let m of router.config">
-        <mat-list-item *ngIf="m.path && m.path.indexOf(':')<0" routerLinkActive="active-route" >
+        <mat-list-item *ngIf="m.path && m.path.indexOf(':')<0" routerLinkActive="active-route">
           <a matLine [routerLink]="m.path">{{m.path}}</a>
         </mat-list-item>
-        
+
       </ng-container>
     </mat-nav-list>
 
   </mat-sidenav>
   <div class="app-sidenav-content ">
-    
+
 
     <div class="wrapper">
-      <router-outlet></router-outlet>
+      <mat-card>
+        <router-outlet></router-outlet>
+      </mat-card>
     </div>
 
   </div>
