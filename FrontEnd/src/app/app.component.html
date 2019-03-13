@@ -6,7 +6,7 @@
   </mat-toolbar>
 <mat-sidenav-container class="app-sidenav-container">
   <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10" [opened]="!isScreenSmall()" [mode]="isScreenSmall()?'over':'side'">
-    <img src="https://www.nwdomaso.com/2015/wp-content/uploads/logo121.png" style="width:225px">
+    <img src="http://www.cbc.ca/northwind/assets_c/2010/12/sitenavlogo-thumb-268xauto-68304.jpg" style="width:225px">
     <mat-nav-list role="list">
       <ng-container *ngFor="let m of router.config">
         <mat-list-item *ngIf="m.path && m.path.indexOf(':')<0" routerLinkActive="active-route" >
