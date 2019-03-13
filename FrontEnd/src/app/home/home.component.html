@@ -4,12 +4,12 @@
  <br>
   
 
-<mat-tab-group>
+<mat-tab-group style="height:300px">
   <mat-tab label="ShipInfo">
     <data-area [settings]="shipInfoArea"></data-area>
   </mat-tab>
   <mat-tab label="Order Details {{getOrderTotal()}}">
-    <data-grid2 [settings]="orderDetailsGrid"></data-grid2>
+    <data-grid2 [settings]="orderDetailsGrid" height="200"></data-grid2>
   </mat-tab>
 
 </mat-tab-group>
