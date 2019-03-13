@@ -1,15 +1,15 @@
 <mat-card>
-  <h2>Orders</h2>
+
     <data-grid2 [settings]="ordersGrid" height="250"></data-grid2>
  <br>
   
 
-<mat-tab-group style="height:300px">
+<mat-tab-group >
   <mat-tab label="ShipInfo">
     <data-area [settings]="shipInfoArea"></data-area>
   </mat-tab>
   <mat-tab label="Order Details {{getOrderTotal()}}">
-    <data-grid2 [settings]="orderDetailsGrid" height="200"></data-grid2>
+    <data-grid2 [settings]="orderDetailsGrid" [height]="200"></data-grid2>
   </mat-tab>
 
 </mat-tab-group>

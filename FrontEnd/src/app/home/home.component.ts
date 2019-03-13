@@ -95,7 +95,7 @@ export class HomeComponent {
       columnSettings: order_details => [
         {
           column: order_details.productID,
-          width: '300px',
+          width: '250px',
           dropDown: {
             source: new models.Products()
           }
