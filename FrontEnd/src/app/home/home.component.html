@@ -1,16 +1,19 @@
-<h2>Orders</h2>
-<div class="table-responsive">
-    <data-grid [settings]="ordersGrid"></data-grid>
-  </div>
-  <select-popup [settings]="selectCustomerGrid"></select-popup>
-  <tabset>
-    <tab heading='Ship Info'>
-      <data-area [settings]="shipInfoArea"></data-area>
-    </tab>
-    <tab heading='Order Details {{getOrderTotal()}}'>
-      <div class="table-responsive">
-        <data-grid [settings]="orderDetailsGrid"></data-grid>
-      </div>
-    </tab>
-  </tabset>
-  <button class="btn btn-primary" (click)="printCurrentOrder()">Print</button>
+<mat-card>
+  <h2>Orders</h2>
+    <data-grid2 [settings]="ordersGrid" height="250"></data-grid2>
+ <br>
+  
+
+<mat-tab-group>
+  <mat-tab label="ShipInfo">
+    <data-area [settings]="shipInfoArea"></data-area>
+  </mat-tab>
+  <mat-tab label="Order Details {{getOrderTotal()}}">
+    <data-grid2 [settings]="orderDetailsGrid"></data-grid2>
+  </mat-tab>
+
+</mat-tab-group>
+<button class="btn btn-primary" (click)="printCurrentOrder()">Print</button>
+</mat-card>
+
+<select-popup [settings]="selectCustomerGrid"></select-popup>

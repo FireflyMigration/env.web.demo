@@ -22,11 +22,12 @@ export class HomeComponent {
       customers.city
     ]
   });
-  ordersGrid = new radweb.GridSettings(new models.Orders(),
+  ordersGrid = new radweb.GridSettings<models.Orders>(new models.Orders(),
     {
       get:{
-        limit:4
+        limit:25
       },
+      knowTotalRows:true,
       numOfColumnsInGrid: 4,
       allowUpdate: true,
       
@@ -34,15 +35,18 @@ export class HomeComponent {
       onEnterRow: orders =>
       this.orderDetailsGrid.get({
         where: orderDetails =>
-          orderDetails.orderID.isEqualTo(orders.id)
+          orderDetails.orderID.isEqualTo(orders.id),
+          limit:50
       }),
       columnSettings: orders => [
         {
           column: orders.id,
-          readonly: true
+          width:'90px',
+          readonly: true,
         },
         {
           column: orders.customerID,
+          width:'400px',
           getValue: orders =>
             orders.lookup(new models.Customers(), orders.customerID).companyName,
           click: orders =>
@@ -78,11 +82,12 @@ export class HomeComponent {
       orders.shipCity
     ]
   });
-  orderDetailsGrid = new radweb.GridSettings(new models.OrderDetails(),
+  orderDetailsGrid = new radweb.GridSettings<models.OrderDetails>(new models.OrderDetails(),
   {
     allowUpdate: true,
     allowDelete: true,
     allowInsert: true,
+    knowTotalRows:true,
     columnSettings: order_details => [
       {
         column: order_details.productID,
