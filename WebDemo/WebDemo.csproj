@@ -54,8 +54,9 @@
     <Reference Include="ENV.Web">
       <HintPath>..\lib\ENV.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Firefly.Box">
-      <HintPath>..\bin\Firefly.Box.dll</HintPath>
+    <Reference Include="Firefly.Box, Version=3.4.24.31353, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Firefly.Box.Dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>

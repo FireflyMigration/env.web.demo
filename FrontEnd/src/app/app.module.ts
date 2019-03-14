@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { MaterialModule } from './material.module';
 import { CustomersComponent } from './customers/customers.component';
 import { ProductsComponent } from './products/products.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { ProductsComponent } from './products/products.component';
     BrowserModule,
     MaterialModule,
     BrowserAnimationsModule,
+    FormsModule,
     RadWebModule,
     AppRoutingModule
   ],
