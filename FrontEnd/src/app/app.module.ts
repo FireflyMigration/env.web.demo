@@ -10,6 +10,7 @@ import { MaterialModule } from './material.module';
 import { CustomersComponent } from './customers/customers.component';
 import { ProductsComponent } from './products/products.component';
 import { FormsModule } from '@angular/forms';
+import { ChartsModule } from 'ng2-charts';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { FormsModule } from '@angular/forms';
     BrowserModule,
     MaterialModule,
     BrowserAnimationsModule,
+    ChartsModule,
     FormsModule,
     RadWebModule,
     AppRoutingModule

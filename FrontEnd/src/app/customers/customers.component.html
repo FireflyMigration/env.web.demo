@@ -1,25 +1,32 @@
+<div style="display: block;">
+    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" [options]="options"
+        [colors]="colors" (chartClick)="chartClicked($event)"></canvas>
+</div>
+<h4 *ngIf="filterCountry" >
+        {{filterCountry}} <a (click)="filterCountry=''">Show All</a>
+        </h4>
 <mat-form-field class="full-width">
     <input matInput [(ngModel)]="searchString" placeholder="Search Customer" [ngModelOptions]="{standalone: true}">
     <mat-icon matSuffix (click)="clearSearch()">clear</mat-icon>
 </mat-form-field>
+
 <mat-accordion>
     <ng-container *ngFor="let c of customers.items">
-    <mat-expansion-panel *ngIf="showCustomer(c)" (opened)="selectCustomer(c)">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                {{c.companyName.value}}
-            </mat-panel-title>
+        <mat-expansion-panel *ngIf="showCustomer(c)" (opened)="selectCustomer(c)">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{c.companyName.value}}
+                </mat-panel-title>
 
-        </mat-expansion-panel-header>
-        <div class="row" *ngIf="customers.currentRow==c">
-            <data-area [settings]="dataArea"></data-area>
-        </div>
-        <button (click)="customers.currentRow.save()"
-            [disabled]="!customers.currentRow.wasChanged()" class="btn glyphicon glyphicon-ok btn-success"></button>
-        <button 
-            (click)="customers.currentRow.reset();customers.setCurrentRow(c);"
-            [disabled]="!customers.currentRow.wasChanged()"
-            class="btn btn-danger glyphicon glyphicon-ban-circle ng-star-inserted"></button>
-    </mat-expansion-panel>
-</ng-container>
+            </mat-expansion-panel-header>
+            <div class="row" *ngIf="customers.currentRow==c">
+                <data-area [settings]="dataArea"></data-area>
+            </div>
+            <button (click)="customers.currentRow.save()" [disabled]="!customers.currentRow.wasChanged()"
+                class="btn glyphicon glyphicon-ok btn-success"></button>
+            <button (click)="customers.currentRow.reset();customers.setCurrentRow(c);"
+                [disabled]="!customers.currentRow.wasChanged()"
+                class="btn btn-danger glyphicon glyphicon-ban-circle ng-star-inserted"></button>
+        </mat-expansion-panel>
+    </ng-container>
 </mat-accordion>
