@@ -24,6 +24,7 @@ export class CustomersComponent implements OnInit {
       limit: 1000
     }
   });
+  
   searchString: string;
   selectCustomer(c: Customers) {
     this.customers.setCurrentRow(c);

@@ -7,7 +7,7 @@
         </h4>
 <mat-form-field class="full-width">
     <input matInput [(ngModel)]="searchString" placeholder="Search Customer" [ngModelOptions]="{standalone: true}">
-    <mat-icon matSuffix (click)="clearSearch()">clear</mat-icon>
+    <mat-icon matSuffix (click)="searchString=''">clear</mat-icon>
 </mat-form-field>
 
 <mat-accordion>
