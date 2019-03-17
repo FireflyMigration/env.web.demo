@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as models from './../models';
 import * as radweb from 'radweb';
 import { environment } from '../../environments/environment';
+import { SelectService } from '../select-popup/select-popup.component';
 
 @Component({
   selector: 'app-home',
@@ -9,25 +10,16 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  selectCustomerGrid = new radweb.GridSettings(new models.Customers(),
-    {
+  constructor(private selectService: SelectService) {
 
-      numOfColumnsInGrid: 4,
-      columnSettings: customers => [
-        customers.id,
-        customers.companyName,
-        customers.contactName,
-        customers.country,
-        customers.address,
-        customers.city
-      ]
-    });
+  }
+
   ordersGrid = new radweb.GridSettings<models.Orders>(new models.Orders(),
     {
       get: {
         limit: 25
       },
-      
+
       numOfColumnsInGrid: 4,
       allowUpdate: true,
       hideDataArea: true,
@@ -50,13 +42,24 @@ export class HomeComponent {
           getValue: orders =>
             orders.lookup(new models.Customers(), orders.customerID).companyName,
           click: orders =>
-            this.selectCustomerGrid.showSelectPopup(
-              selectedCustomer =>
-                orders.customerID.value = selectedCustomer.id.value)
+            this.selectService.show(new models.Customers(), c => {
+              orders.customerID.value = c.id.value
+            }, {
+                numOfColumnsInGrid: 4,
+                columnSettings: customers => [
+                  customers.id,
+                  customers.companyName,
+                  customers.contactName,
+                  customers.country,
+                  customers.address,
+                  customers.city
+                ]
+              })
+         
         },
         {
           column: orders.orderDate,
-          width:'170px'
+          width: '170px'
         },
         {
           column: orders.shipVia,
@@ -75,7 +78,7 @@ export class HomeComponent {
         orders.shipRegion,
         orders.shipPostalCode,
         orders.shipCountry,
-        
+
       ],
       rowButtons: [
         {
@@ -101,7 +104,7 @@ export class HomeComponent {
       allowUpdate: true,
       allowDelete: true,
       allowInsert: true,
-      
+
       columnSettings: order_details => [
         {
           column: order_details.productID,

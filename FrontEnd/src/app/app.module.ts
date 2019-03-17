@@ -22,6 +22,7 @@ import { ChartsModule } from 'ng2-charts';
 import { CategoriesComponent } from './categories/categories.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 import { ShippersComponent } from './shippers/shippers.component';
+import { SelectPopupComponent, SelectService } from './select-popup/select-popup.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { ShippersComponent } from './shippers/shippers.component';
     ProductsComponent,
     CategoriesComponent,
     SuppliersComponent,
-    ShippersComponent
+    ShippersComponent,
+    SelectPopupComponent
   ],
   imports: [
     ChartsModule,
@@ -56,7 +58,8 @@ import { ShippersComponent } from './shippers/shippers.component';
     MatButtonModule,
     RadWebModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [SelectService],
+  bootstrap: [AppComponent],
+  entryComponents:[SelectPopupComponent]
 })
 export class AppModule { }
