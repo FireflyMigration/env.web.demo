@@ -24,6 +24,11 @@
             "problemMatcher": [
                 "$tsc"
             ]
+        },
+        {
+            "type": "npm",
+            "script": "gc",
+            "problemMatcher": []
         }
     ]
 }
