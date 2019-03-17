@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "ng": "ng",
-    "gc": "ng generate component --skipTests=true --module=app.module",
+    "generate-component": "ng generate component --skipTests=true --module=app.module",
     "start": "ng serve",
     "build": "ng build --prod && npm run copyFilesToMVC",
     "test": "ng test",
