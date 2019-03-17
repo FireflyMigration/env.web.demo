@@ -94,3 +94,12 @@ export class Products extends radweb.Entity<number> {
         this.initColumns();
     }
 }
+export class Suppliers extends radweb.Entity<number> {
+    id = new radweb.NumberColumn('SupplierID');
+    companyName = new radweb.StringColumn();
+
+    constructor() {
+        super(() => new Suppliers(), environment.dataSource, 'Suppliers');
+        this.initColumns();
+    }
+}
