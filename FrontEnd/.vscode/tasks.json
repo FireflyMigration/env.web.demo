@@ -27,7 +27,7 @@
         },
         {
             "type": "npm",
-            "script": "gc",
+            "script": "generate-component",
             "problemMatcher": []
         }
     ]
