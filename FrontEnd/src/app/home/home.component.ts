@@ -30,7 +30,7 @@ export class HomeComponent {
       
       numOfColumnsInGrid: 4,
       allowUpdate: true,
-
+      hideDataArea: true,
       allowInsert: true,
       onEnterRow: orders =>
         this.orderDetailsGrid.get({
@@ -65,7 +65,17 @@ export class HomeComponent {
             source: new models.Shippers()
           }
         },
-
+        orders.employeeID,
+        orders.requiredDate,
+        orders.shippedDate,
+        orders.freight,
+        orders.shipName,
+        orders.shipAddress,
+        orders.shipCity,
+        orders.shipRegion,
+        orders.shipPostalCode,
+        orders.shipCountry,
+        
       ],
       rowButtons: [
         {

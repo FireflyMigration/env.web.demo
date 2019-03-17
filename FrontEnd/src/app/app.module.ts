@@ -11,6 +11,9 @@ import { CustomersComponent } from './customers/customers.component';
 import { ProductsComponent } from './products/products.component';
 import { FormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
+import { CategoriesComponent } from './categories/categories.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
+import { ShippersComponent } from './shippers/shippers.component';
 
 
 @NgModule({
@@ -18,7 +21,10 @@ import { ChartsModule } from 'ng2-charts';
     AppComponent,
     HomeComponent,
     CustomersComponent,
-    ProductsComponent
+    ProductsComponent,
+    CategoriesComponent,
+    SuppliersComponent,
+    ShippersComponent
   ],
   imports: [
     BrowserModule,
