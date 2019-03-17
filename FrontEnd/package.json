@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "copyFilesToMVC": "ts-node   copyFilesToMVC.ts",
+    "copyFilesToMVC": "node   copyFilesToMVC.js",
     "ngrok": "ngrok start -config ngrok.yml dataApi"
   },
   "private": true,
