@@ -84,7 +84,7 @@ export class HomeComponent {
         {
           click: orders =>
             window.open(
-              environment.serverUrl + 'home/print/' + orders.id.value),
+               '/home/print/' + orders.id.value),
           cssClass: 'btn btn-primary glyphicon glyphicon-print'
         }
       ],
@@ -141,7 +141,7 @@ export class HomeComponent {
   }
   printCurrentOrder() {
     window.open(
-      environment.serverUrl + 'home/print/' + this.ordersGrid.currentRow.id.value);
+       '/home/print/' + this.ordersGrid.currentRow.id.value);
   }
 
 }

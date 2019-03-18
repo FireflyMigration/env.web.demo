@@ -1,0 +1,10 @@
+{
+    "/dataapi": {
+      "target": "http://localhost:56557",
+      "secure": false
+    },
+    "/home": {
+      "target": "http://localhost:56557",
+      "secure": false
+    }
+  }
