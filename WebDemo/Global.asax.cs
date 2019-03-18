@@ -24,15 +24,9 @@ namespace WebDemo
             ENV.Common.SuppressDialogs();
             ConnectionManager.UseConnectionPool = true;
             
-            //sets the current directory to the bin directory in the parent directory
-            Environment.CurrentDirectory = 
-               Path.Combine(
-                Path.GetDirectoryName( HttpContext.Current.Server.MapPath("")),"bin");
-            //determines where the appliaction dlls are
-            ENV.AbstractFactory.AlternativeDllPath = Environment.CurrentDirectory;
              
             // Call the init of the original application to load it's ini and other settings
-            Northwind.Program.Init(new string[0]);
+            Northwind.Program.Init(new string[] { "/ini=" + HttpContext.Current.Server.MapPath("Northwind.ini") });
 
             //ApplicationStartup=B && DeploymentMode=B
             ENV.UserSettings.DoNotDisplayUI = true;
@@ -40,8 +34,11 @@ namespace WebDemo
             //connection to sql server without a user and password requires giving permission to the iis user
             //Instead I use an sql server password for this demo
             // Add this row when you move to a regular IIS, as IIS Express allows anonimous authentication
-             ConnectionManager.SetDefaultUserAndPassword("sa", "MASTERKEY");
-            
+            using (var sr = new StreamReader(HttpContext.Current.Server.MapPath(".passwords")))
+            {
+                ConnectionManager.SetDefaultUserAndPassword(sr.ReadLine(), sr.ReadLine());
+            }
+
             // so that btrieve tables will have a primary key we can use.
             BtrieveEntity.UseBtrievePosition = true;
             

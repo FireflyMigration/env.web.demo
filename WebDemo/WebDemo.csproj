@@ -65,11 +65,21 @@
     <Reference Include="Northwind">
       <HintPath>..\bin\Northwind.exe</HintPath>
     </Reference>
+    <Reference Include="Northwind.Customers">
+      <HintPath>..\bin\Northwind.Customers.dll</HintPath>
+    </Reference>
     <Reference Include="Northwind.Orders">
       <HintPath>..\bin\Northwind.Orders.dll</HintPath>
     </Reference>
+    <Reference Include="Northwind.Products">
+      <HintPath>..\bin\Northwind.Products.dll</HintPath>
+    </Reference>
     <Reference Include="NorthwindBase">
       <HintPath>..\bin\NorthwindBase.dll</HintPath>
+    </Reference>
+    <Reference Include="NorthwindInterfaces, Version=3.4.24.31370, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\NorthwindInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -206,9 +216,14 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Northwind.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".passwords" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\PublishProfiles\nwdemo - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -28,8 +28,8 @@ namespace WebDemo.Controllers
             {
                 ProfilerPath = Environment.CurrentDirectory;
             }
-            ProfilerPath = Path.Combine(ProfilerPath, "webDemoProfilerFiles") + "\\";
-            Directory.CreateDirectory(ProfilerPath);
+        //    ProfilerPath = Path.Combine(ProfilerPath, "webDemoProfilerFiles") + "\\";
+         //   Directory.CreateDirectory(ProfilerPath);
 
             Profiler.ProfilerFile = "";
 
@@ -37,7 +37,7 @@ namespace WebDemo.Controllers
         public static string ProfilerPath;
         public string Start()
         {
-            ENV.Utilities.Profiler.ProfilerFile = ProfilerPath;
+      //      ENV.Utilities.Profiler.ProfilerFile = ProfilerPath;
             return "Started";
         }
         public string Stop()
