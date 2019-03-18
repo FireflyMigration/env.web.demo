@@ -12,6 +12,18 @@
             "isBackground": true
         },
         {
+            "label": "generate component",
+            "type":"shell",
+            "command":"ng",
+            "args":[
+                "g",
+                "component",
+                "--skipTests=true",
+                "${input:componentName}"
+            ],
+            "problemMatcher":[]
+        },
+        {
             "type": "npm",
             "script": "build",
             "problemMatcher": [
@@ -30,5 +42,10 @@
             "script": "generate-component",
             "problemMatcher": []
         }
-    ]
+    ],
+    "inputs": [{
+        "id":"componentName",
+        "description": "please select component name",
+        "type": "promptString"
+    }]
 }
