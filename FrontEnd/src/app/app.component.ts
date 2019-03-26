@@ -1,4 +1,4 @@
-import { Component, transition, NgZone } from '@angular/core';
+import { Component,  NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,7 +13,7 @@ export class AppComponent {
   constructor(zone: NgZone,
     public activeRoute: ActivatedRoute,
     public router: Router) {
-    this.mediaMatcher.addListener(mql => zone.run(() => this.mediaMatcher = mql));
+      this.mediaMatcher.addListener(mql => zone.run(() => /*this.mediaMatcher = mql*/"".toString() ));
   }
   isScreenSmall() {
     return this.mediaMatcher.matches;
