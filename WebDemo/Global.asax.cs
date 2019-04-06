@@ -8,6 +8,9 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using ENV.Data.DataProvider;
 using System.IO;
+using JWT;
+using JWT.Serializers;
+using Newtonsoft.Json;
 
 namespace WebDemo
 {
@@ -23,14 +26,14 @@ namespace WebDemo
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ENV.Common.SuppressDialogs();
             ConnectionManager.UseConnectionPool = true;
-            
+
             //sets the current directory to the bin directory in the parent directory
-            Environment.CurrentDirectory = 
+            Environment.CurrentDirectory =
                Path.Combine(
-                Path.GetDirectoryName( HttpContext.Current.Server.MapPath("")),"bin");
+                Path.GetDirectoryName(HttpContext.Current.Server.MapPath("")), "bin");
             //determines where the appliaction dlls are
             ENV.AbstractFactory.AlternativeDllPath = Environment.CurrentDirectory;
-             
+
             // Call the init of the original application to load it's ini and other settings
             Northwind.Program.Init(new string[0]);
 
@@ -40,13 +43,13 @@ namespace WebDemo
             //connection to sql server without a user and password requires giving permission to the iis user
             //Instead I use an sql server password for this demo
             // Add this row when you move to a regular IIS, as IIS Express allows anonimous authentication
-             ConnectionManager.SetDefaultUserAndPassword("sa", "MASTERKEY");
-            
+            ConnectionManager.SetDefaultUserAndPassword("sa", "MASTERKEY");
+
             // so that btrieve tables will have a primary key we can use.
             BtrieveEntity.UseBtrievePosition = true;
-            
+
             Controllers.ProfilerController.Init();
-            
+
 
 
         }
@@ -55,9 +58,52 @@ namespace WebDemo
         protected void Application_BeginRequest(object sender, System.EventArgs e)
         {
             Firefly.Box.Context.Current.SetNonUIThread();
-            _profilerContext =  ENV.Utilities.Profiler.StartContextAndSaveOnEnd(() => ENV.ProgramCollection.CollectRequestPArametersForProfiler(), () =>  VirtualPathUtility.MakeRelative("~", Request.Url.AbsolutePath).Replace("/","_") + "_" + Firefly.Box.Date.Now.ToString("YYYYMMDD") + "_" + ENV.UserMethods.Instance.mTime().ToString());
+            _profilerContext = ENV.Utilities.Profiler.StartContextAndSaveOnEnd(() => ENV.ProgramCollection.CollectRequestPArametersForProfiler(), () => VirtualPathUtility.MakeRelative("~", Request.Url.AbsolutePath).Replace("/", "_") + "_" + Firefly.Box.Date.Now.ToString("YYYYMMDD") + "_" + ENV.UserMethods.Instance.mTime().ToString());
 
         }
+        public void Application_AuthenticateRequest(object sender, EventArgs e)
+        {
+            const string AuthorizationHeader = "Authorization";
+            var token = Request.Headers[AuthorizationHeader];
+            if (!string.IsNullOrEmpty(token))
+            {
+                const string bearer = "Bearer ";
+                if (token.StartsWith(bearer))
+                    token = token.Substring(bearer.Length);
+                const string secret = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
+
+                try
+                {
+                    IJsonSerializer serializer = new JsonNetSerializer();
+                    IDateTimeProvider provider = new UtcDateTimeProvider();
+                    IJwtValidator validator = new JwtValidator(serializer, provider);
+                    IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+                    IJwtDecoder decoder = new JwtDecoder(serializer, validator, urlEncoder);
+
+                    var json = decoder.Decode(token, secret, verify: true);
+                    var x = JsonConvert.DeserializeObject<userObject>(json);
+                    Console.WriteLine(json);
+                }
+                catch (TokenExpiredException)
+                {
+                    Console.WriteLine("Token has expired");
+                }
+                catch (SignatureVerificationException)
+                {
+                    Console.WriteLine("Token has invalid signature");
+                }
+            }
+
+
+
+        }
+
+        public class userObject
+        {
+            public string name { get; set; }
+            public string[] roles { get; set; }
+        }
+
         protected void Application_EndRequest(object sender, System.EventArgs e)
         {
             if (_profilerContext != null)
