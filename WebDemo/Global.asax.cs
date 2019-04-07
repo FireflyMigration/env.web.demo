@@ -11,11 +11,14 @@ using System.IO;
 using JWT;
 using JWT.Serializers;
 using Newtonsoft.Json;
+using System.Security.Principal;
+using System.Configuration;
 
 namespace WebDemo
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        public static JwtHelper Jwt;
         protected void Application_Start()
         {
             //commented out for performance - it uses reflection to read everything - just expensive.
@@ -25,6 +28,19 @@ namespace WebDemo
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ENV.Common.SuppressDialogs();
+
+            //todo - replace secret with something that is secrative;
+            string jwtSecret = ConfigurationManager.AppSettings.Get("JwtKey");
+            if (string.IsNullOrEmpty(jwtSecret))
+            {
+#if DEBUG
+                Jwt = new JwtHelper("GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk");
+#else
+            throw new InvalidOperationException("You must configure a JwtKey value in the web confiug to secure the Jwt Authentication");
+#endif
+            }
+
+
             ConnectionManager.UseConnectionPool = true;
 
             //sets the current directory to the bin directory in the parent directory
@@ -63,45 +79,7 @@ namespace WebDemo
         }
         public void Application_AuthenticateRequest(object sender, EventArgs e)
         {
-            const string AuthorizationHeader = "Authorization";
-            var token = Request.Headers[AuthorizationHeader];
-            if (!string.IsNullOrEmpty(token))
-            {
-                const string bearer = "Bearer ";
-                if (token.StartsWith(bearer))
-                    token = token.Substring(bearer.Length);
-                const string secret = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
-
-                try
-                {
-                    IJsonSerializer serializer = new JsonNetSerializer();
-                    IDateTimeProvider provider = new UtcDateTimeProvider();
-                    IJwtValidator validator = new JwtValidator(serializer, provider);
-                    IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
-                    IJwtDecoder decoder = new JwtDecoder(serializer, validator, urlEncoder);
-
-                    var json = decoder.Decode(token, secret, verify: true);
-                    var x = JsonConvert.DeserializeObject<userObject>(json);
-                    Console.WriteLine(json);
-                }
-                catch (TokenExpiredException)
-                {
-                    Console.WriteLine("Token has expired");
-                }
-                catch (SignatureVerificationException)
-                {
-                    Console.WriteLine("Token has invalid signature");
-                }
-            }
-
-
-
-        }
-
-        public class userObject
-        {
-            public string name { get; set; }
-            public string[] roles { get; set; }
+            Jwt.AuthenticateRequest();
         }
 
         protected void Application_EndRequest(object sender, System.EventArgs e)

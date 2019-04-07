@@ -35,28 +35,20 @@ namespace WebDemo.Controllers
         {
             new Northwind.Orders.Print_Order().Run(id);
         }
+        [Authorize]
         public string DoSomething()
         {
-            return "Hello World";
+            return "Hello World " + ENV.Security.UserManager.CurrentUser.Name;
         }
 
         public ActionResult Login(string userName)
         {
-            var payload = new Dictionary<string, object>
+            var payload = new JwtUserInfo()
             {
-                { "name",userName },
-                { "roles", new []{ "Admin","Login"} }
+                Name = userName,
+                Roles = new HashSet<string> { "Admin", "Login" }
             };
-            const string secret = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
-
-            IJwtAlgorithm algorithm = new HMACSHA256Algorithm();
-            IJsonSerializer serializer = new JsonNetSerializer();
-            IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
-            IJwtEncoder encoder = new JwtEncoder(algorithm, serializer, urlEncoder);
-
-            var token = encoder.Encode(payload, secret);
-
-            return Json(new { Name = userName, token = token });
+            return Json(new { token = MvcApplication.Jwt.GetToken(payload) });
         }
     }
 }
