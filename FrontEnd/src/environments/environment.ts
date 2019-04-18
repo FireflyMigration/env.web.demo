@@ -1,10 +1,11 @@
 import { DataProviderFactory, RestDataProvider } from 'radweb';
+import { shared } from './shared';
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 export const environment = {
   production: false,
-  dataSource : new RestDataProvider('/dataapi') as DataProviderFactory
+  dataSource : shared.dataSource
 };
 
 /*
