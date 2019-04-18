@@ -1,7 +1,8 @@
-import { shared } from './shared';
+import { RestDataProvider, DataProviderFactory } from 'radweb';
+
 
 
 export const environment = {
   production: true,
-  dataSource : shared.dataSource
+  dataSource: new RestDataProvider('/dataapi') as DataProviderFactory,
 };

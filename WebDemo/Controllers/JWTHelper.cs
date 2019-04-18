@@ -17,12 +17,13 @@ namespace WebDemo
         {
             _secret = secret;
         }
-        public string GetToken<T>(T info) where T:JwtUserInfo
+        public string GetToken<T>(T info) where T : JwtUserInfo
         {
 
             var algorithm = new HMACSHA256Algorithm();
-            
-            var serializer = new JsonNetSerializer(new JsonSerializer {
+
+            var serializer = new JsonNetSerializer(new JsonSerializer
+            {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             });
             var urlEncoder = new JwtBase64UrlEncoder();
@@ -36,6 +37,14 @@ namespace WebDemo
         {
             const string AuthorizationHeader = "Authorization";
             var token = HttpContext.Current.Request.Headers[AuthorizationHeader];
+            if (string.IsNullOrEmpty(token))
+            {
+                var cookie = HttpContext.Current.Request.Cookies.Get(AuthorizationHeader);
+                if (cookie != null)
+                {
+                    token = cookie.Value;
+                }
+            }
             if (!string.IsNullOrEmpty(token))
             {
                 const string bearer = "Bearer ";

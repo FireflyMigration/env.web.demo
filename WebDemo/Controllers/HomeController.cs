@@ -31,6 +31,7 @@ namespace WebDemo.Controllers
             return View();
         }
         [ENV.Web.PrintToPDF]
+        [Authorize]
         public void Print(int id)
         {
             new Northwind.Orders.Print_Order().Run(id);

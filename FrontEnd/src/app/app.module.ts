@@ -24,7 +24,7 @@ import { SuppliersComponent } from './suppliers/suppliers.component';
 import { ShippersComponent } from './shippers/shippers.component';
 import { SelectPopupComponent, SelectService } from './select-popup/select-popup.component';
 import { TestComponent } from './test/test.component';
-import { AuthService, JwtHttpInterceptor, AuthorizedGuard } from './auth/auth-service';
+import { AuthService,  AuthorizedGuard } from './auth/auth-service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
@@ -64,9 +64,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
     RadWebModule,
     HttpClientModule
   ],
-  providers: [SelectService, AuthService, {
-    provide: HTTP_INTERCEPTORS, useClass: JwtHttpInterceptor, multi: true
-  },AuthorizedGuard],
+  providers: [SelectService, AuthService,AuthorizedGuard],
   bootstrap: [AppComponent],
   entryComponents: [SelectPopupComponent]
 })

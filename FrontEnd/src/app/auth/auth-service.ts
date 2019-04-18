@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
-import { shared } from '../../environments/shared';
+
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-import { dummyRoute, myRoute, myRouteData } from '../app-routing.module';
+import { dummyRoute, myRouteData } from '../app-routing.module';
 
 
-const authToken = 'auth-token';
+const authToken = 'authorization';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     hasRole(allowedRoles?: string[]) {
@@ -26,16 +26,19 @@ export class AuthService {
     private currentToken: string;
     user: UserInfo;
     constructor(private http: HttpClient) {
+        let c = document.cookie;
+        let i = c.indexOf(authToken + '=');
+        if (i >= 0) {
+            c = c.substring(i + authToken.length + 2).trim();
+            i = c.indexOf(';');
+            if (i >= 0) {
+                c = c.substring(0, i - 1);
+            }
+            this.setToken(c);
 
-        this.setToken(localStorage.getItem(authToken));
-        shared.headerInteceptor.addRequestHeader = (add: (name: string, value: string) => void) => {
-            if (this.currentToken)
-                add("Authorization", 'Bearer ' + this.currentToken);
         }
     }
-    getToken() {
-        return this.currentToken;
-    }
+  
 
     private setToken(token: string) {
         this.currentToken = token;
@@ -51,35 +54,21 @@ export class AuthService {
     }
     logout() {
         this.setToken('');
-        localStorage.removeItem(authToken);
+        document.cookie = authToken+'=; expires = Thu, 01 Jan 1970 00:00:00 GMT';
         this.user = undefined;
     }
     async login(username: string, password: string, rememberMeOnThisMachine?: boolean) {
         let loginResult = await this.http.post<any>('/home/login', { username, password }).toPromise();
         if (loginResult && loginResult.token) {
             this.setToken(loginResult.token);
-            if (rememberMeOnThisMachine)
+            if (rememberMeOnThisMachine) {
                 localStorage.setItem(authToken, loginResult.token);
+                document.cookie = authToken + "=" + loginResult.token;
+            }
             return true;
         }
         return false;
     }
-
-}
-@Injectable()
-export class JwtHttpInterceptor implements HttpInterceptor {
-    constructor(private authService: AuthService) {
-
-    }
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log(req.url);
-        let token = this.authService.getToken();
-        if (token) {
-            req = req.clone({ setHeaders: { Authorization: 'Bearer ' + token } });
-        }
-        return next.handle(req);
-    }
-
 
 }
 
