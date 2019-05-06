@@ -1,0 +1,10 @@
+<p>
+  test works!
+</p>
+<p *ngIf="authService.user">Hello {{authService.user.name}}</p>
+
+<button (click)="testLogin()">Login</button>
+<button (click)="authService.logout()">logout</button>
+
+
+{{authService.user|json}}

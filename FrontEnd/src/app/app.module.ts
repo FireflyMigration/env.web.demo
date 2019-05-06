@@ -9,7 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatTabsModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { RadWebModule } from 'radweb';
@@ -23,6 +23,10 @@ import { CategoriesComponent } from './categories/categories.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 import { ShippersComponent } from './shippers/shippers.component';
 import { SelectPopupComponent, SelectService } from './select-popup/select-popup.component';
+import { TestComponent } from './test/test.component';
+import { AuthService,  AuthorizedGuard } from './auth/auth-service';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
 
 
 @NgModule({
@@ -34,7 +38,8 @@ import { SelectPopupComponent, SelectService } from './select-popup/select-popup
     CategoriesComponent,
     SuppliersComponent,
     ShippersComponent,
-    SelectPopupComponent
+    SelectPopupComponent,
+    TestComponent
   ],
   imports: [
     ChartsModule,
@@ -56,10 +61,11 @@ import { SelectPopupComponent, SelectService } from './select-popup/select-popup
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    RadWebModule
+    RadWebModule,
+    HttpClientModule
   ],
-  providers: [SelectService],
+  providers: [SelectService, AuthService,AuthorizedGuard],
   bootstrap: [AppComponent],
-  entryComponents:[SelectPopupComponent]
+  entryComponents: [SelectPopupComponent]
 })
 export class AppModule { }
