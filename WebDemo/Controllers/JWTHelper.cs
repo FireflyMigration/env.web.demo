@@ -98,6 +98,11 @@ namespace WebDemo
     }
     public class JwtUserInfo
     {
+        public JwtUserInfo(string name, params string[] roles)
+        {
+            this.Name = name;
+            this.Roles = new HashSet<string>(roles);
+        }
         public string Name { get; set; }
         public HashSet<string> Roles { get; set; }
     }

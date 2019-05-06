@@ -43,11 +43,7 @@ namespace WebDemo.Controllers
 
         public ActionResult Login(string userName)
         {
-            var payload = new JwtUserInfo()
-            {
-                Name = userName,
-                Roles = new HashSet<string> { "Admin", "Login" }
-            };
+            var payload = new JwtUserInfo(userName, "Admin", "Login");
             return Json(new { token = MvcApplication.Jwt.GetToken(payload) });
         }
     }
