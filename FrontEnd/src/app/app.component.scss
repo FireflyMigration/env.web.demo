@@ -12,6 +12,15 @@
     min-height:100%;
     border:1px solid rgba(0,0,0,0.5);
 }
+.mat-toolbar{
+    display:flex;
+}
+.toolbar-title{
+    flex-grow: 1;
+}
+.user-info-button{
+    border: solid;
+}
 .app-sidenav-content{
     display:flex;
     height:100%;

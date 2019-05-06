@@ -1,6 +1,12 @@
-import { Component,  NgZone, Injector } from '@angular/core';
+import { Component, NgZone, Injector, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Route, CanActivate } from '@angular/router';
 import { dummyRoute } from './app-routing.module';
+
+import { MatDialog, MatSidenav } from '@angular/material';
+import { AuthService } from './common/auth/auth-service';
+import { SignInComponent } from './common/sign-in/sign-in.component';
+import { DialogService } from './common/dialog';
+
 
 @Component({
   selector: 'app-root',
@@ -9,14 +15,31 @@ import { dummyRoute } from './app-routing.module';
 
 })
 export class AppComponent {
-  isCollapsed = true;
+  
   private mediaMatcher: MediaQueryList = matchMedia(`(max-width: 720px)`);
   constructor(zone: NgZone,
     public activeRoute: ActivatedRoute,
     public router: Router,
-    private injector: Injector) {
-      this.mediaMatcher.addListener(mql => zone.run(() => /*this.mediaMatcher = mql*/"".toString() ));
+    private injector: Injector,
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private dialogService:DialogService) {
+    this.mediaMatcher.addListener(mql => zone.run(() => /*this.mediaMatcher = mql*/"".toString()));
   }
+  signInText() {
+    if (this.authService.user)
+      return this.authService.user.name;
+    return 'Sign in';
+  }
+  signIn() {
+    if (!this.authService.user) {
+        this.dialog.open(SignInComponent);
+    }else{
+      this.dialogService.YesNoQuestion("Would you like to sign out?",()=>{this.authService.signout()});
+    }
+  }
+  @ViewChild("sideNav") sideNav:MatSidenav;
+
   isScreenSmall() {
     return this.mediaMatcher.matches;
   }

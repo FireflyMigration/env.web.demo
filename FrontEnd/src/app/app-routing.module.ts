@@ -7,8 +7,9 @@ import { ProductsComponent } from './products/products.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { ShippersComponent } from './shippers/shippers.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
-import { TestComponent } from './test/test.component';
-import { AuthorizedGuard } from './auth/auth-service';
+
+import { AuthorizedGuard } from './common/auth/auth-service';
+
 
 
 const routes: myRoute[] = [
@@ -18,7 +19,7 @@ const routes: myRoute[] = [
   { path: 'Categories', component: CategoriesComponent },
   { path: 'Shippers', component: ShippersComponent },
   { path: 'Suppliers', component: SuppliersComponent, canActivate: [AuthorizedGuard], data: { allowedRoles: ["Admin"] } },
-  { path: 'test', component: TestComponent },
+  
   { path: '', redirectTo: '/Orders', pathMatch: 'full' }
 ];
 

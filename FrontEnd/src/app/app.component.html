@@ -2,7 +2,8 @@
   <button mat-button class="sidenav-toggle" (click)="sidenav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>{{currentTitle()}}</span>
+  <span class="toolbar-title">{{currentTitle()}}</span>
+  <button mat-flat-button color="primary" (click)="signIn()">{{signInText()}}</button>
 </mat-toolbar>
 <mat-sidenav-container class="app-sidenav-container">
   <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10" [opened]="!isScreenSmall()"
@@ -11,7 +12,7 @@
     <mat-nav-list role="list">
       <ng-container *ngFor="let m of router.config">
         <mat-list-item *ngIf="shouldDisplayRoute(m)" routerLinkActive="active-route">
-          <a matLine [routerLink]="m.path">{{m.path}}</a>
+          <a matLine [routerLink]="m.path" >{{m.path}}</a>
         </mat-list-item>
 
       </ng-container>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as models from './../models';
 import * as radweb from 'radweb';
 import { environment } from '../../environments/environment';
-import { SelectService } from '../select-popup/select-popup.component';
+import { SelectService } from '../common/select-popup/select-popup.component';
 
 @Component({
   selector: 'app-home',

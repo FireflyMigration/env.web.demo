@@ -4,7 +4,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-import { dummyRoute, myRouteData } from '../app-routing.module';
+import { dummyRoute, myRouteData } from '../../app-routing.module';
 
 
 const authToken = 'authorization';
@@ -52,12 +52,12 @@ export class AuthService {
 
         }
     }
-    logout() {
+    signout() {
         this.setToken('');
         document.cookie = authToken+'=; expires = Thu, 01 Jan 1970 00:00:00 GMT';
         this.user = undefined;
     }
-    async login(username: string, password: string, rememberMeOnThisMachine?: boolean) {
+    async signIn(username: string, password: string, rememberMeOnThisMachine?: boolean) {
         let loginResult = await this.http.post<any>('/home/login', { username, password }).toPromise();
         if (loginResult && loginResult.token) {
             this.setToken(loginResult.token);
