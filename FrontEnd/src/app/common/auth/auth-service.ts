@@ -38,7 +38,7 @@ export class AuthService {
 
         }
     }
-  
+
 
     private setToken(token: string) {
         this.currentToken = token;
@@ -54,17 +54,15 @@ export class AuthService {
     }
     signout() {
         this.setToken('');
-        document.cookie = authToken+'=; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+        document.cookie = authToken + '=; expires = Thu, 01 Jan 1970 00:00:00 GMT';
         this.user = undefined;
     }
-    async signIn(username: string, password: string, rememberMeOnThisMachine?: boolean) {
+    async signIn(username: string, password: string) {
         let loginResult = await this.http.post<any>('/home/login', { username, password }).toPromise();
         if (loginResult && loginResult.token) {
             this.setToken(loginResult.token);
-            if (rememberMeOnThisMachine) {
-                localStorage.setItem(authToken, loginResult.token);
-                document.cookie = authToken + "=" + loginResult.token;
-            }
+            localStorage.setItem(authToken, loginResult.token);
+            document.cookie = authToken + "=" + loginResult.token;
             return true;
         }
         return false;
