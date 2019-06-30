@@ -61,7 +61,6 @@ export class AuthService {
         let loginResult = await this.http.post<any>('/home/login', { username, password }).toPromise();
         if (loginResult && loginResult.token) {
             this.setToken(loginResult.token);
-            localStorage.setItem(authToken, loginResult.token);
             document.cookie = authToken + "=" + loginResult.token;
             return true;
         }

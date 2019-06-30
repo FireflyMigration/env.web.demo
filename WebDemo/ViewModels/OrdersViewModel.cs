@@ -13,7 +13,7 @@ namespace WebDemo.ViewModels
         public OrdersViewModel()
         {
             From = Orders;
-            AllowUpdate = true;
+            AllowUpdate = ENV.Security.UserManager.CurrentUser.Name=="noam";
             AllowInsert = true;
             AllowDelete = true;
 
