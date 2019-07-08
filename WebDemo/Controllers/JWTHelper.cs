@@ -80,6 +80,8 @@ namespace WebDemo
                 {
                     Console.WriteLine("Token has invalid signature");
                 }
+                catch {
+                }
             }
         }
     }
