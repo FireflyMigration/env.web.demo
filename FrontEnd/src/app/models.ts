@@ -1,17 +1,19 @@
 import { environment } from './../environments/environment';
 import * as radweb from 'radweb';
+import { EntityClass } from 'radweb';
 
+@EntityClass
 export class Categories extends radweb.Entity<number> {
     id = new radweb.NumberColumn('CategoryID');
     categoryName = new radweb.StringColumn();
     description = new radweb.StringColumn();
 
     constructor() {
-        super(() => new Categories(), environment.dataSource, 'Categories');
-        this.initColumns();
+        super( 'Categories');
+        this.__initColumns();
     }
 }
-
+@EntityClass
 export class Orders extends radweb.Entity<number> {
     id = new radweb.NumberColumn('OrderID');
     customerID = new radweb.StringColumn();
@@ -29,11 +31,10 @@ export class Orders extends radweb.Entity<number> {
     shipCountry = new radweb.StringColumn();
 
     constructor() {
-        super(() => new Orders(), environment.dataSource, 'Orders');
-        this.initColumns();
+        super( 'Orders');
     }
 }
-
+@EntityClass
 export class OrderDetails extends radweb.Entity<string> {
     orderID = new radweb.NumberColumn();
     productID = new radweb.NumberColumn();
@@ -43,11 +44,11 @@ export class OrderDetails extends radweb.Entity<string> {
     id = new radweb.StringColumn();
 
     constructor() {
-        super(() => new OrderDetails(), environment.dataSource, 'OrderDetails');
-        this.initColumns();
+        super( 'OrderDetails');
+        
     }
 }
-
+@EntityClass
 export class Customers extends radweb.Entity<string> {
     id = new radweb.StringColumn('CustomerID');
     companyName = new radweb.StringColumn();
@@ -62,21 +63,21 @@ export class Customers extends radweb.Entity<string> {
     fax = new radweb.StringColumn();
 
     constructor() {
-        super(() => new Customers(), environment.dataSource, 'Customers');
-        this.initColumns();
+        super('Customers');
     }
 }
-
+        
+@EntityClass
 export class Shippers extends radweb.Entity<number> {
     id = new radweb.NumberColumn('ShipperID');
     companyName = new radweb.StringColumn();
     phone = new radweb.StringColumn();
 
     constructor() {
-        super(() => new Shippers(), environment.dataSource, 'Shippers');
-        this.initColumns();
+        super( 'Shippers');
     }
 }
+@EntityClass
 export class Products extends radweb.Entity<number> {
     id = new radweb.NumberColumn('ProductID');
     productName = new radweb.StringColumn();
@@ -90,16 +91,15 @@ export class Products extends radweb.Entity<number> {
     discontinued = new radweb.BoolColumn();
 
     constructor() {
-        super(() => new Products(), environment.dataSource, 'Products');
-        this.initColumns();
+        super( 'Products');
     }
 }
+@EntityClass
 export class Suppliers extends radweb.Entity<number> {
     id = new radweb.NumberColumn('SupplierID');
     companyName = new radweb.StringColumn();
 
     constructor() {
-        super(() => new Suppliers(), environment.dataSource, 'Suppliers');
-        this.initColumns();
+        super('Suppliers');
     }
 }

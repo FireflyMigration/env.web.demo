@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Shippers } from '../models';
-import { GridSettings } from 'radweb';
+import { GridSettings, Context } from 'radweb';
 
 @Component({
   selector: 'app-shippers',
@@ -9,8 +9,8 @@ import { GridSettings } from 'radweb';
 })
 export class ShippersComponent implements OnInit {
 
-  constructor() { }
-  shippers = new GridSettings<Shippers>(new Shippers(), 
+  constructor(private context:Context) { }
+  shippers = this.context.for(Shippers).gridSettings(
   {
     allowUpdate:true,
     allowInsert:true,
