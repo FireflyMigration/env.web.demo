@@ -24,7 +24,7 @@ try {
     var csHtml = fs.readFileSync('dist/index.html').toString();
     csHtml = csHtml.replace(/src="/g, 'src="' + distDirInTarget + '/');
     csHtml = csHtml.replace(/href="styles/g, 'href="' + distDirInTarget + '/styles');
-    fs.writeFileSync(path.join(targetProjectDir, mvcIndexFile), "@{\n      Layout = null;\n  }\n  " +
+    fs.writeFileSync(path.join(targetProjectDir, mvcIndexFile), "@{\n      Layout = null;\n  }\n" +
         csHtml);
     console.log("DONE!!!!!");
 }
