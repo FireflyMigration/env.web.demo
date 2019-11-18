@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GridSettings, Context } from 'radweb';
+import { GridSettings, Context } from '@remult/core';
 import { Products, Suppliers, Categories } from '../models';
 
 
@@ -12,24 +12,7 @@ export class ProductsComponent implements OnInit {
   constructor(private context: Context) {
 
   }
-  selectCustomerGrid = this.context.for(Suppliers).gridSettings(
-    {
-
-      numOfColumnsInGrid: 2,
-      columnSettings: suppliers => [
-        suppliers.id,
-        suppliers.companyName
-      ]
-    });
-  selectCategoriesGrid = this.context.for(Categories).gridSettings(
-    {
-
-      numOfColumnsInGrid: 2,
-      columnSettings: categories => [
-        categories.id,
-        categories.categoryName
-      ]
-    });
+ 
   products = this.context.for(Products).gridSettings(
     {
       get: {

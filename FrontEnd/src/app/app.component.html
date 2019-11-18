@@ -8,11 +8,15 @@
 <mat-sidenav-container class="app-sidenav-container">
   <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10" [opened]="!isScreenSmall()"
     [mode]="isScreenSmall()?'over':'side'">
-    <img src="http://www.cbc.ca/northwind/assets_c/2010/12/sitenavlogo-thumb-268xauto-68304.jpg" style="width:225px">
+    <img src="https://www.logomyway.com/logos_new/4899/5.png" style="width:225px;
+    height: 90px;
+    object-fit: cover;
+    
+    object-position: 0 -39px;">
     <mat-nav-list role="list">
       <ng-container *ngFor="let m of router.config">
         <mat-list-item *ngIf="shouldDisplayRoute(m)" routerLinkActive="active-route">
-          <a matLine [routerLink]="m.path" >{{m.path}}</a>
+          <a matLine [routerLink]="m.path">{{m.path}}</a>
         </mat-list-item>
 
       </ng-container>

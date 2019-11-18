@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GridSettings, Context } from 'radweb';
+import { GridSettings, Context } from '@remult/core';
 import { Customers } from '../models';
 import * as chart from 'chart.js';
 

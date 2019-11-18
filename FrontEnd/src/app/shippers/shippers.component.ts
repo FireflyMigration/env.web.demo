@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Shippers } from '../models';
-import { GridSettings, Context } from 'radweb';
+import { GridSettings, Context } from '@remult/core';
 
 @Component({
   selector: 'app-shippers',

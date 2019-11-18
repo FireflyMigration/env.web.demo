@@ -1,4 +1,4 @@
-import { RestDataProvider, DataProviderFactory } from 'radweb';
+import { RestDataProvider, DataProviderFactory } from '@remult/core';
 
 
 

@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
-import { Context } from 'radweb';
+import { Context } from '@remult/core';
 
 
 if (environment.production) {

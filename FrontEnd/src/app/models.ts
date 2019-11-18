@@ -1,6 +1,5 @@
-import { environment } from './../environments/environment';
-import * as radweb from 'radweb';
-import { EntityClass } from 'radweb';
+import * as radweb from '@remult/core';
+import { EntityClass } from '@remult/core';
 
 @EntityClass
 export class Categories extends radweb.Entity<number> {

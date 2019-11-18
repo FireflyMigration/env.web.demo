@@ -1,11 +1,11 @@
-<h1 mat-dialog-title >Select {{data.settings.caption}}</h1>
+<h1 mat-dialog-title >Select {{settings.caption}}</h1>
 <div mat-dialog-content>
     <mat-form-field class="full-width">
         <input matInput [(ngModel)]="searchText" placeholder="Search {{searchColumnCaption()}}" (input)="search()" [ngModelOptions]="{standalone: true}" cdkFocusInitial>
         <mat-icon matSuffix (click)="searchText=''">clear</mat-icon>
     </mat-form-field>
     
- <data-grid2 [settings]="data.settings" [height]="300"></data-grid2>
+ <data-grid [settings]="settings" [height]="300"></data-grid>
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button (click)="close()" >Cancel</button>

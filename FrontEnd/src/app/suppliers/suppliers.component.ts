@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Suppliers } from '../models';
-import { GridSettings, Column } from 'radweb';
+import { GridSettings, Column } from '@remult/core';
 
 @Component({
   selector: 'app-suppliers',
