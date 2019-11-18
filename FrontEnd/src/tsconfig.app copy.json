@@ -4,8 +4,15 @@
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
     "module": "es2015",
-    "types": []
-    
+    "types": [],
+    "paths": {
+      "@remult/core": [
+        "../../../radweb/projects/radweb"
+      ],
+      "*": [
+        "../node_modules/*"
+      ]
+    }
   },
   "exclude": [
     "test.ts",
