@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Entity, GridSettings, IDataSettings, StringColumn, Context, Column, ColumnSetting, BusyService } from '@remult/core';
+import { Entity, GridSettings, IDataSettings, StringColumn, Context, Column, ColumnSetting, BusyService, Filter, Sort, SortSegment, FilterBase, AndFilter } from '@remult/core';
 
 @Component({
   selector: 'app-select-popup',
@@ -8,13 +8,13 @@ import { Entity, GridSettings, IDataSettings, StringColumn, Context, Column, Col
   styleUrls: ['./select-popup.component.scss']
 })
 export class SelectPopupComponent {
-  constructor(private dialogRef: MatDialogRef<any>, private context: Context,private busy:BusyService) {
+  constructor(private dialogRef: MatDialogRef<any>, private context: Context, private busy: BusyService) {
   }
   search() {
-    this.busy.donotWait(async ()=>{
-    await this.settings.getRecords();
-  })
-    
+    this.busy.donotWait(async () => {
+      await this.settings.getRecords();
+    })
+
 
   }
   searchColumnCaption() {
@@ -42,8 +42,8 @@ export class SelectPopupComponent {
       let y = settings.get.where;
       settings.get.where = x => this.searchText ? this.searchColumn.isContains(this.searchText).and(y(x)) : y(x);
     }
-    if (!settings.get.limit){
-      settings.get.limit=50;
+    if (!settings.get.limit) {
+      settings.get.limit = 50;
     }
     this.settings = this.context.for(c).gridSettings(settings);
     await this.settings.getRecords();
@@ -83,7 +83,7 @@ export function columnWithSelectPopupAndGetValue<T, fromEntity extends Entity<an
   if (!args.getDescription) {
     for (let col of context.for(fromEntity).create().__iterateColumns()) {
       if (col instanceof StringColumn && col.jsonName != "id" && (!col.inputType || col.inputType == "text")) {
-        args.getDescription = x => getColumnFromEntity(column, x);
+        args.getDescription = x => getColumnFromEntity(col, x);
         break;
       }
     }
@@ -91,19 +91,46 @@ export function columnWithSelectPopupAndGetValue<T, fromEntity extends Entity<an
   if (!args.getIdColumn) {
     args.getIdColumn = x => x.__idColumn;
   }
+  let lookupWhere = (row, e) => <FilterBase>args.getIdColumn(e).isEqualTo(getColumnFromEntity(column, row));
+  if (args.where) {
+    let x = lookupWhere;
+    lookupWhere = (row, e) => new AndFilter(x(row, e), args.where(e, row));
+
+  }
+
   return {
     column: column,
     width: args.width,
-    getValue: orders => args.getDescription(context.for(fromEntity).lookup(getColumnFromEntity(column, orders))),
-    click: orders => context.openDialog(SelectPopupComponent, s => s.set(fromEntity, c => {
-      getColumnFromEntity(column, orders).value = args.getIdColumn(c).value;
-    }, args.popupSettings), x => { })
+    getValue: orders => args.getDescription(context.for(fromEntity).lookup(e => lookupWhere(orders, e))),
+    click: orders => {
+      let popupSettings: IDataSettings<fromEntity> = { get: {} };
+      if (args.where)
+        popupSettings.get.where = e => args.where(e, orders);
+      if (args.orderBy) {
+        popupSettings.get.orderBy = args.orderBy;
+      }
+      if (args.numOfColumnsInGrid) {
+        popupSettings.numOfColumnsInGrid = args.numOfColumnsInGrid;
+      }
+      if (args.popupColumnSettings) {
+        popupSettings.columnSettings = args.popupColumnSettings;
+      }
+      else
+        popupSettings.columnSettings = e => args.getDescription(e);
+
+      context.openDialog(SelectPopupComponent, s => s.set(fromEntity, c => {
+        getColumnFromEntity(column, orders).value = args.getIdColumn(c).value;
+      }, popupSettings));
+    }
   };
 }
 export interface columnWithSelectPopupAndGetValueArgs<fromEntity extends Entity<any>, T> {
   getDescription?: (e: fromEntity) => any,
   getIdColumn?: (e: fromEntity) => Column<T>,
-  popupSettings?: IDataSettings<fromEntity>,
+  where?: (e: fromEntity, row: Entity<any>) => Filter,
+  orderBy?: ((rowType: fromEntity) => Sort) | ((rowType: fromEntity) => (Column<any>)) | ((rowType: fromEntity) => (Column<any> | SortSegment)[]);
+  popupColumnSettings?: (row: fromEntity) => ColumnSetting<fromEntity>[];
+  numOfColumnsInGrid?: number;
   width?: string
 
 }

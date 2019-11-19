@@ -43,22 +43,7 @@ export class HomeComponent {
         },
         columnWithSelectPopupAndGetValue(this.context, orders.customerID, models.Customers,
           {
-            getDescription: c => c.companyName,
-            getIdColumn: c => c.id,
-            popupSettings: {
-              numOfColumnsInGrid: 4,
-              columnSettings: customers => [
-                customers.id,
-                customers.companyName,
-                customers.contactName,
-                customers.country,
-                customers.address,
-                customers.city
-              ]
-            },
-            width:'300px'
-
-
+            width: '300px'
           }),
         {
           column: orders.orderDate,
