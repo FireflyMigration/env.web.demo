@@ -12,7 +12,7 @@ export class ProductsComponent implements OnInit {
   constructor(private context: Context) {
 
   }
- 
+
   products = this.context.for(Products).gridSettings(
     {
       get: {
@@ -36,16 +36,13 @@ export class ProductsComponent implements OnInit {
           {
             column: products.supplierID,
             width: '250px',
-            dropDown: {
-              source: this.context.for(Suppliers).create()
-            }
+            valueList: this.context.for(Suppliers).getValueList()
+
           },
           {
             column: products.categoryID,
-            width: '250px',
-            dropDown: {
-              source: this.context.for(Categories).create()
-            }
+            width: '150px',
+            valueList: this.context.for(Categories).getValueList()
           },
 
           products.quantityPerUnit,

@@ -34,11 +34,12 @@ namespace WebDemo
             if (string.IsNullOrEmpty(jwtSecret))
             {
 #if DEBUG
-                Jwt = new JwtHelper("GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk");
+                jwtSecret = ("GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk");
 #else
             throw new InvalidOperationException("You must configure a JwtKey value in the web confiug to secure the Jwt Authentication");
 #endif
             }
+            Jwt = new JwtHelper(jwtSecret);
 
 
             ConnectionManager.UseConnectionPool = true;

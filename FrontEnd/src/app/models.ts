@@ -9,7 +9,6 @@ export class Categories extends radweb.Entity<number> {
 
     constructor() {
         super( 'Categories');
-        this.__initColumns();
     }
 }
 @EntityClass

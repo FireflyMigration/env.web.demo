@@ -16,7 +16,7 @@
     <mat-nav-list role="list">
       <ng-container *ngFor="let m of router.config">
         <mat-list-item *ngIf="shouldDisplayRoute(m)" routerLinkActive="active-route">
-          <a matLine [routerLink]="m.path">{{m.path}}</a>
+          <a matLine [routerLink]="m.path" (click)="routeClicked()">{{m.path}}</a>
         </mat-list-item>
 
       </ng-container>

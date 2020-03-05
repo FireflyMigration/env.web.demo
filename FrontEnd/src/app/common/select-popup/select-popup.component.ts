@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Entity, GridSettings, IDataSettings, StringColumn, Context, Column, ColumnSetting, BusyService, Filter, Sort, SortSegment, FilterBase, AndFilter } from '@remult/core';
+import { Entity, GridSettings, IDataSettings, StringColumn, Context, Column,  BusyService, Filter, Sort, SortSegment, FilterBase, AndFilter, DataControlInfo } from '@remult/core';
 
 @Component({
   selector: 'app-select-popup',
@@ -20,7 +20,7 @@ export class SelectPopupComponent {
   searchColumnCaption() {
 
     if (this.searchColumn)
-      return this.searchColumn.caption;
+      return this.searchColumn.defs.caption;
     return "";
   }
   searchText: string;
@@ -49,7 +49,7 @@ export class SelectPopupComponent {
     await this.settings.getRecords();
     if (!this.searchColumn) {
       for (let col of this.settings.columns.items) {
-        if (col.column instanceof StringColumn && col.column && col.column.jsonName != "id" && (!col.inputType || col.inputType == "text")) {
+        if (col.column instanceof StringColumn && col.column && col.column.defs.key != "id" && (!col.inputType || col.inputType == "text")) {
           this.searchColumn = col.column;
           break;
         }
@@ -68,28 +68,28 @@ export class SelectPopupComponent {
 function getColumnFromEntity<T extends Column<any>>(column: T, entity: Entity<any>): T {
   if (!entity)
     return column;
-  else return <T>entity.__getColumn(column);
+  else return <T>entity.columns.find(column);
 }
 export function columnWithSelectPopupAndGetValue<T, fromEntity extends Entity<any>>(
   context: Context,
   column: Column<T>,
   fromEntity: { new(...args: any[]): fromEntity; },
   args: columnWithSelectPopupAndGetValueArgs<fromEntity, T>
-): ColumnSetting<any> {
+): DataControlInfo<any> {
 
   if (!args) {
     args = {};
   }
   if (!args.getDescription) {
-    for (let col of context.for(fromEntity).create().__iterateColumns()) {
-      if (col instanceof StringColumn && col.jsonName != "id" && (!col.inputType || col.inputType == "text")) {
+    for (let col of context.for(fromEntity).create().columns) {
+      if (col instanceof StringColumn && col.defs.key != "id" ) {
         args.getDescription = x => getColumnFromEntity(col, x);
         break;
       }
     }
   }
   if (!args.getIdColumn) {
-    args.getIdColumn = x => x.__idColumn;
+    args.getIdColumn = x => x.columns.idColumn;
   }
   let lookupWhere = (row, e) => <FilterBase>args.getIdColumn(e).isEqualTo(getColumnFromEntity(column, row));
   if (args.where) {
@@ -129,7 +129,7 @@ export interface columnWithSelectPopupAndGetValueArgs<fromEntity extends Entity<
   getIdColumn?: (e: fromEntity) => Column<T>,
   where?: (e: fromEntity, row: Entity<any>) => Filter,
   orderBy?: ((rowType: fromEntity) => Sort) | ((rowType: fromEntity) => (Column<any>)) | ((rowType: fromEntity) => (Column<any> | SortSegment)[]);
-  popupColumnSettings?: (row: fromEntity) => ColumnSetting<fromEntity>[];
+  popupColumnSettings?: (row: fromEntity) => DataControlInfo<fromEntity>[];
   numOfColumnsInGrid?: number;
   width?: string
 

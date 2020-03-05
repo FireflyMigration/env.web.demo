@@ -52,9 +52,7 @@ export class HomeComponent {
         {
           column: orders.shipVia,
           width: '150px',
-          dropDown: {
-            source: this.context.for(models.Shippers).create()
-          }
+          valueList: this.context.for(models.Shippers).getValueList()
         },
         orders.employeeID,
         orders.requiredDate,
@@ -96,9 +94,7 @@ export class HomeComponent {
       {
         column: order_details.productID,
         width: '250px',
-        dropDown: {
-          source: this.context.for(models.Products).create()
-        }
+        valueList: this.context.for(models.Products).getValueList()
       }, {
         column: order_details.unitPrice,
         width: '100px'

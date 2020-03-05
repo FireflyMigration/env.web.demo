@@ -45,6 +45,7 @@ namespace WebDemo
                     token = cookie.Value;
                 }
             }
+            myPrinciple p = null;
             if (!string.IsNullOrEmpty(token))
             {
                 const string bearer = "Bearer ";
@@ -61,14 +62,8 @@ namespace WebDemo
 
                     var json = decoder.Decode(token, _secret, verify: true);
                     var x = JsonConvert.DeserializeObject<JwtUserInfo>(json);
-                    var p = new myPrinciple(x.Name, x.Roles);
-                    System.Threading.Thread.CurrentPrincipal = p;
-                    if (HttpContext.Current != null)
-                    {
-                        HttpContext.Current.User = p;
-                    }
-                    var u = new ENV.Security.User(x.Name, x.Name, "", "", "");
-                    ENV.Security.UserManager.SetCurrentUser(u);
+                    p = new myPrinciple(x.Name, x.Roles);
+
 
 
                 }
@@ -80,8 +75,19 @@ namespace WebDemo
                 {
                     Console.WriteLine("Token has invalid signature");
                 }
-                catch {
+                catch
+                {
                 }
+            }
+            System.Threading.Thread.CurrentPrincipal = p;
+            if (HttpContext.Current != null)
+            {
+                HttpContext.Current.User = p;
+            }
+            if (p != null)
+            {
+                var u = new ENV.Security.User(p.Name, p.Name, "", "", "");
+                ENV.Security.UserManager.SetCurrentUser(u);
             }
         }
     }

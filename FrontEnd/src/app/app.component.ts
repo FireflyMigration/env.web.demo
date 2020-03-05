@@ -65,5 +65,11 @@ export class AppComponent {
       return this.activeRoute.snapshot.firstChild.routeConfig.path;
     return 'Northwind';
   }
+  //@ts-ignore ignoring this to match angular 7 and 8
+  @ViewChild('sidenav') sidenav: MatSidenav;
+  routeClicked() {
+    if (this.isScreenSmall())
+      this.sidenav.close();
+  }
 }
 

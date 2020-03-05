@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Suppliers } from '../models';
-import { GridSettings, Column } from '@remult/core';
+import { GridSettings, Column, Context } from '@remult/core';
 
 @Component({
   selector: 'app-suppliers',
@@ -9,8 +9,8 @@ import { GridSettings, Column } from '@remult/core';
 })
 export class SuppliersComponent implements OnInit {
   
-  constructor() { }
-  suppliers = new GridSettings<Suppliers>(new Suppliers(),
+  constructor(private context:Context) { }
+  suppliers =this.context.for(Suppliers) .gridSettings(
   {
     get: {
       limit: 25
