@@ -20,13 +20,13 @@
 
             </mat-expansion-panel-header>
             <div class="row" *ngIf="customers.currentRow==c">
-                <data-area [settings]="dataArea"></data-area>
+                <data-area [settings]="dataArea" [columns]="2"></data-area>
             </div>
-            <button (click)="customers.currentRow.save()" [disabled]="!customers.currentRow.wasChanged()"
-                class="btn glyphicon glyphicon-ok btn-success"></button>
+            <button mat-raised-button (click)="customers.currentRow.save()" [disabled]="!customers.currentRow.wasChanged()"
+                ><mat-icon>check</mat-icon></button>
             <button (click)="customers.currentRow.reset();customers.setCurrentRow(c);"
                 [disabled]="!customers.currentRow.wasChanged()"
-                class="btn btn-danger glyphicon glyphicon-ban-circle ng-star-inserted"></button>
+                mat-raised-button><mat-icon>clear</mat-icon></button>
         </mat-expansion-panel>
     </ng-container>
 </mat-accordion>

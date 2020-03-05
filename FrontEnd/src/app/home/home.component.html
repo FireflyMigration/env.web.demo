@@ -1,5 +1,5 @@
 <div class="row">
-    <data-grid2 [settings]="ordersGrid" height="250"></data-grid2>
+    <data-grid [settings]="ordersGrid" height="250"></data-grid>
   </div>
 
 <mat-tab-group >
@@ -7,8 +7,8 @@
     <data-area [settings]="shipInfoArea"></data-area>
   </mat-tab>
   <mat-tab label="Order Details {{getOrderTotal()}}">
-    <data-grid2 [settings]="orderDetailsGrid" [height]="200"></data-grid2>
+    <data-grid [settings]="orderDetailsGrid" [height]="200"></data-grid>
   </mat-tab>
 
 </mat-tab-group>
-<button class="btn btn-primary" (click)="printCurrentOrder()">Print</button>
+<button mat-raised-button (click)="printCurrentOrder()">Print</button>

@@ -1,8 +1,7 @@
-import { RestDataProvider, DataProviderFactory } from 'radweb';
+import { RestDataProvider, DataProviderFactory } from '@remult/core';
 
 
 
 export const environment = {
-  production: true,
-  dataSource: new RestDataProvider('/dataapi') as DataProviderFactory,
+  production: true
 };

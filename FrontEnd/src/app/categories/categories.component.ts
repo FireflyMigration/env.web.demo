@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Categories } from '../models';
-import { GridSettings } from 'radweb';
+import { GridSettings, Context } from '@remult/core';
 
 
 @Component({
@@ -10,8 +10,8 @@ import { GridSettings } from 'radweb';
 })
 export class CategoriesComponent implements OnInit {
 
-  constructor() { }
-  categories = new GridSettings<Categories>(new Categories(),
+  constructor(private context:Context) { }
+  categories = this.context.for(Categories).gridSettings(
    {
     
      allowUpdate:true,

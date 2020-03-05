@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GridSettings } from 'radweb';
+import { GridSettings, Context } from '@remult/core';
 import { Products, Suppliers, Categories } from '../models';
-import { modalConfigDefaults } from 'ngx-bootstrap/modal/modal-options.class';
+
 
 @Component({
   selector: 'app-products',
@@ -9,25 +9,11 @@ import { modalConfigDefaults } from 'ngx-bootstrap/modal/modal-options.class';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-  selectCustomerGrid = new GridSettings<Suppliers>(new Suppliers(),
-    {
+  constructor(private context: Context) {
 
-      numOfColumnsInGrid: 2,
-      columnSettings: suppliers => [
-        suppliers.id,
-        suppliers.companyName
-      ]
-    });
-  selectCategoriesGrid = new GridSettings<Categories>(new Categories(),
-    {
-
-      numOfColumnsInGrid: 2,
-      columnSettings: categories => [
-        categories.id,
-        categories.categoryName
-      ]
-    });
-  products = new GridSettings<Products>(new Products(),
+  }
+ 
+  products = this.context.for(Products).gridSettings(
     {
       get: {
         limit: 25
@@ -51,14 +37,14 @@ export class ProductsComponent implements OnInit {
             column: products.supplierID,
             width: '250px',
             dropDown: {
-              source: new Suppliers
+              source: this.context.for(Suppliers).create()
             }
           },
           {
             column: products.categoryID,
             width: '250px',
             dropDown: {
-              source: new Categories
+              source: this.context.for(Categories).create()
             }
           },
 

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as models from './../models';
-import * as radweb from 'radweb';
+import * as radweb from '@remult/core';
 import { environment } from '../../environments/environment';
-import { SelectService } from '../common/select-popup/select-popup.component';
+
+import { Context, BusyService, Column, Entity, IDataSettings } from '@remult/core';
+import { SelectPopupComponent, columnWithSelectPopupAndGetValue } from '../common/select-popup/select-popup.component';
 
 @Component({
   selector: 'app-home',
@@ -10,11 +12,11 @@ import { SelectService } from '../common/select-popup/select-popup.component';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  constructor(private selectService: SelectService) {
+  constructor(private context: Context, private busyService: BusyService) {
 
   }
 
-  ordersGrid = new radweb.GridSettings<models.Orders>(new models.Orders(),
+  ordersGrid = this.context.for(models.Orders).gridSettings(
     {
       get: {
         limit: 25
@@ -24,39 +26,25 @@ export class HomeComponent {
       allowUpdate: true,
       hideDataArea: true,
       allowInsert: true,
-      onEnterRow: orders =>
-        this.orderDetailsGrid.get({
-          where: orderDetails =>
-            orderDetails.orderID.isEqualTo(orders.id),
-          limit: 50
-        }),
+      onEnterRow: orders => {
+        this.busyService.donotWait(async () => {
+          await this.orderDetailsGrid.get({
+            where: orderDetails =>
+              orderDetails.orderID.isEqualTo(orders.id),
+            limit: 50
+          })
+        });
+      },
       columnSettings: orders => [
         {
           column: orders.id,
           width: '90px',
           readonly: true,
         },
-        {
-          column: orders.customerID,
-          width: '400px',
-          getValue: orders =>
-            orders.lookup(new models.Customers(), orders.customerID).companyName,
-          click: orders =>
-            this.selectService.show(new models.Customers(), c => {
-              orders.customerID.value = c.id.value
-            }, {
-                numOfColumnsInGrid: 4,
-                columnSettings: customers => [
-                  customers.id,
-                  customers.companyName,
-                  customers.contactName,
-                  customers.country,
-                  customers.address,
-                  customers.city
-                ]
-              })
-         
-        },
+        columnWithSelectPopupAndGetValue(this.context, orders.customerID, models.Customers,
+          {
+            width: '300px'
+          }),
         {
           column: orders.orderDate,
           width: '170px'
@@ -65,7 +53,7 @@ export class HomeComponent {
           column: orders.shipVia,
           width: '150px',
           dropDown: {
-            source: new models.Shippers()
+            source: this.context.for(models.Shippers).create()
           }
         },
         orders.employeeID,
@@ -84,8 +72,8 @@ export class HomeComponent {
         {
           click: orders =>
             window.open(
-               '/home/print/' + orders.id.value),
-          cssClass: 'btn btn-primary glyphicon glyphicon-print'
+              '/home/print/' + orders.id.value),
+          icon: 'print'
         }
       ],
     }
@@ -99,39 +87,38 @@ export class HomeComponent {
       orders.shipCity
     ]
   });
-  orderDetailsGrid = new radweb.GridSettings<models.OrderDetails>(new models.OrderDetails(),
-    {
-      allowUpdate: true,
-      allowDelete: true,
-      allowInsert: true,
+  orderDetailsGrid = this.context.for(models.OrderDetails).gridSettings({
+    allowUpdate: true,
+    allowDelete: true,
+    allowInsert: true,
 
-      columnSettings: order_details => [
-        {
-          column: order_details.productID,
-          width: '250px',
-          dropDown: {
-            source: new models.Products()
-          }
-        }, {
-          column: order_details.unitPrice,
-          width: '100px'
-        },
-        {
-          column: order_details.quantity, width: '100px'
-        },
-        {
-          caption: 'Total',
-          width: '100px',
-          getValue: orderDetails =>
-            (orderDetails.quantity.value * orderDetails.unitPrice.value).toFixed(2)
+    columnSettings: order_details => [
+      {
+        column: order_details.productID,
+        width: '250px',
+        dropDown: {
+          source: this.context.for(models.Products).create()
         }
-      ],
-      onNewRow: orderDetail => {
-        orderDetail.orderID.value = this.ordersGrid.currentRow.id.value;
-        orderDetail.quantity.value = 1;
+      }, {
+        column: order_details.unitPrice,
+        width: '100px'
       },
+      {
+        column: order_details.quantity, width: '100px'
+      },
+      {
+        caption: 'Total',
+        width: '100px',
+        getValue: orderDetails =>
+          (orderDetails.quantity.value * orderDetails.unitPrice.value).toFixed(2)
+      }
+    ],
+    onNewRow: orderDetail => {
+      orderDetail.orderID.value = this.ordersGrid.currentRow.id.value;
+      orderDetail.quantity.value = 1;
+    },
 
-    });
+  });
   getOrderTotal() {
     let result = 0;
     this.orderDetailsGrid.items.forEach(
@@ -141,7 +128,8 @@ export class HomeComponent {
   }
   printCurrentOrder() {
     window.open(
-       '/home/print/' + this.ordersGrid.currentRow.id.value);
+      '/home/print/' + this.ordersGrid.currentRow.id.value);
   }
 
 }
+

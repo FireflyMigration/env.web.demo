@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GridSettings } from 'radweb';
+import { GridSettings, Context } from '@remult/core';
 import { Customers } from '../models';
 import * as chart from 'chart.js';
 
@@ -10,13 +10,13 @@ import * as chart from 'chart.js';
 })
 export class CustomersComponent implements OnInit {
 
-  constructor() { }
+  constructor(private context:Context) { }
 
   async ngOnInit() {
     await this.customers.getRecords();
     this.updateChart();
   }
-  customers = new GridSettings(new Customers(), {
+  customers = this.context.for(Customers).gridSettings( {
     hideDataArea: true,
     allowUpdate: true,
     get: {

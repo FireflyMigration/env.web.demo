@@ -52,7 +52,8 @@
     <Reference Include="ENV">
       <HintPath>..\bin\ENV.dll</HintPath>
     </Reference>
-    <Reference Include="ENV.Web">
+    <Reference Include="ENV.Web, Version=1.0.0.15, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\ENV.Web.dll</HintPath>
     </Reference>
     <Reference Include="Firefly.Box, Version=3.4.24.31353, Culture=neutral, processorArchitecture=MSIL">
