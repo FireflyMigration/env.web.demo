@@ -20,3 +20,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin-right: 0!important;
   margin-left: 0!important;
 }
+.table {
+  border: 1px solid lightgray;
+  border-collapse: collapse;
+}
+.table input,
+button {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.87);
+}
+.table tr td,th {
+  border: 1px solid lightgray;
+  padding: 5px;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
