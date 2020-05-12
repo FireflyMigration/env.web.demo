@@ -6,10 +6,9 @@
 .app-sidenav-container{
     flex:1;
     width:100%;
-    position:fixed;
     height:100%;
     min-width:100%;
-    min-height:100%;
+ //   min-height:100%;
     border:1px solid rgba(0,0,0,0.5);
 }
 .mat-toolbar{
@@ -30,10 +29,8 @@
     width:240px;
 }
 .wrapper{
-    margin:5px 5px;
-    margin-bottom: 60px;
 }
-
+  
 $iconWidth:56px;
 
 .sidenav-toggle{

@@ -38,6 +38,7 @@ export class AppComponent {
       this.dialogService.YesNoQuestion("Would you like to sign out?",()=>{this.authService.signout()});
     }
   }
+  //@ts-ignore
   @ViewChild("sideNav") sideNav:MatSidenav;
 
   isScreenSmall() {
