@@ -102,10 +102,11 @@ export function columnWithSelectPopupAndGetValue<T, fromEntity extends Entity<an
     column: column,
     width: args.width,
     getValue: orders => args.getDescription(context.for(fromEntity).lookup(e => lookupWhere(orders, e))),
-    click: orders => {
+    hideDataOnInput: args.hideDataOnInput,
+    click: theRowThatWasClicked => {
       let popupSettings: IDataSettings<fromEntity> = { get: {} };
       if (args.where)
-        popupSettings.get.where = e => args.where(e, orders);
+        popupSettings.get.where = e => args.where(e, theRowThatWasClicked);
       if (args.orderBy) {
         popupSettings.get.orderBy = args.orderBy;
       }
@@ -119,7 +120,9 @@ export function columnWithSelectPopupAndGetValue<T, fromEntity extends Entity<an
         popupSettings.columnSettings = e => args.getDescription(e);
 
       context.openDialog(SelectPopupComponent, s => s.set(fromEntity, c => {
-        getColumnFromEntity(column, orders).value = args.getIdColumn(c).value;
+        getColumnFromEntity(column, theRowThatWasClicked).value = args.getIdColumn(c).value;
+        if (args.afterSelect)
+          args.afterSelect(c,theRowThatWasClicked);
       }, popupSettings));
     }
   };
@@ -131,6 +134,8 @@ export interface columnWithSelectPopupAndGetValueArgs<fromEntity extends Entity<
   orderBy?: ((rowType: fromEntity) => Sort) | ((rowType: fromEntity) => (Column<any>)) | ((rowType: fromEntity) => (Column<any> | SortSegment)[]);
   popupColumnSettings?: (row: fromEntity) => DataControlInfo<fromEntity>[];
   numOfColumnsInGrid?: number;
+  hideDataOnInput?: boolean;
+  afterSelect?: (e: fromEntity,x:Entity<any>) => any,
   width?: string
 
 }
