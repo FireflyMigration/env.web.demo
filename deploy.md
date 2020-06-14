@@ -10,7 +10,7 @@ npm run build
 Run the `Publish.bat`  file from your solution folder.
 
 ### Step 3
-update the jwt token in your `web.config` with a long random string (https://www.uuidgenerator.net/version4)[https://www.uuidgenerator.net/version4] (you only need to do this once) 
+update the jwt token in your `web.config` with a long random string https://www.uuidgenerator.net/version4 (you only need to do this once) 
 
 ### Step 4
 In the IIS map your website to the `publish/web` 
