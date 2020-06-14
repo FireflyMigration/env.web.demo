@@ -3,9 +3,10 @@ import { Router, ActivatedRoute, Route, CanActivate } from '@angular/router';
 import { dummyRoute } from './app-routing.module';
 
 import { MatDialog, MatSidenav } from '@angular/material';
-import { AuthService } from './common/auth/auth-service';
+
 import { SignInComponent } from './common/sign-in/sign-in.component';
 import { DialogService } from './common/dialog';
+import { RouteHelperService, JwtSessionManager, Context } from '@remult/core';
 
 
 @Component({
@@ -15,31 +16,35 @@ import { DialogService } from './common/dialog';
 
 })
 export class AppComponent {
-  
+
   private mediaMatcher: MediaQueryList = matchMedia(`(max-width: 720px)`);
   constructor(zone: NgZone,
+    public sessionManager: JwtSessionManager,
     public activeRoute: ActivatedRoute,
     public router: Router,
     private injector: Injector,
-    private authService: AuthService,
+    private context: Context,
+
     private dialog: MatDialog,
-    private dialogService:DialogService) {
+    private dialogService: DialogService,
+    private routeHelper: RouteHelperService) {
     this.mediaMatcher.addListener(mql => zone.run(() => /*this.mediaMatcher = mql*/"".toString()));
+    sessionManager.loadSessionFromCookie();
   }
   signInText() {
-    if (this.authService.user)
-      return this.authService.user.name;
+    if (this.context.user)
+      return this.context.user.name;
     return 'Sign in';
   }
   signIn() {
-    if (!this.authService.user) {
-        this.dialog.open(SignInComponent);
-    }else{
-      this.dialogService.YesNoQuestion("Would you like to sign out?",()=>{this.authService.signout()});
+    if (!this.context.user) {
+      this.dialog.open(SignInComponent);
+    } else {
+      this.dialogService.YesNoQuestion("Would you like to sign out?", () => { this.sessionManager.signout(); });
     }
   }
   //@ts-ignore
-  @ViewChild("sideNav") sideNav:MatSidenav;
+  @ViewChild("sideNav") sideNav: MatSidenav;
 
   isScreenSmall() {
     return this.mediaMatcher.matches;
@@ -47,19 +52,7 @@ export class AppComponent {
   shouldDisplayRoute(route: Route) {
     if (!(route.path && route.path.indexOf(':') < 0 && route.path.indexOf('**') < 0))
       return false;
-    if (!route.canActivate)
-      return true;
-    for (let guard of route.canActivate) {
-      let g = this.injector.get(guard) as CanActivate;
-      if (g && g.canActivate) {
-        var r = new dummyRoute();
-        r.routeConfig = route;
-        let canActivate = g.canActivate(r, undefined);
-        if (!canActivate)
-          return false;
-      }
-    }
-    return true;
+    return this.routeHelper.canNavigateToRoute(route);
   }
   currentTitle() {
     if (this.activeRoute && this.activeRoute.snapshot && this.activeRoute.firstChild && this.activeRoute.firstChild.routeConfig)

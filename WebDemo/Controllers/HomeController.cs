@@ -42,8 +42,8 @@ namespace WebDemo.Controllers
 
         public ActionResult Login(string userName)
         {
-            var payload = new JwtUserInfo(userName, "Admin", "Login");
-            return Json(new { token = MvcApplication.Jwt.GetToken(payload) });
+            var payload = new JwtUserInfo(userName, userName, "Admin", "Login");
+            return Json(MvcApplication.Jwt.GetToken(payload) );
         }
     }
 }

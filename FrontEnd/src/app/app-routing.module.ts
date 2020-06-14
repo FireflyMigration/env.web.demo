@@ -8,7 +8,9 @@ import { CategoriesComponent } from './categories/categories.component';
 import { ShippersComponent } from './shippers/shippers.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 
-import { AuthorizedGuard } from './common/auth/auth-service';
+
+import { SignInComponent } from './common/sign-in/sign-in.component';
+import { SignedInGuard } from '@remult/core';
 
 
 
@@ -18,8 +20,8 @@ const routes: myRoute[] = [
   { path: 'Products', component: ProductsComponent },
   { path: 'Categories', component: CategoriesComponent },
   { path: 'Shippers', component: ShippersComponent },
-  { path: 'Suppliers', component: SuppliersComponent, canActivate: [AuthorizedGuard], data: { allowedRoles: ["Admin"] } },
-  
+  { path: 'Suppliers', component: SuppliersComponent },
+
   { path: '', redirectTo: '/Orders', pathMatch: 'full' }
 ];
 

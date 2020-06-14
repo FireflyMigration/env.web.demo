@@ -115,11 +115,13 @@ namespace WebDemo
     }
     public class JwtUserInfo
     {
-        public JwtUserInfo(string name, params string[] roles)
+        public JwtUserInfo(string id,string name, params string[] roles)
         {
+            this.Id = id;
             this.Name = name;
             this.Roles = new HashSet<string>(roles);
         }
+        public string Id { get; set; }
         public string Name { get; set; }
         public HashSet<string> Roles { get; set; }
     }
