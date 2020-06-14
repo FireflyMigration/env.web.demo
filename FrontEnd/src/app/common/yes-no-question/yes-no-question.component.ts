@@ -1,6 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
+
 
 @Component({
   selector: 'app-yes-no-question',
@@ -8,12 +10,17 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./yes-no-question.component.scss']
 })
 export class YesNoQuestionComponent implements OnInit {
+  okPressed = false;
+  setMessage(question: string, yesNoQuestion = true): void {
+    this.message = question;
+    this.showOk = yesNoQuestion;
+  }
+  message: string;
+  showOk: boolean;
 
   constructor(
-    private dialogRef: MatDialogRef<YesNoQuestionComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: YesNoQuestionComponentData
-  ) {
-    
+    private dialogRef: MatDialogRef<any>) {
+
   }
 
   ngOnInit() {
@@ -23,10 +30,6 @@ export class YesNoQuestionComponent implements OnInit {
   }
   select() {
     this.dialogRef.close();
-    this.data.onYes();
+    this.okPressed = true;
   }
-}
-export interface YesNoQuestionComponentData {
-  onYes: () => void,
-  question: string;
 }

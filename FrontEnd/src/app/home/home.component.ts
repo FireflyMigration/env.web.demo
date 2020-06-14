@@ -19,7 +19,7 @@ export class HomeComponent {
   ordersGrid = this.context.for(models.Orders).gridSettings(
     {
       get: {
-        limit: 25
+        limit: 50
       },
 
       numOfColumnsInGrid: 4,

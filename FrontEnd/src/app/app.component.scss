@@ -29,6 +29,10 @@
     width:240px;
 }
 .wrapper{
+    padding:0 10px;
+    @media screen and (max-width:800px){
+        padding:0 2px;
+    }
 }
   
 $iconWidth:56px;

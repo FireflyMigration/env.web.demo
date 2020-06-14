@@ -7,18 +7,18 @@
     <button mat-flat-button color="primary" (click)="signIn()">{{signInText()}}</button>
   </mat-toolbar>
   <mat-sidenav-container class="app-sidenav-container">
-    <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10" [opened]="!isScreenSmall()"
-      [mode]="isScreenSmall()?'over':'side'">
+    <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10" [opened]="!dialogService.isScreenSmall()"
+      [mode]="dialogService.isScreenSmall()?'over':'side'">
       <img src="https://www.logomyway.com/logos_new/4899/5.png" style="width:225px;
     height: 90px;
     object-fit: cover;
     
     object-position: 0 -39px;">
-      <mat-nav-list role="list">
-        <ng-container *ngFor="let m of router.config">
-          <mat-list-item *ngIf="shouldDisplayRoute(m)" routerLinkActive="active-route">
-            <a matLine [routerLink]="m.path" (click)="routeClicked()">{{m.path}}</a>
-          </mat-list-item>
+    <mat-nav-list role="list">
+      <ng-container *ngFor="let m of router.config">
+        <mat-list-item *ngIf="shouldDisplayRoute(m)" routerLinkActive="active-route">
+          <a matLine [routerLink]="m.path" (click)="routeClicked()">{{routeName(m)}}</a>
+        </mat-list-item>
 
         </ng-container>
       </mat-nav-list>

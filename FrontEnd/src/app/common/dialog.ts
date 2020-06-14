@@ -1,26 +1,43 @@
-import { Injectable } from "@angular/core";
-import { MatDialog, MatSnackBar } from "@angular/material";
-import { YesNoQuestionComponentData, YesNoQuestionComponent } from './yes-no-question/yes-no-question.component';
-  
+import { Injectable, NgZone } from "@angular/core";
+import {  MatSnackBar } from "@angular/material/snack-bar";
+import {  Context } from "@remult/core";
+
+import {  YesNoQuestionComponent } from "./yes-no-question/yes-no-question.component";
+
+
+
+
+
+
 @Injectable()
 export class DialogService {
     Info(info: string): any {
         this.snackBar.open(info, "close", { duration: 4000 });
     }
     Error(err: string): any {
+
         this.YesNoQuestion(err);
     }
+    private mediaMatcher: MediaQueryList = matchMedia(`(max-width: 720px)`);
 
-    constructor(private dialog: MatDialog,   private snackBar: MatSnackBar) {
+
+    isScreenSmall() {
+        return this.mediaMatcher.matches;
+    }
+
+    
+
+
+    constructor(private context:Context, zone: NgZone, private snackBar: MatSnackBar) {
+        this.mediaMatcher.addListener(mql => zone.run(() => /*this.mediaMatcher = mql*/"".toString() ));
+
 
     }
-   
-    YesNoQuestion(question: string, onYes?: () => void) {
-        let data: YesNoQuestionComponentData = {
-            question: question,
-            onYes: onYes
-        };
-        this.dialog.open(YesNoQuestionComponent, { data });
+    
+    async YesNoQuestion(question: string) {
+        return await this.context.openDialog(YesNoQuestionComponent,d=>d.setMessage(question),d=>d.okPressed);
     }
- 
+    async confirmDelete(of: string) {
+        return await this.YesNoQuestion("Are you sure you would like to delete " + of + "?");
+    }
 }

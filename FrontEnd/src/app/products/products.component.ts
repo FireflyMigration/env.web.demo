@@ -16,7 +16,7 @@ export class ProductsComponent implements OnInit {
   products = this.context.for(Products).gridSettings(
     {
       get: {
-        limit: 25
+        limit: 50
       },
       allowUpdate: true,
       allowInsert: true,

@@ -1,15 +1,17 @@
 
-<div >
-  <div class="row" style="height:100%">
+<div class="full-page">
+  <div class="grow-item">
     <data-grid [settings]="ordersGrid"></data-grid>
   </div>
 
-  <mat-tab-group>
+  <mat-tab-group style="height:250px">
     <mat-tab label="ShipInfo">
       <data-area [settings]="shipInfoArea"></data-area>
     </mat-tab>
-    <mat-tab label="Order Details {{getOrderTotal()}}">
-      <data-grid [settings]="orderDetailsGrid" [height]="200"></data-grid>
+    <mat-tab label="Order Details {{getOrderTotal()}}" class="full-page" >
+      <div class="full-page" style="padding:0 2px">
+      <data-grid class="grow-item" [settings]="orderDetailsGrid" [height]="200"></data-grid>
+    </div>
     </mat-tab>
 
   </mat-tab-group>
