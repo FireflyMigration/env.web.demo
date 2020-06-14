@@ -62,7 +62,7 @@ export class AppComponent {
         if (this.activeRoute.firstChild.routeConfig)
           return this.activeRoute.firstChild.routeConfig.path;
       }
-    return '<%= project %>';
+    return 'Northwind App';
   }
 
 
