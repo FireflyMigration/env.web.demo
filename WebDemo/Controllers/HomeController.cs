@@ -16,6 +16,10 @@ namespace WebDemo.Controllers
         {
             return View();
         }
+        public void Run(string id)
+        {
+            Northwind.Application.Instance.ProcessWebRequest(id);
+        }
 
         public ActionResult About()
         {
