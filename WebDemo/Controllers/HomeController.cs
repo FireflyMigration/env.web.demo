@@ -5,6 +5,7 @@ using JWT.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -27,6 +28,32 @@ namespace WebDemo.Controllers
 
             return View();
         }
+        DataResult ToJson(ENV.Data.Entity e)
+        {
+            return new ViewModel(e).ExportRows();
+        }
+
+        private static void StreamResult(string url)
+        {
+            var req = WebRequest.Create(url);
+            var result = req.GetResponse();
+            var resultStream = result.GetResponseStream();
+            var response = System.Web.HttpContext.Current.Response;
+            foreach (var item in result.Headers.AllKeys)
+            {
+                response.AddHeader(item, result.Headers[item]);
+            }
+
+
+            using (var os = response.OutputStream)
+            {
+                int v;
+                while ((v = resultStream.ReadByte()) > -1)
+                {
+                    os.WriteByte((byte)v);
+                }
+            }
+        }
 
         public ActionResult Contact()
         {
@@ -47,7 +74,7 @@ namespace WebDemo.Controllers
         public ActionResult Login(string userName)
         {
             var payload = new JwtUserInfo(userName, userName, "Admin", "Login");
-            return Json(MvcApplication.Jwt.GetToken(payload) );
+            return Json(MvcApplication.Jwt.GetToken(payload));
         }
     }
 }
