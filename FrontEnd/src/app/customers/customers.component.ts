@@ -17,7 +17,7 @@ export class CustomersComponent implements OnInit {
     this.updateChart();
   }
   customers = this.context.for(Customers).gridSettings( {
-    hideDataArea: true,
+    
     allowUpdate: true,
     get: {
       orderBy: f => [f.companyName],

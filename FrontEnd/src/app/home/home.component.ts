@@ -3,8 +3,9 @@ import * as models from './../models';
 import * as radweb from '@remult/core';
 import { environment } from '../../environments/environment';
 
-import { Context, BusyService, Column, Entity, IDataSettings } from '@remult/core';
+import { Context,  Column, Entity, IDataSettings } from '@remult/core';
 import { SelectPopupComponent, columnWithSelectPopupAndGetValue } from '../common/select-popup/select-popup.component';
+import { BusyService } from '@remult/angular';
 
 @Component({
   selector: 'app-home',
@@ -24,9 +25,9 @@ export class HomeComponent {
 
       numOfColumnsInGrid: 4,
       allowUpdate: true,
-      hideDataArea: true,
+      
       allowInsert: true,
-      onEnterRow: orders => {
+      enterRow: orders => {
         this.busyService.donotWait(async () => {
           await this.orderDetailsGrid.get({
             where: orderDetails =>
@@ -109,7 +110,7 @@ export class HomeComponent {
           (orderDetails.quantity.value * orderDetails.unitPrice.value).toFixed(2)
       }
     ],
-    onNewRow: orderDetail => {
+    newRow: orderDetail => {
       orderDetail.orderID.value = this.ordersGrid.currentRow.id.value;
       orderDetail.quantity.value = 1;
     },

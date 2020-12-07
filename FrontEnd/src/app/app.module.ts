@@ -10,9 +10,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatTabsModule, MatMenuModule } from '@angular/material';
+
 import { AppComponent } from './app.component';
-import { RemultModule, SignedInGuard } from '@remult/core';
+
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { CustomersComponent } from './customers/customers.component';
@@ -24,7 +24,7 @@ import { SuppliersComponent } from './suppliers/suppliers.component';
 import { ShippersComponent } from './shippers/shippers.component';
 
 
-import {SelectPopupComponent} from './common/select-popup/select-popup.component';
+import { SelectPopupComponent } from './common/select-popup/select-popup.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { SignInComponent } from './common/sign-in/sign-in.component';
@@ -32,8 +32,15 @@ import { SignInComponent } from './common/sign-in/sign-in.component';
 
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
 import { DialogService } from './common/dialog';
+import { RemultModule } from '@remult/angular';
 
+import { MatTabsModule } from '@angular/material/tabs';
 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({

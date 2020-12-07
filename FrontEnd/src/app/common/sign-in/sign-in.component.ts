@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { DialogService } from '../dialog';
 import { MatDialogRef } from '@angular/material/dialog';
-import { JwtSessionManager } from '@remult/core';
+import { JwtSessionManager } from '@remult/angular';
 import {  HttpClient } from '@angular/common/http';
 
 @Component({

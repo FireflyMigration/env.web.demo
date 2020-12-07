@@ -9,9 +9,6 @@ import { ShippersComponent } from './shippers/shippers.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 
 
-import { SignInComponent } from './common/sign-in/sign-in.component';
-import { SignedInGuard } from '@remult/core';
-
 
 
 const routes: myRoute[] = [
@@ -27,7 +24,7 @@ const routes: myRoute[] = [
 
 @NgModule({
   imports: [
-    CommonModule, RouterModule.forRoot(routes)
+    CommonModule, RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })
   ],
   declarations: [],
   exports: [RouterModule]

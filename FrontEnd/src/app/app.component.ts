@@ -4,13 +4,14 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 
 
-import { Context, RouteHelperService } from '@remult/core';
+import { Context } from '@remult/core';
 
 
 import { SignInComponent } from './common/sign-in/sign-in.component';
 
 import { DialogService } from './common/dialog';
-import { JwtSessionManager } from '@remult/core';
+import { JwtSessionManager, RouteHelperService } from '@remult/angular';
+
 
 @Component({
   selector: 'app-root',

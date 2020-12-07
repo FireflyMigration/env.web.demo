@@ -14,7 +14,7 @@ export class ShippersComponent implements OnInit {
   {
     allowUpdate:true,
     allowInsert:true,
-    hideDataArea: true,
+    
     columnSettings: shippers =>
     [
       {

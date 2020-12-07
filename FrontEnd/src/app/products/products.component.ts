@@ -20,7 +20,7 @@ export class ProductsComponent implements OnInit {
       },
       allowUpdate: true,
       allowInsert: true,
-      hideDataArea: true,
+      
       columnSettings: products =>
         [
           {

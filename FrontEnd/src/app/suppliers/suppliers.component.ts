@@ -17,7 +17,7 @@ export class SuppliersComponent implements OnInit {
     },
     allowUpdate:true,
     allowInsert:true,
-    hideDataArea: true,
+    
     columnSettings: suppliers =>
     [
       {

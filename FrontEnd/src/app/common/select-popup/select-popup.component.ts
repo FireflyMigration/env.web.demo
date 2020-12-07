@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Entity, GridSettings, IDataSettings, StringColumn, Context, Column,  BusyService, Filter, Sort, SortSegment, FilterBase, AndFilter, DataControlInfo } from '@remult/core';
+import { BusyService } from '@remult/angular';
+import { Entity, GridSettings, IDataSettings, StringColumn, Context, Column,   Filter, Sort, SortSegment, FilterBase, AndFilter, DataControlInfo } from '@remult/core';
 
 @Component({
   selector: 'app-select-popup',
