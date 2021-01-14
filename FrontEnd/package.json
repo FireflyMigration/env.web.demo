@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "copyFilesToMVC": "node   copyFilesToMVC.js",
-    "ngrok": "ngrok start -config ngrok.yml dataApi",
+    "ngrok": "ngrok start dataApi",
     "gc": "ng generate component --skipTests=true"
   },
   "private": true,
