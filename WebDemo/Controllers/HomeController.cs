@@ -17,9 +17,9 @@ namespace WebDemo.Controllers
         {
             return View();
         }
-        public void Run(string id)
+        public void Run(string prgname)
         {
-            Northwind.Application.Instance.ProcessWebRequest(id);
+            Northwind.Application.Instance.ProcessWebRequest(prgname);
         }
 
         public ActionResult About()

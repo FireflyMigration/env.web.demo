@@ -10,9 +10,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatTabsModule, MatMenuModule } from '@angular/material';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { AppComponent } from './app.component';
-import { RemultModule, SignedInGuard } from '@remult/core';
+
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { CustomersComponent } from './customers/customers.component';
@@ -24,7 +28,7 @@ import { SuppliersComponent } from './suppliers/suppliers.component';
 import { ShippersComponent } from './shippers/shippers.component';
 
 
-import {SelectPopupComponent} from './common/select-popup/select-popup.component';
+import { SelectPopupComponent } from './common/select-popup/select-popup.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { SignInComponent } from './common/sign-in/sign-in.component';
@@ -32,6 +36,7 @@ import { SignInComponent } from './common/sign-in/sign-in.component';
 
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
 import { DialogService } from './common/dialog';
+import { InputAreaComponent } from './common/input-area/input-area.component';
 
 
 
@@ -46,9 +51,10 @@ import { DialogService } from './common/dialog';
     SuppliersComponent,
     ShippersComponent,
     SelectPopupComponent,
-    
+
     SignInComponent,
-    YesNoQuestionComponent
+    YesNoQuestionComponent,
+    InputAreaComponent
   ],
   imports: [
     ChartsModule,
@@ -63,7 +69,6 @@ import { DialogService } from './common/dialog';
     MatIconModule,
     MatCheckboxModule,
     MatExpansionModule,
-    MatProgressSpinnerModule,
     MatCardModule,
     MatDialogModule,
     MatSnackBarModule,
@@ -71,11 +76,11 @@ import { DialogService } from './common/dialog';
     MatInputModule,
     MatButtonModule,
     MatMenuModule,
-    RemultModule,
+    
     HttpClientModule
   ],
-  providers: [ DialogService],
+  providers: [DialogService],
   bootstrap: [AppComponent],
-  entryComponents: [SelectPopupComponent,SignInComponent,YesNoQuestionComponent]
+  entryComponents: [SelectPopupComponent, SignInComponent, YesNoQuestionComponent]
 })
 export class AppModule { }

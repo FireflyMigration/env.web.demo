@@ -3,17 +3,17 @@ import { EntityClass } from '@remult/core';
 
 @EntityClass
 export class Categories extends radweb.Entity<number> {
-    id = new radweb.NumberColumn('CategoryID');
+    id = new radweb.NumberColumn({ caption: 'CategoryID' });
     categoryName = new radweb.StringColumn();
     description = new radweb.StringColumn();
 
     constructor() {
-        super( 'Categories');
+        super('Categories');
     }
 }
 @EntityClass
 export class Orders extends radweb.Entity<number> {
-    id = new radweb.NumberColumn('OrderID');
+    id = new radweb.NumberColumn({ caption: 'OrderID' });
     customerID = new radweb.StringColumn();
     employeeID = new radweb.NumberColumn();
     orderDate = new radweb.DateColumn();
@@ -29,7 +29,7 @@ export class Orders extends radweb.Entity<number> {
     shipCountry = new radweb.StringColumn();
 
     constructor() {
-        super( 'Orders');
+        super('Orders');
     }
 }
 @EntityClass
@@ -42,13 +42,13 @@ export class OrderDetails extends radweb.Entity<string> {
     id = new radweb.StringColumn();
 
     constructor() {
-        super( 'OrderDetails');
-        
+        super('OrderDetails');
+
     }
 }
 @EntityClass
 export class Customers extends radweb.Entity<string> {
-    id = new radweb.StringColumn('CustomerID');
+    id = new radweb.StringColumn({ caption: 'CustomerID' });
     companyName = new radweb.StringColumn();
     contactName = new radweb.StringColumn();
     contactTitle = new radweb.StringColumn();
@@ -64,20 +64,20 @@ export class Customers extends radweb.Entity<string> {
         super('Customers');
     }
 }
-        
+
 @EntityClass
 export class Shippers extends radweb.Entity<number> {
-    id = new radweb.NumberColumn('ShipperID');
+    id = new radweb.NumberColumn({ caption: 'ShipperID' });
     companyName = new radweb.StringColumn();
     phone = new radweb.StringColumn();
 
     constructor() {
-        super( 'Shippers');
+        super('Shippers');
     }
 }
 @EntityClass
 export class Products extends radweb.Entity<number> {
-    id = new radweb.NumberColumn('ProductID');
+    id = new radweb.NumberColumn({ caption: 'ProductID' });
     productName = new radweb.StringColumn();
     supplierID = new radweb.NumberColumn();
     categoryID = new radweb.NumberColumn();
@@ -89,12 +89,12 @@ export class Products extends radweb.Entity<number> {
     discontinued = new radweb.BoolColumn();
 
     constructor() {
-        super( 'Products');
+        super('Products');
     }
 }
 @EntityClass
 export class Suppliers extends radweb.Entity<number> {
-    id = new radweb.NumberColumn('SupplierID');
+    id = new radweb.NumberColumn({ caption: 'SupplierID' });
     companyName = new radweb.StringColumn();
 
     constructor() {

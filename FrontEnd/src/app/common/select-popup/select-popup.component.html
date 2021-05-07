@@ -1,13 +1,16 @@
-<h1 mat-dialog-title >Select {{settings.caption}}</h1>
-<div mat-dialog-content>
+<ng-container *ngIf="settings">
+  <h1 mat-dialog-title>Select {{settings.caption}}</h1>
+  <div mat-dialog-content>
     <mat-form-field class="full-width">
-        <input matInput [(ngModel)]="searchText" placeholder="Search {{searchColumnCaption()}}" (input)="search()" [ngModelOptions]="{standalone: true}" cdkFocusInitial>
-        <mat-icon matSuffix (click)="searchText=''">clear</mat-icon>
+      <input matInput [(ngModel)]="searchText" placeholder="Search {{searchColumnCaption()}}" (input)="search()"
+        [ngModelOptions]="{standalone: true}" cdkFocusInitial>
+      <mat-icon matSuffix (click)="searchText=''">clear</mat-icon>
     </mat-form-field>
-    
- <data-grid [settings]="settings" [height]="300"></data-grid>
-</div>
-<div mat-dialog-actions>
-  <button mat-raised-button (click)="close()" >Cancel</button>
-  <button mat-raised-button  color="primary" (click)="select()">Select</button>
-</div>
+
+    <data-grid [settings]="settings" [height]="300"></data-grid>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="close()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="select()">Select</button>
+  </div>
+</ng-container>

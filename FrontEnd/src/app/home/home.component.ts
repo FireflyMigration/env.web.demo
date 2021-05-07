@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as models from './../models';
-import * as radweb from '@remult/core';
-import { environment } from '../../environments/environment';
 
-import { Context, BusyService, Column, Entity, IDataSettings } from '@remult/core';
+import { Context } from '@remult/core';
 import { SelectPopupComponent, columnWithSelectPopupAndGetValue } from '../common/select-popup/select-popup.component';
+import { BusyService, getValueList, GridSettings } from '@remult/angular';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +15,7 @@ export class HomeComponent {
 
   }
 
-  ordersGrid = this.context.for(models.Orders).gridSettings(
+  ordersGrid = new GridSettings( this.context.for(models.Orders),
     {
       get: {
         limit: 50
@@ -24,9 +23,8 @@ export class HomeComponent {
 
       numOfColumnsInGrid: 4,
       allowUpdate: true,
-      hideDataArea: true,
       allowInsert: true,
-      onEnterRow: orders => {
+      enterRow: orders => {
         this.busyService.donotWait(async () => {
           await this.orderDetailsGrid.get({
             where: orderDetails =>
@@ -52,7 +50,7 @@ export class HomeComponent {
         {
           column: orders.shipVia,
           width: '150px',
-          valueList: this.context.for(models.Shippers).getValueList()
+          valueList: getValueList( this.context.for(models.Shippers)),
         },
         orders.employeeID,
         orders.requiredDate,
@@ -85,7 +83,7 @@ export class HomeComponent {
       orders.shipCity
     ]
   });
-  orderDetailsGrid = this.context.for(models.OrderDetails).gridSettings({
+  orderDetailsGrid =new GridSettings( this.context.for(models.OrderDetails),{
     allowUpdate: true,
     allowDelete: true,
     allowInsert: true,
@@ -94,7 +92,7 @@ export class HomeComponent {
       {
         column: order_details.productID,
         width: '250px',
-        valueList: this.context.for(models.Products).getValueList()
+        valueList: getValueList( this.context.for(models.Products))
       }, {
         column: order_details.unitPrice,
         width: '100px'
@@ -109,7 +107,7 @@ export class HomeComponent {
           (orderDetails.quantity.value * orderDetails.unitPrice.value).toFixed(2)
       }
     ],
-    onNewRow: orderDetail => {
+    newRow: orderDetail => {
       orderDetail.orderID.value = this.ordersGrid.currentRow.id.value;
       orderDetail.quantity.value = 1;
     },

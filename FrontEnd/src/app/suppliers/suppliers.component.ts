@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Suppliers } from '../models';
-import { GridSettings, Column, Context } from '@remult/core';
+import { Column, Context } from '@remult/core';
+import { GridSettings } from '@remult/angular';
 
 @Component({
   selector: 'app-suppliers',
@@ -8,25 +9,25 @@ import { GridSettings, Column, Context } from '@remult/core';
   styleUrls: ['./suppliers.component.css']
 })
 export class SuppliersComponent implements OnInit {
-  
-  constructor(private context:Context) { }
-  suppliers =this.context.for(Suppliers) .gridSettings(
-  {
-    get: {
-      limit: 25
-    },
-    allowUpdate:true,
-    allowInsert:true,
-    hideDataArea: true,
-    columnSettings: suppliers =>
-    [
-      {
-        column:suppliers.id,
-        width:'100px'
+
+  constructor(private context: Context) { }
+  suppliers = new GridSettings(this.context.for(Suppliers),
+    {
+      get: {
+        limit: 25
       },
-      suppliers.companyName
-    ]
-  });
+      allowUpdate: true,
+      allowInsert: true,
+      
+      columnSettings: suppliers =>
+        [
+          {
+            column: suppliers.id,
+            width: '100px'
+          },
+          suppliers.companyName
+        ]
+    });
   ngOnInit() {
   }
 }

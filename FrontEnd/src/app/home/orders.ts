@@ -2,7 +2,7 @@ import { EntityClass, Entity, NumberColumn, StringColumn, DateColumn, BoolColumn
 
 @EntityClass
 export class Orders extends Entity<number> {
-    id = new NumberColumn('OrderID');
+    id = new NumberColumn({ caption: 'OrderID' });
     customerID = new StringColumn();
     employeeID = new NumberColumn();
     orderDate = new DateColumn();

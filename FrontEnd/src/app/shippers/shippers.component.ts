@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Shippers } from '../models';
-import { GridSettings, Context } from '@remult/core';
+import {  Context } from '@remult/core';
+import { GridSettings } from '@remult/angular';
 
 @Component({
   selector: 'app-shippers',
@@ -10,11 +11,11 @@ import { GridSettings, Context } from '@remult/core';
 export class ShippersComponent implements OnInit {
 
   constructor(private context:Context) { }
-  shippers = this.context.for(Shippers).gridSettings(
+  shippers = new GridSettings(this.context.for(Shippers),
   {
     allowUpdate:true,
     allowInsert:true,
-    hideDataArea: true,
+    
     columnSettings: shippers =>
     [
       {

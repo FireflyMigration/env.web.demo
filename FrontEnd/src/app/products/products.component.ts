@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GridSettings, Context } from '@remult/core';
+import { Context } from '@remult/core';
 import { Products, Suppliers, Categories } from '../models';
+import { getValueList, GridSettings } from '@remult/angular';
 
 
 @Component({
@@ -13,14 +14,14 @@ export class ProductsComponent implements OnInit {
 
   }
 
-  products = this.context.for(Products).gridSettings(
+  products = new GridSettings( this.context.for(Products),
     {
       get: {
         limit: 50
       },
       allowUpdate: true,
       allowInsert: true,
-      hideDataArea: true,
+      
       columnSettings: products =>
         [
           {
@@ -36,13 +37,13 @@ export class ProductsComponent implements OnInit {
           {
             column: products.supplierID,
             width: '250px',
-            valueList: this.context.for(Suppliers).getValueList()
+            valueList: getValueList(this.context.for(Suppliers))
 
           },
           {
             column: products.categoryID,
             width: '150px',
-            valueList: this.context.for(Categories).getValueList()
+            valueList: getValueList( this.context.for(Categories))
           },
 
           products.quantityPerUnit,

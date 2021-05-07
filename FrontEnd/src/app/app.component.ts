@@ -1,27 +1,28 @@
-import { Component, Injector, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { Router, Route, CanActivate, ActivatedRoute } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 
 
-import { Context, RouteHelperService } from '@remult/core';
+import { Context } from '@remult/core';
 
 
 import { SignInComponent } from './common/sign-in/sign-in.component';
 
 import { DialogService } from './common/dialog';
-import { JwtSessionManager } from '@remult/core';
+import { RouteHelperService } from '@remult/angular';
+import { UserService } from './common/sign-in/user.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
 
   constructor(
-    public sessionManager: JwtSessionManager,
+    public userService: UserService,
     public router: Router,
     public activeRoute: ActivatedRoute,
     private dialog: MatDialog,
@@ -29,20 +30,23 @@ export class AppComponent {
 
     public dialogService: DialogService,
     public context: Context) {
-    sessionManager.loadSessionFromCookie();
+
 
   }
+  ngOnInit(): void {
+    this.userService.populate();
+  }
   signInText() {
-    if (this.context.user)
+    if (this.context.isSignedIn())
       return this.context.user.name;
     return 'Sign in';
   }
   async signIn() {
-    if (!this.context.user) {
+    if (!this.context.isSignedIn()) {
       this.dialog.open(SignInComponent);
     } else {
-      if (await this.dialogService.YesNoQuestion("Would you like to sign out?"))
-        this.sessionManager.signout();
+      if (await this.dialogService.yesNoQuestion("Would you like to sign out?"))
+        this.userService.purgeAuth();
     }
   }
 
@@ -69,7 +73,7 @@ export class AppComponent {
   signOut() {
 
     this.routeClicked();
-    this.sessionManager.signout();
+    this.userService.purgeAuth();
   }
   shouldDisplayRoute(route: Route) {
     if (!(route.path && route.path.indexOf(':') < 0 && route.path.indexOf('**') < 0))

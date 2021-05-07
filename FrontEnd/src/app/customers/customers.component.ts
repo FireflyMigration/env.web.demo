@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { GridSettings, Context } from '@remult/core';
+import { Context } from '@remult/core';
 import { Customers } from '../models';
 import * as chart from 'chart.js';
+import { GridSettings } from '@remult/angular';
 
 @Component({
   selector: 'app-customers',
@@ -10,27 +11,26 @@ import * as chart from 'chart.js';
 })
 export class CustomersComponent implements OnInit {
 
-  constructor(private context:Context) { }
+  constructor(private context: Context) { }
 
   async ngOnInit() {
     await this.customers.getRecords();
     this.updateChart();
   }
-  customers = this.context.for(Customers).gridSettings( {
-    hideDataArea: true,
+  customers = new GridSettings(this.context.for(Customers), {
     allowUpdate: true,
     get: {
       orderBy: f => [f.companyName],
       limit: 1000
     }
   });
-  
+
   searchString: string;
   selectCustomer(c: Customers) {
     this.customers.setCurrentRow(c);
   }
   showCustomer(c: Customers) {
-    return (!this.searchString || c.companyName.value.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0)&&(!this.filterCountry||c.country.value==this.filterCountry);
+    return (!this.searchString || c.companyName.value.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0) && (!this.filterCountry || c.country.value == this.filterCountry);
   }
   dataArea = this.customers.addArea({
     numberOfColumnAreas: 2,
@@ -63,15 +63,10 @@ export class CustomersComponent implements OnInit {
   options: chart.ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    legend: {
-      position: 'right',
-      display: false,
-      onClick: (event: MouseEvent, legendItem: any) => {
-
-
-        return false;
-      }
-    },
+    legend:{
+      display:false
+    }
+   
   };
   filterCountry: string;
   public chartClicked(e: any): void {

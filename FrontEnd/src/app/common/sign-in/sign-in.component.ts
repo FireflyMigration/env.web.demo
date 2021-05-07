@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { DialogService } from '../dialog';
 import { MatDialogRef } from '@angular/material/dialog';
-import { JwtSessionManager } from '@remult/core';
-import {  HttpClient } from '@angular/common/http';
+
+import { HttpClient } from '@angular/common/http';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,9 +15,9 @@ import {  HttpClient } from '@angular/common/http';
 export class SignInComponent implements OnInit {
 
   constructor(private dialog: DialogService,
-    private authService: JwtSessionManager,
+    private userService: UserService,
     public dialogRef: MatDialogRef<SignInComponent>,
-    private http:HttpClient) { }
+    private http: HttpClient) { }
   user: string;
   password: string;
   ngOnInit() {
@@ -24,11 +25,14 @@ export class SignInComponent implements OnInit {
   async signIn() {
     if (this.canceling)
       return;
-    if (!this.user || this.user.length < 2 || !(await this.authService.setToken(await this.doSignIn(this.user, this.password)))) {
-      this.dialog.YesNoQuestion("Invalid sign in information");
+    let token: string;
+    if (!this.user || this.user.length < 2 || !(token = (await this.doSignIn(this.user, this.password)))) {
+      this.dialog.yesNoQuestion("Invalid sign in information");
     }
-    else
+    else {
+      this.userService.setToken(token);
       this.dialogRef.close();
+    }
   }
   canceling = false;
   cancel() {
@@ -37,6 +41,6 @@ export class SignInComponent implements OnInit {
   }
   async doSignIn(username: string, password: string) {
     return await this.http.post<any>('/home/login', { username, password }).toPromise();
-}
+  }
 
 }

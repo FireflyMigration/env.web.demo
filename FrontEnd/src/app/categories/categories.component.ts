@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Categories } from '../models';
-import { GridSettings, Context } from '@remult/core';
+import { Context } from '@remult/core';
+import { GridSettings } from '@remult/angular';
 
 
 @Component({
@@ -10,24 +11,22 @@ import { GridSettings, Context } from '@remult/core';
 })
 export class CategoriesComponent implements OnInit {
 
-  constructor(private context:Context) { }
-  categories = this.context.for(Categories).gridSettings(
-   {
-    
-     allowUpdate:true,
-     allowInsert:true,
-     hideDataArea: true,
-     columnSettings: categories =>
-     [
-       {
-         column:categories.id,
-         width:'100px'
-       },
-       categories.categoryName
-      ]
+  constructor(private context: Context) { }
+  categories = new GridSettings(this.context.for(Categories),
+    {
+
+      allowUpdate: true,
+      allowInsert: true,
+      columnSettings: categories =>
+        [
+          {
+            column: categories.id,
+            width: '100px'
+          },
+          categories.categoryName
+        ]
     });
-    ngOnInit() {
-    }
-  
+  ngOnInit() {
   }
-  
+
+}
