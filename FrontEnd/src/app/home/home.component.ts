@@ -15,7 +15,7 @@ export class HomeComponent {
 
   }
 
-  ordersGrid = new GridSettings( this.context.for(models.Orders),
+  ordersGrid = new GridSettings(this.context.for(models.Orders),
     {
       get: {
         limit: 50
@@ -50,7 +50,7 @@ export class HomeComponent {
         {
           column: orders.shipVia,
           width: '150px',
-          valueList: getValueList( this.context.for(models.Shippers)),
+          valueList: getValueList(this.context.for(models.Shippers)),
         },
         orders.employeeID,
         orders.requiredDate,
@@ -69,6 +69,8 @@ export class HomeComponent {
           click: orders =>
             window.open(
               '/home/print/' + orders.id.value),
+          showInLine: true,
+          textInMenu: 'Print',
           icon: 'print'
         }
       ],
@@ -83,7 +85,7 @@ export class HomeComponent {
       orders.shipCity
     ]
   });
-  orderDetailsGrid =new GridSettings( this.context.for(models.OrderDetails),{
+  orderDetailsGrid = new GridSettings(this.context.for(models.OrderDetails), {
     allowUpdate: true,
     allowDelete: true,
     allowInsert: true,
@@ -92,7 +94,7 @@ export class HomeComponent {
       {
         column: order_details.productID,
         width: '250px',
-        valueList: getValueList( this.context.for(models.Products))
+        valueList: getValueList(this.context.for(models.Products))
       }, {
         column: order_details.unitPrice,
         width: '100px'
