@@ -14,14 +14,12 @@ export class ProductsComponent implements OnInit {
 
   }
 
-  products = new GridSettings( this.context.for(Products),
+  products = new GridSettings(this.context.for(Products),
     {
-      get: {
-        limit: 50
-      },
+      rowsInPage: 50,
       allowUpdate: true,
       allowInsert: true,
-      
+
       columnSettings: products =>
         [
           {
@@ -43,7 +41,7 @@ export class ProductsComponent implements OnInit {
           {
             column: products.categoryID,
             width: '150px',
-            valueList: getValueList( this.context.for(Categories))
+            valueList: getValueList(this.context.for(Categories))
           },
 
           products.quantityPerUnit,

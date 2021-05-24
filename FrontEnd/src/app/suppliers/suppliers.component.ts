@@ -13,12 +13,10 @@ export class SuppliersComponent implements OnInit {
   constructor(private context: Context) { }
   suppliers = new GridSettings(this.context.for(Suppliers),
     {
-      get: {
-        limit: 25
-      },
+      rowsInPage: 25,
       allowUpdate: true,
       allowInsert: true,
-      
+
       columnSettings: suppliers =>
         [
           {

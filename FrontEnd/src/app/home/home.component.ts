@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import * as models from './../models';
 
 import { Context } from '@remult/core';
-import { SelectPopupComponent, columnWithSelectPopupAndGetValue } from '../common/select-popup/select-popup.component';
-import { BusyService, getValueList, GridSettings } from '@remult/angular';
+import { SelectPopupComponent } from '../common/select-popup/select-popup.component';
+import { BusyService, getValueList, GridSettings, openDialog } from '@remult/angular';
 
 @Component({
   selector: 'app-home',
@@ -17,9 +17,7 @@ export class HomeComponent {
 
   ordersGrid = new GridSettings(this.context.for(models.Orders),
     {
-      get: {
-        limit: 50
-      },
+      rowsInPage: 50,
 
       numOfColumnsInGrid: 4,
       allowUpdate: true,
@@ -39,10 +37,17 @@ export class HomeComponent {
           width: '90px',
           readonly: true,
         },
-        columnWithSelectPopupAndGetValue(this.context, orders.customerID, models.Customers,
-          {
-            width: '300px'
-          }),
+        {
+          column: orders.customerID,
+          getValue: (order) => this.context.for(models.Customers).lookup(c => c.id.isEqualTo(order.customerID)).companyName,
+          click: (order) =>
+            openDialog(SelectPopupComponent,
+              popup => popup.config(this.context.for(models.Customers),
+                {
+                  onSelect: selected => { order.customerID = selected.id }
+                }))
+        },
+
         {
           column: orders.orderDate,
           width: '170px'
@@ -68,7 +73,7 @@ export class HomeComponent {
         {
           click: orders =>
             window.open(
-              '/home/print/' + orders.id.value),
+              '/home/print/' + orders.id),
           showInLine: true,
           textInMenu: 'Print',
           icon: 'print'
@@ -106,12 +111,12 @@ export class HomeComponent {
         caption: 'Total',
         width: '100px',
         getValue: orderDetails =>
-          (orderDetails.quantity.value * orderDetails.unitPrice.value).toFixed(2)
+          (orderDetails.quantity * orderDetails.unitPrice).toFixed(2)
       }
     ],
     newRow: orderDetail => {
-      orderDetail.orderID.value = this.ordersGrid.currentRow.id.value;
-      orderDetail.quantity.value = 1;
+      orderDetail.orderID = this.ordersGrid.currentRow.id;
+      orderDetail.quantity = 1;
     },
 
   });
@@ -119,12 +124,12 @@ export class HomeComponent {
     let result = 0;
     this.orderDetailsGrid.items.forEach(
       orderDetail =>
-        result += orderDetail.quantity.value * orderDetail.unitPrice.value);
+        result += orderDetail.quantity * orderDetail.unitPrice);
     return result.toFixed(2);
   }
   printCurrentOrder() {
     window.open(
-      '/home/print/' + this.ordersGrid.currentRow.id.value);
+      '/home/print/' + this.ordersGrid.currentRow.id);
   }
 
 }

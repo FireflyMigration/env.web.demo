@@ -14,15 +14,13 @@ export class CustomersComponent implements OnInit {
   constructor(private context: Context) { }
 
   async ngOnInit() {
-    await this.customers.getRecords();
+    await this.customers.reloadData();
     this.updateChart();
   }
   customers = new GridSettings(this.context.for(Customers), {
     allowUpdate: true,
-    get: {
-      orderBy: f => [f.companyName],
-      limit: 1000
-    }
+    orderBy: f => f.companyName,
+    rowsInPage: 1000
   });
 
   searchString: string;
@@ -30,7 +28,7 @@ export class CustomersComponent implements OnInit {
     this.customers.setCurrentRow(c);
   }
   showCustomer(c: Customers) {
-    return (!this.searchString || c.companyName.value.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0) && (!this.filterCountry || c.country.value == this.filterCountry);
+    return (!this.searchString || c.companyName.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0) && (!this.filterCountry || c.country == this.filterCountry);
   }
   dataArea = this.customers.addArea({
     numberOfColumnAreas: 2,
@@ -63,10 +61,10 @@ export class CustomersComponent implements OnInit {
   options: chart.ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    legend:{
-      display:false
+    legend: {
+      display: false
     }
-   
+
   };
   filterCountry: string;
   public chartClicked(e: any): void {
@@ -83,12 +81,12 @@ export class CustomersComponent implements OnInit {
     let countries = {};
     this.countriesList = [];
     this.customers.items.forEach(c => {
-      let x = countries[c.country.value];
+      let x = countries[c.country];
       if (!x) {
         x = 0;
-        this.countriesList.push(c.country.value);
+        this.countriesList.push(c.country);
       }
-      countries[c.country.value] = x + 1;
+      countries[c.country] = x + 1;
     });
     this.countriesList.sort((a, b) => {
       var ca = countries[a];

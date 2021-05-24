@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { DataArealColumnSetting, DataAreaSettings, IDataAreaSettings } from '@remult/angular';
-import { getColumnsFromObject } from '@remult/core';
+import {  getControllerDefs } from '@remult/core';
 
 import { DialogService } from '../dialog';
 
@@ -42,7 +42,7 @@ export class InputAreaComponent implements OnInit {
       this.area = new DataAreaSettings({ columnSettings: () => this.args.columnSettings() });
     }
     else if (this.args.object) {
-      this.area = new DataAreaSettings({ columnSettings: () => getColumnsFromObject(this.args.object) })
+      this.area = new DataAreaSettings({ columnSettings: () => [...getControllerDefs(this.args.object).columns] })
     }
   }
   cancel() {

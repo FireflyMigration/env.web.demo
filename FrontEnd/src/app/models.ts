@@ -1,103 +1,131 @@
-import * as radweb from '@remult/core';
-import { EntityClass } from '@remult/core';
+import { Column, DateOnlyValueConverter, Entity, EntityBase } from '@remult/core';
 
-@EntityClass
-export class Categories extends radweb.Entity<number> {
-    id = new radweb.NumberColumn({ caption: 'CategoryID' });
-    categoryName = new radweb.StringColumn();
-    description = new radweb.StringColumn();
+@Entity({ key: 'Categories' })
+export class Categories extends EntityBase {
+    @Column({ caption: 'CategoryID' })
+    id: number;
+    @Column()
+    categoryName: string;
+    @Column()
+    description: string;
 
-    constructor() {
-        super('Categories');
-    }
+
+
 }
-@EntityClass
-export class Orders extends radweb.Entity<number> {
-    id = new radweb.NumberColumn({ caption: 'OrderID' });
-    customerID = new radweb.StringColumn();
-    employeeID = new radweb.NumberColumn();
-    orderDate = new radweb.DateColumn();
-    requiredDate = new radweb.DateColumn();
-    shippedDate = new radweb.DateColumn();
-    shipVia = new radweb.NumberColumn();
-    freight = new radweb.NumberColumn();
-    shipName = new radweb.StringColumn();
-    shipAddress = new radweb.StringColumn();
-    shipCity = new radweb.StringColumn();
-    shipRegion = new radweb.StringColumn();
-    shipPostalCode = new radweb.StringColumn();
-    shipCountry = new radweb.StringColumn();
+@Entity({ key: 'Orders' })
+export class Orders extends EntityBase {
+    @Column({ caption: 'OrderID' })
+    id: number;
+    @Column()
+    customerID: string;
+    @Column()
+    employeeID: number;
+    @Column({ valueConverter: () => DateOnlyValueConverter })
+    orderDate: Date;
+    @Column({ valueConverter: () => DateOnlyValueConverter })
+    requiredDate: Date;
+    @Column({ valueConverter: () => DateOnlyValueConverter })
+    shippedDate: Date;
+    @Column()
+    shipVia: number;
+    @Column()
+    freight: number;
+    @Column()
+    shipName: string;
+    @Column()
+    shipAddress: string;
+    @Column()
+    shipCity: string;
+    @Column()
+    shipRegion: string;
+    @Column()
+    shipPostalCode: string;
+    @Column()
+    shipCountry: string;
 
-    constructor() {
-        super('Orders');
-    }
 }
-@EntityClass
-export class OrderDetails extends radweb.Entity<string> {
-    orderID = new radweb.NumberColumn();
-    productID = new radweb.NumberColumn();
-    unitPrice = new radweb.NumberColumn();
-    quantity = new radweb.NumberColumn();
-    discount = new radweb.NumberColumn();
-    id = new radweb.StringColumn();
+@Entity({ key: 'OrderDetails' })
+export class OrderDetails extends EntityBase {
+    @Column()
+    orderID: number;
+    @Column()
+    productID: number;
+    @Column()
+    unitPrice: number;
+    @Column()
+    quantity: number;
+    @Column()
+    discount: number;
+    @Column()
+    id: string;
 
-    constructor() {
-        super('OrderDetails');
-
-    }
 }
-@EntityClass
-export class Customers extends radweb.Entity<string> {
-    id = new radweb.StringColumn({ caption: 'CustomerID' });
-    companyName = new radweb.StringColumn();
-    contactName = new radweb.StringColumn();
-    contactTitle = new radweb.StringColumn();
-    address = new radweb.StringColumn();
-    city = new radweb.StringColumn();
-    region = new radweb.StringColumn();
-    postalCode = new radweb.StringColumn();
-    country = new radweb.StringColumn();
-    phone = new radweb.StringColumn();
-    fax = new radweb.StringColumn();
+@Entity({ key: 'Customers' })
+export class Customers extends EntityBase {
+    @Column({ caption: 'CustomerID' })
+    id: string;
+    @Column()
+    companyName: string;
+    @Column()
+    contactName: string;
+    @Column()
+    contactTitle: string;
+    @Column()
+    address: string;
+    @Column()
+    city: string;
+    @Column()
+    region: string;
+    @Column()
+    postalCode: string;
+    @Column()
+    country: string;
+    @Column()
+    phone: string;
+    @Column()
+    fax: string;
 
-    constructor() {
-        super('Customers');
-    }
 }
 
-@EntityClass
-export class Shippers extends radweb.Entity<number> {
-    id = new radweb.NumberColumn({ caption: 'ShipperID' });
-    companyName = new radweb.StringColumn();
-    phone = new radweb.StringColumn();
+@Entity({ key: 'Shippers' })
+export class Shippers extends EntityBase {
+    @Column({ caption: 'ShipperID' })
+    id: number;
+    @Column()
+    companyName: string;
+    @Column()
+    phone: string;
 
-    constructor() {
-        super('Shippers');
-    }
 }
-@EntityClass
-export class Products extends radweb.Entity<number> {
-    id = new radweb.NumberColumn({ caption: 'ProductID' });
-    productName = new radweb.StringColumn();
-    supplierID = new radweb.NumberColumn();
-    categoryID = new radweb.NumberColumn();
-    quantityPerUnit = new radweb.StringColumn();
-    unitPrice = new radweb.NumberColumn();
-    unitsInStock = new radweb.NumberColumn();
-    unitsOnOrder = new radweb.NumberColumn();
-    reorderLevel = new radweb.NumberColumn();
-    discontinued = new radweb.BoolColumn();
+@Entity({ key: 'Products' })
+export class Products extends EntityBase {
+    @Column({ caption: 'ProductID' })
+    id: number;
+    @Column()
+    productName: string;
+    @Column()
+    supplierID: number;
+    @Column()
+    categoryID: number;
+    @Column()
+    quantityPerUnit: string;
+    @Column()
+    unitPrice: number;
+    @Column()
+    unitsInStock: number;
+    @Column()
+    unitsOnOrder: number;
+    @Column()
+    reorderLevel: number;
+    @Column()
+    discontinued: boolean;
 
-    constructor() {
-        super('Products');
-    }
 }
-@EntityClass
-export class Suppliers extends radweb.Entity<number> {
-    id = new radweb.NumberColumn({ caption: 'SupplierID' });
-    companyName = new radweb.StringColumn();
+@Entity({ key: 'Suppliers' })
+export class Suppliers extends EntityBase {
+    @Column({ caption: 'SupplierID' })
+    id: number;
+    @Column()
+    companyName: string;
 
-    constructor() {
-        super('Suppliers');
-    }
 }

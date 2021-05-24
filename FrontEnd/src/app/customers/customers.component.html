@@ -15,17 +15,17 @@
         <mat-expansion-panel *ngIf="showCustomer(c)" (opened)="selectCustomer(c)">
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    {{c.companyName.value}}
+                    {{c.companyName}}
                 </mat-panel-title>
 
             </mat-expansion-panel-header>
             <div class="row" *ngIf="customers.currentRow==c">
                 <data-area [settings]="dataArea" [columns]="2"></data-area>
             </div>
-            <button mat-raised-button (click)="customers.currentRow.save()" [disabled]="!customers.currentRow.wasChanged()"
+            <button mat-raised-button (click)="customers.currentRow.save()" [disabled]="!customers.currentRow._.wasChanged()"
                 ><mat-icon>check</mat-icon></button>
             <button (click)="customers.currentRow.reset();customers.setCurrentRow(c);"
-                [disabled]="!customers.currentRow.wasChanged()"
+                [disabled]="!customers.currentRow._.wasChanged()"
                 mat-raised-button><mat-icon>clear</mat-icon></button>
         </mat-expansion-panel>
     </ng-container>
