@@ -2,7 +2,7 @@
   <h1 mat-dialog-title>Select {{settings.caption}}</h1>
   <div mat-dialog-content>
     <mat-form-field class="full-width">
-      <input matInput [(ngModel)]="searchText" placeholder="Search {{searchColumnCaption()}}" (input)="search()"
+      <input matInput [(ngModel)]="searchText" placeholder="Search {{searchFieldCaption()}}" (input)="search()"
         [ngModelOptions]="{standalone: true}" cdkFocusInitial>
       <mat-icon matSuffix (click)="searchText=''">clear</mat-icon>
     </mat-form-field>

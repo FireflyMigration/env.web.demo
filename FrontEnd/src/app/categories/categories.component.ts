@@ -20,7 +20,7 @@ export class CategoriesComponent implements OnInit {
       columnSettings: categories =>
         [
           {
-            column: categories.id,
+            field: categories.id,
             width: '100px'
           },
           categories.categoryName

@@ -19,7 +19,7 @@ export class ShippersComponent implements OnInit {
     columnSettings: shippers =>
     [
       {
-        column:shippers.id,
+        field:shippers.id,
         width:'100px'
       },
       shippers.companyName

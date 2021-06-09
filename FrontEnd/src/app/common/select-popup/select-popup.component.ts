@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { BusyService, DataControlInfo, GridSettings, IDataSettings, openDialog } from '@remult/angular';
-import { Entity, Context, Column, Filter, Sort, SortSegment, AndFilter, ColumnDefinitions, EntityDefinitions, Repository, EntityWhere } from '@remult/core';
+import { Entity, Context, Filter, Sort, SortSegment, AndFilter, FieldDefinitions, Repository } from '@remult/core';
 
 @Component({
   selector: 'app-select-popup',
@@ -18,22 +18,22 @@ export class SelectPopupComponent {
 
 
   }
-  searchColumnCaption() {
+  searchFieldCaption() {
 
-    if (this.searchColumn)
-      return this.searchColumn.caption;
+    if (this.searchField)
+      return this.searchField.caption;
     return "";
   }
   searchText: string = '';
-  private searchColumn: ColumnDefinitions;
+  private searchField: FieldDefinitions;
   settings: GridSettings<any>;
   onOk: (selected: any) => void;
   config<T>(contextForEntity: Repository<T>, settings: IDataSettings<T> & { onSelect: (selected: T) => void }) {
     this.onOk = settings.onSelect;
 
     let searchWhere = new Filter(x => {
-      if (this.searchColumn && this.searchText)
-        x.containsCaseInsensitive(this.searchColumn, this.searchText);
+      if (this.searchField && this.searchText)
+        x.containsCaseInsensitive(this.searchField, this.searchText);
     });
 
     if (!settings.where) {
@@ -41,7 +41,7 @@ export class SelectPopupComponent {
     }
     else {
       let y = settings.where;
-      settings.where = x => new AndFilter(contextForEntity.translateWhereToFilter(y), searchWhere);;
+      settings.where = [y, () => searchWhere];
     }
     if (!settings.rowsInPage) {
       settings.rowsInPage = 50;
@@ -49,11 +49,11 @@ export class SelectPopupComponent {
     this.settings = new GridSettings(contextForEntity, settings);
     this.settings.reloadData().then(() => {
 
-      if (!this.searchColumn) {
+      if (!this.searchField) {
         for (let col of this.settings.columns.items) {
-          let colDefs = col.column as ColumnDefinitions;
-          if (col.column && colDefs.dataType === String && colDefs.key != "id" && (!col.inputType || col.inputType == "text")) {
-            this.searchColumn = colDefs;
+          let colDefs = col.field as FieldDefinitions;
+          if (col.field && colDefs.dataType === String && colDefs.key != "id" && (!col.inputType || col.inputType == "text")) {
+            this.searchField = colDefs;
             break;
           }
         }

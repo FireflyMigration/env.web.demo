@@ -1,12 +1,12 @@
-import { Column, DateOnlyValueConverter, Entity, EntityBase } from '@remult/core';
+import { Field, Entity, EntityBase, DateOnlyField } from '@remult/core';
 
 @Entity({ key: 'Categories' })
 export class Categories extends EntityBase {
-    @Column({ caption: 'CategoryID' })
+    @Field({ caption: 'CategoryID' })
     id: number;
-    @Column()
+    @Field()
     categoryName: string;
-    @Column()
+    @Field()
     description: string;
 
 
@@ -14,118 +14,118 @@ export class Categories extends EntityBase {
 }
 @Entity({ key: 'Orders' })
 export class Orders extends EntityBase {
-    @Column({ caption: 'OrderID' })
+    @Field({ caption: 'OrderID' })
     id: number;
-    @Column()
+    @Field()
     customerID: string;
-    @Column()
+    @Field()
     employeeID: number;
-    @Column({ valueConverter: () => DateOnlyValueConverter })
+    @DateOnlyField()
     orderDate: Date;
-    @Column({ valueConverter: () => DateOnlyValueConverter })
+    @DateOnlyField()
     requiredDate: Date;
-    @Column({ valueConverter: () => DateOnlyValueConverter })
+    @DateOnlyField()
     shippedDate: Date;
-    @Column()
+    @Field()
     shipVia: number;
-    @Column()
+    @Field()
     freight: number;
-    @Column()
+    @Field()
     shipName: string;
-    @Column()
+    @Field()
     shipAddress: string;
-    @Column()
+    @Field()
     shipCity: string;
-    @Column()
+    @Field()
     shipRegion: string;
-    @Column()
+    @Field()
     shipPostalCode: string;
-    @Column()
+    @Field()
     shipCountry: string;
 
 }
 @Entity({ key: 'OrderDetails' })
 export class OrderDetails extends EntityBase {
-    @Column()
+    @Field()
     orderID: number;
-    @Column()
+    @Field()
     productID: number;
-    @Column()
+    @Field()
     unitPrice: number;
-    @Column()
+    @Field()
     quantity: number;
-    @Column()
+    @Field()
     discount: number;
-    @Column()
+    @Field()
     id: string;
 
 }
 @Entity({ key: 'Customers' })
 export class Customers extends EntityBase {
-    @Column({ caption: 'CustomerID' })
+    @Field({ caption: 'CustomerID' })
     id: string;
-    @Column()
+    @Field()
     companyName: string;
-    @Column()
+    @Field()
     contactName: string;
-    @Column()
+    @Field()
     contactTitle: string;
-    @Column()
+    @Field()
     address: string;
-    @Column()
+    @Field()
     city: string;
-    @Column()
+    @Field()
     region: string;
-    @Column()
+    @Field()
     postalCode: string;
-    @Column()
+    @Field()
     country: string;
-    @Column()
+    @Field()
     phone: string;
-    @Column()
+    @Field()
     fax: string;
 
 }
 
 @Entity({ key: 'Shippers' })
 export class Shippers extends EntityBase {
-    @Column({ caption: 'ShipperID' })
+    @Field({ caption: 'ShipperID' })
     id: number;
-    @Column()
+    @Field()
     companyName: string;
-    @Column()
+    @Field()
     phone: string;
 
 }
 @Entity({ key: 'Products' })
 export class Products extends EntityBase {
-    @Column({ caption: 'ProductID' })
+    @Field({ caption: 'ProductID' })
     id: number;
-    @Column()
+    @Field()
     productName: string;
-    @Column()
+    @Field()
     supplierID: number;
-    @Column()
+    @Field()
     categoryID: number;
-    @Column()
+    @Field()
     quantityPerUnit: string;
-    @Column()
+    @Field()
     unitPrice: number;
-    @Column()
+    @Field()
     unitsInStock: number;
-    @Column()
+    @Field()
     unitsOnOrder: number;
-    @Column()
+    @Field()
     reorderLevel: number;
-    @Column()
+    @Field()
     discontinued: boolean;
 
 }
 @Entity({ key: 'Suppliers' })
 export class Suppliers extends EntityBase {
-    @Column({ caption: 'SupplierID' })
+    @Field({ caption: 'SupplierID' })
     id: number;
-    @Column()
+    @Field()
     companyName: string;
 
 }

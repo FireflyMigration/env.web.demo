@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Suppliers } from '../models';
-import { Column, Context } from '@remult/core';
+import { Context } from '@remult/core';
 import { GridSettings } from '@remult/angular';
 
 @Component({
@@ -20,7 +20,7 @@ export class SuppliersComponent implements OnInit {
       columnSettings: suppliers =>
         [
           {
-            column: suppliers.id,
+            field: suppliers.id,
             width: '100px'
           },
           suppliers.companyName

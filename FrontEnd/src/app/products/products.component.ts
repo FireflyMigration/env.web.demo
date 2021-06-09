@@ -23,23 +23,23 @@ export class ProductsComponent implements OnInit {
       columnSettings: products =>
         [
           {
-            column: products.id,
+            field: products.id,
             width: '100px',
           },
           {
-            column: products.productName,
+            field: products.productName,
             width: '250px',
           },
 
 
           {
-            column: products.supplierID,
+            field: products.supplierID,
             width: '250px',
             valueList: getValueList(this.context.for(Suppliers))
 
           },
           {
-            column: products.categoryID,
+            field: products.categoryID,
             width: '150px',
             valueList: getValueList(this.context.for(Categories))
           },
@@ -59,7 +59,7 @@ export class ProductsComponent implements OnInit {
   }
   ProductInfoArea = this.products.addArea({
     numberOfColumnAreas: 2,
-    columnSettings: products => [
+    fields: products => [
       products.unitPrice,
       products.unitsInStock,
       products.unitsOnOrder,

@@ -33,27 +33,28 @@ export class HomeComponent {
       },
       columnSettings: orders => [
         {
-          column: orders.id,
+          field: orders.id,
           width: '90px',
           readonly: true,
         },
         {
-          column: orders.customerID,
+          field: orders.customerID,
           getValue: (order) => this.context.for(models.Customers).lookup(c => c.id.isEqualTo(order.customerID)).companyName,
           click: (order) =>
             openDialog(SelectPopupComponent,
               popup => popup.config(this.context.for(models.Customers),
                 {
                   onSelect: selected => { order.customerID = selected.id }
-                }))
+                })),
+          width: '200px'
         },
 
         {
-          column: orders.orderDate,
+          field: orders.orderDate,
           width: '170px'
         },
         {
-          column: orders.shipVia,
+          field: orders.shipVia,
           width: '150px',
           valueList: getValueList(this.context.for(models.Shippers)),
         },
@@ -83,7 +84,7 @@ export class HomeComponent {
   );
   shipInfoArea = this.ordersGrid.addArea({
     numberOfColumnAreas: 2,
-    columnSettings: orders => [
+    fields: orders => [
       orders.requiredDate,
       orders.shippedDate,
       orders.shipAddress,
@@ -97,15 +98,15 @@ export class HomeComponent {
 
     columnSettings: order_details => [
       {
-        column: order_details.productID,
+        field: order_details.productID,
         width: '250px',
         valueList: getValueList(this.context.for(models.Products))
       }, {
-        column: order_details.unitPrice,
+        field: order_details.unitPrice,
         width: '100px'
       },
       {
-        column: order_details.quantity, width: '100px'
+        field: order_details.quantity, width: '100px'
       },
       {
         caption: 'Total',

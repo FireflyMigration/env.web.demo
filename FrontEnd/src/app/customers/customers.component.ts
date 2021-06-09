@@ -32,7 +32,7 @@ export class CustomersComponent implements OnInit {
   }
   dataArea = this.customers.addArea({
     numberOfColumnAreas: 2,
-    columnSettings: f => [
+    fields: f => [
       f.id,
       f.companyName,
       f.contactName,
