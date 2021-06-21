@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { BusyService, DataControlInfo, GridSettings, IDataSettings, openDialog } from '@remult/angular';
-import { Entity, Context, Filter, Sort, SortSegment, AndFilter, FieldDefinitions, Repository } from '@remult/core';
+import { Entity, Context, Filter, Sort, SortSegment, AndFilter, FieldMetadata, Repository } from '@remult/core';
 
 @Component({
   selector: 'app-select-popup',
@@ -25,7 +25,7 @@ export class SelectPopupComponent {
     return "";
   }
   searchText: string = '';
-  private searchField: FieldDefinitions;
+  private searchField: FieldMetadata;
   settings: GridSettings<any>;
   onOk: (selected: any) => void;
   config<T>(contextForEntity: Repository<T>, settings: IDataSettings<T> & { onSelect: (selected: T) => void }) {
@@ -51,7 +51,7 @@ export class SelectPopupComponent {
 
       if (!this.searchField) {
         for (let col of this.settings.columns.items) {
-          let colDefs = col.field as FieldDefinitions;
+          let colDefs = col.field as FieldMetadata;
           if (col.field && colDefs.dataType === String && colDefs.key != "id" && (!col.inputType || col.inputType == "text")) {
             this.searchField = colDefs;
             break;
