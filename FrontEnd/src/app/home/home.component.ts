@@ -3,7 +3,8 @@ import * as models from './../models';
 
 import { Context } from '@remult/core';
 import { SelectPopupComponent } from '../common/select-popup/select-popup.component';
-import { BusyService, getValueList, GridSettings, openDialog } from '@remult/angular';
+import { BusyService, getValueList, GridSettings, openDialog, Lookup } from '@remult/angular';
+
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,7 @@ export class HomeComponent {
   constructor(private context: Context, private busyService: BusyService) {
 
   }
-
+  lookup = new Lookup(this.context.for(models.Customers));
   ordersGrid = new GridSettings(this.context.for(models.Orders),
     {
       rowsInPage: 50,
@@ -39,7 +40,7 @@ export class HomeComponent {
         },
         {
           field: orders.customerID,
-          getValue: (order) => this.context.for(models.Customers).lookup(c => c.id.isEqualTo(order.customerID)).companyName,
+          getValue: (order) => this.lookup.get(c => c.id.isEqualTo(order.customerID)).companyName,
           click: (order) =>
             openDialog(SelectPopupComponent,
               popup => popup.config(this.context.for(models.Customers),
