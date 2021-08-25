@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Context } from '@remult/core';
+import { Remult } from 'remult';
 import { Products, Suppliers, Categories } from '../models';
 import { getValueList, GridSettings } from '@remult/angular';
 
@@ -10,11 +10,11 @@ import { getValueList, GridSettings } from '@remult/angular';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-  constructor(private context: Context) {
+  constructor(private remult: Remult) {
 
   }
 
-  products = new GridSettings(this.context.for(Products),
+  products = new GridSettings(this.remult.repo(Products),
     {
       rowsInPage: 50,
       allowUpdate: true,
@@ -35,13 +35,13 @@ export class ProductsComponent implements OnInit {
           {
             field: products.supplierID,
             width: '250px',
-            valueList: getValueList(this.context.for(Suppliers))
+            valueList: getValueList(this.remult.repo(Suppliers))
 
           },
           {
             field: products.categoryID,
             width: '150px',
-            valueList: getValueList(this.context.for(Categories))
+            valueList: getValueList(this.remult.repo(Categories))
           },
 
           products.quantityPerUnit,

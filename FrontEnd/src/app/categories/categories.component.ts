@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Categories } from '../models';
-import { Context } from '@remult/core';
+import { Remult } from 'remult';
 import { GridSettings } from '@remult/angular';
 
 
@@ -11,8 +11,8 @@ import { GridSettings } from '@remult/angular';
 })
 export class CategoriesComponent implements OnInit {
 
-  constructor(private context: Context) { }
-  categories = new GridSettings(this.context.for(Categories),
+  constructor(private remult: Remult) { }
+  categories = new GridSettings(this.remult.repo(Categories),
     {
 
       allowUpdate: true,

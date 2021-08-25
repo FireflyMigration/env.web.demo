@@ -1,4 +1,4 @@
-import { Field, Entity, EntityBase, DateOnlyField } from '@remult/core';
+import { Field, Entity, EntityBase, DateOnlyField } from 'remult';
 
 @Entity({ key: 'Categories' })
 export class Categories extends EntityBase {

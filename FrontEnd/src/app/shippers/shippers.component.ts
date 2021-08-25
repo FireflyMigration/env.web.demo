@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Shippers } from '../models';
-import {  Context } from '@remult/core';
+import {  Remult } from 'remult';
 import { GridSettings } from '@remult/angular';
 
 @Component({
@@ -10,8 +10,8 @@ import { GridSettings } from '@remult/angular';
 })
 export class ShippersComponent implements OnInit {
 
-  constructor(private context:Context) { }
-  shippers = new GridSettings(this.context.for(Shippers),
+  constructor(private remult:Remult) { }
+  shippers = new GridSettings(this.remult.repo(Shippers),
   {
     allowUpdate:true,
     allowInsert:true,

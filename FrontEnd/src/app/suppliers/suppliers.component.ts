@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Suppliers } from '../models';
-import { Context } from '@remult/core';
+import { Remult } from 'remult';
 import { GridSettings } from '@remult/angular';
 
 @Component({
@@ -10,8 +10,8 @@ import { GridSettings } from '@remult/angular';
 })
 export class SuppliersComponent implements OnInit {
 
-  constructor(private context: Context) { }
-  suppliers = new GridSettings(this.context.for(Suppliers),
+  constructor(private remult: Remult) { }
+  suppliers = new GridSettings(this.remult.repo(Suppliers),
     {
       rowsInPage: 25,
       allowUpdate: true,

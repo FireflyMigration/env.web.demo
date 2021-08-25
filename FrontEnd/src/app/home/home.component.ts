@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as models from './../models';
 
-import { Context } from '@remult/core';
+import { Remult } from 'remult';
 import { SelectPopupComponent } from '../common/select-popup/select-popup.component';
 import { BusyService, getValueList, GridSettings, openDialog, Lookup } from '@remult/angular';
 
@@ -12,11 +12,11 @@ import { BusyService, getValueList, GridSettings, openDialog, Lookup } from '@re
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  constructor(private context: Context, private busyService: BusyService) {
+  constructor(private remult: Remult, private busyService: BusyService) {
 
   }
-  lookup = new Lookup(this.context.for(models.Customers));
-  ordersGrid = new GridSettings(this.context.for(models.Orders),
+  lookup = new Lookup(this.remult.repo(models.Customers));
+  ordersGrid = new GridSettings(this.remult.repo(models.Orders),
     {
       rowsInPage: 50,
 
@@ -43,7 +43,7 @@ export class HomeComponent {
           getValue: (order) => this.lookup.get(c => c.id.isEqualTo(order.customerID)).companyName,
           click: (order) =>
             openDialog(SelectPopupComponent,
-              popup => popup.config(this.context.for(models.Customers),
+              popup => popup.config(this.remult.repo(models.Customers),
                 {
                   onSelect: selected => { order.customerID = selected.id }
                 })),
@@ -57,7 +57,7 @@ export class HomeComponent {
         {
           field: orders.shipVia,
           width: '150px',
-          valueList: getValueList(this.context.for(models.Shippers)),
+          valueList:()=> getValueList(this.remult.repo(models.Shippers)),
         },
         orders.employeeID,
         orders.requiredDate,
@@ -92,7 +92,7 @@ export class HomeComponent {
       orders.shipCity
     ]
   });
-  orderDetailsGrid = new GridSettings(this.context.for(models.OrderDetails), {
+  orderDetailsGrid = new GridSettings(this.remult.repo(models.OrderDetails), {
     allowUpdate: true,
     allowDelete: true,
     allowInsert: true,
@@ -101,7 +101,7 @@ export class HomeComponent {
       {
         field: order_details.productID,
         width: '250px',
-        valueList: getValueList(this.context.for(models.Products))
+        valueList: getValueList(this.remult.repo(models.Products))
       }, {
         field: order_details.unitPrice,
         width: '100px'

@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { Context, UserInfo } from "@remult/core";
+import { Remult, UserInfo } from "remult";
 
 @Injectable()
 export class UserService {
 
-    constructor(private context: Context) {
+    constructor(private remult: Remult) {
 
     }
     populate() {
@@ -13,11 +13,11 @@ export class UserService {
     }
     setToken(token: string) {
         if (token) {
-            this.context.setUser(<UserInfo>new JwtHelperService().decodeToken(token));
+            this.remult.setUser(<UserInfo>new JwtHelperService().decodeToken(token));
             localStorage.setItem("jwtToken", token);
         }
         else {
-            this.context.setUser(undefined);
+            this.remult.setUser(undefined);
             localStorage.removeItem("jwtToken");
             token='';
         }

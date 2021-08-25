@@ -4,7 +4,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 
 
-import { Context } from '@remult/core';
+import { Remult } from 'remult';
 
 
 import { SignInComponent } from './common/sign-in/sign-in.component';
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
     private routeHelper: RouteHelperService,
 
     public dialogService: DialogService,
-    public context: Context) {
+    public remult: Remult) {
 
 
   }
@@ -37,12 +37,12 @@ export class AppComponent implements OnInit {
     this.userService.populate();
   }
   signInText() {
-    if (this.context.isSignedIn())
-      return this.context.user.name;
+    if (this.remult.authenticated())
+      return this.remult.user.name;
     return 'Sign in';
   }
   async signIn() {
-    if (!this.context.isSignedIn()) {
+    if (!this.remult.authenticated()) {
       this.dialog.open(SignInComponent);
     } else {
       if (await this.dialogService.yesNoQuestion("Would you like to sign out?"))

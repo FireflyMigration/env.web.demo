@@ -50,10 +50,6 @@
     <Reference Include="ENV">
       <HintPath>..\bin\ENV.dll</HintPath>
     </Reference>
-    <Reference Include="ENV.Web, Version=1.0.0.15, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\ENV.Web.dll</HintPath>
-    </Reference>
     <Reference Include="Firefly.Box, Version=3.4.24.31353, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Firefly.Box.Dll</HintPath>
@@ -246,6 +242,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ENV.Web\ENV.Web.csproj">
+      <Project>{fc6b4960-8db6-467f-bfd7-d386def73b4e}</Project>
+      <Name>ENV.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
