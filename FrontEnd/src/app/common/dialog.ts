@@ -48,7 +48,7 @@ export class ShowDialogOnErrorErrorHandler extends ErrorHandler {
         super();
     }
     lastErrorString = '';
-    lastErrorTime: number;
+    lastErrorTime!: number;
     async handleError(error: any) {
         super.handleError(error);
         if (this.lastErrorString == error.toString() && new Date().valueOf() - this.lastErrorTime < 100)

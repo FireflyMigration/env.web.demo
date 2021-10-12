@@ -24,7 +24,7 @@
             </div>
             <button mat-raised-button (click)="customers.currentRow.save()" [disabled]="!customers.currentRow._.wasChanged()"
                 ><mat-icon>check</mat-icon></button>
-            <button (click)="customers.currentRow.reset();customers.setCurrentRow(c);"
+            <button (click)="customers.currentRow._.undoChanges();customers.setCurrentRow(c);"
                 [disabled]="!customers.currentRow._.wasChanged()"
                 mat-raised-button><mat-icon>clear</mat-icon></button>
         </mat-expansion-panel>

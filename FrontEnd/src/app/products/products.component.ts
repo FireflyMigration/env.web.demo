@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Remult } from 'remult';
-import { Products, Suppliers, Categories } from '../models';
 import { getValueList, GridSettings } from '@remult/angular';
+import { Products } from './products';
+import { Suppliers } from '../suppliers/suppliers';
+import { Categories } from '../categories/categories';
 
 
 @Component({

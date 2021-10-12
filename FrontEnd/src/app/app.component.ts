@@ -11,7 +11,7 @@ import { SignInComponent } from './common/sign-in/sign-in.component';
 
 import { DialogService } from './common/dialog';
 import { RouteHelperService } from '@remult/angular';
-import { UserService } from './common/sign-in/user.service';
+import { AuthService } from './common/sign-in/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -22,19 +22,18 @@ export class AppComponent implements OnInit {
 
 
   constructor(
-    public userService: UserService,
+    public auth: AuthService,
     public router: Router,
     public activeRoute: ActivatedRoute,
     private dialog: MatDialog,
     private routeHelper: RouteHelperService,
-
     public dialogService: DialogService,
     public remult: Remult) {
 
 
   }
   ngOnInit(): void {
-    this.userService.populate();
+    
   }
   signInText() {
     if (this.remult.authenticated())
@@ -46,7 +45,7 @@ export class AppComponent implements OnInit {
       this.dialog.open(SignInComponent);
     } else {
       if (await this.dialogService.yesNoQuestion("Would you like to sign out?"))
-        this.userService.purgeAuth();
+        this.auth.signOut();
     }
   }
 
@@ -58,9 +57,9 @@ export class AppComponent implements OnInit {
   }
 
   currentTitle() {
-    if (this.activeRoute && this.activeRoute.snapshot && this.activeRoute.firstChild)
-      if (this.activeRoute.firstChild.data && this.activeRoute.snapshot.firstChild.data.name) {
-        return this.activeRoute.snapshot.firstChild.data.name;
+    if (this.activeRoute!.snapshot && this.activeRoute!.firstChild)
+      if (this.activeRoute.snapshot.firstChild!.data!.name) {
+        return this.activeRoute.snapshot.firstChild!.data.name;
       }
       else {
         if (this.activeRoute.firstChild.routeConfig)
@@ -73,7 +72,7 @@ export class AppComponent implements OnInit {
   signOut() {
 
     this.routeClicked();
-    this.userService.purgeAuth();
+    this.auth.signOut();
   }
   shouldDisplayRoute(route: Route) {
     if (!(route.path && route.path.indexOf(':') < 0 && route.path.indexOf('**') < 0))

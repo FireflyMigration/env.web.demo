@@ -163,6 +163,7 @@ namespace ENV.Web
                                             {
                                                 vmc.CreateTypeScriptRemultClass(sw, name);
                                                 Response.ContentType = "application/text";
+                                                name = name[0].ToString().ToLower() + name.Substring(1);
                                                 Response.AddHeader("Content-Disposition", "attachment;filename="+name+".ts");
                                             }
                                             else if (responseType.StartsWith("DCF"))

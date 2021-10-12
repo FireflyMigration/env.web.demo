@@ -25,9 +25,9 @@ export class SelectPopupComponent {
     return "";
   }
   searchText: string = '';
-  private searchField: FieldMetadata;
-  settings: GridSettings<any>;
-  onOk: (selected: any) => void;
+  private searchField!: FieldMetadata;
+  settings!: GridSettings<any>;
+  onOk!: (selected: any) => void;
   config<T>(remultForEntity: Repository<T>, settings: IDataSettings<T> & { onSelect: (selected: T) => void }) {
     this.onOk = settings.onSelect;
 
@@ -41,7 +41,7 @@ export class SelectPopupComponent {
     }
     else {
       let y = settings.where;
-      settings.where = [Filter.toItem(y), () => searchWhere];
+      settings.where = e => Filter.fromEntityFilter(e, y, () => searchWhere);
     }
     if (!settings.rowsInPage) {
       settings.rowsInPage = 50;

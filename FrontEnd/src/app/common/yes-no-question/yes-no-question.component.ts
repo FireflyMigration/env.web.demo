@@ -9,7 +9,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class YesNoQuestionComponent implements OnInit {
   okPressed = false;
-  args: {
+  args!: {
     message: string,
     isAQuestion?: boolean
   }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Remult } from 'remult';
-import { Customers } from '../models';
 import * as chart from 'chart.js';
 import { GridSettings } from '@remult/angular';
+import { Customers } from './customers';
 
 @Component({
   selector: 'app-customers',
@@ -23,7 +23,7 @@ export class CustomersComponent implements OnInit {
     rowsInPage: 1000
   });
 
-  searchString: string;
+  searchString?: string;
   selectCustomer(c: Customers) {
     this.customers.setCurrentRow(c);
   }
@@ -56,7 +56,7 @@ export class CustomersComponent implements OnInit {
       backgroundColor: []
 
     }];
-  public pieChartType: string = 'pie';
+  public pieChartType: chart.ChartType = 'pie';
 
   options: chart.ChartOptions = {
     responsive: true,
@@ -66,19 +66,19 @@ export class CustomersComponent implements OnInit {
     }
 
   };
-  filterCountry: string;
+  filterCountry?: string;
   public chartClicked(e: any): void {
     if (e.active && e.active.length > 0) {
       this.filterCountry = this.countriesList[e.active[0]._index]
 
     }
   }
-  countriesList = [];
+  countriesList :string[]= [];
   updateChart() {
     this.pieChartData = [];
     this.pieChartLabels.splice(0);
     this.colors[0].backgroundColor.splice(0);
-    let countries = {};
+    let countries:any = {};
     this.countriesList = [];
     this.customers.items.forEach(c => {
       let x = countries[c.country];

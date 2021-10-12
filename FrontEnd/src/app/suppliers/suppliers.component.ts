@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Suppliers } from '../models';
+import { Suppliers } from './suppliers';
 import { Remult } from 'remult';
 import { GridSettings } from '@remult/angular';
 

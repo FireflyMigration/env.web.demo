@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Shippers } from '../models';
+import { Shippers } from './shippers';
 import {  Remult } from 'remult';
 import { GridSettings } from '@remult/angular';
 

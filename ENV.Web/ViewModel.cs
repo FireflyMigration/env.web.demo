@@ -260,15 +260,15 @@ namespace ENV.Web
             name = name[0].ToString().ToUpper() + name.Substring(1);
 
 
-            tw.WriteLine("import { Field, DateOnlyField, Entity, EntityBase } from '@remult/core';");
+            tw.WriteLine("import { Field, DateOnlyField, Entity, EntityBase } from 'remult';");
             tw.WriteLine("");
-            tw.WriteLine("@Entity({ key: '" + name + "' })");
+            tw.WriteLine("@Entity('" + name + "')");
             tw.WriteLine($@"export class {name} extends EntityBase {{");
             foreach (var item in _columns)
             {
                 var args = "";
                 if (item.Caption.ToLowerInvariant() != item.Key.ToLowerInvariant())
-                    args = "caption:'" + item.Caption + "'";
+                    args = "caption: '" + item.Caption + "'";
                 var type = item.getColumnType();
                 if (args.Length > 0)
                 {
@@ -278,7 +278,7 @@ namespace ENV.Web
                     tw.WriteLine($"    @DateOnlyField({args})");
                 else
                     tw.WriteLine($"    @Field({args})");
-                tw.WriteLine($"    {item.Key}: {item.getColumnType()};");
+                tw.WriteLine($"    {item.GetTypeScriptDefinition()};");
 
             }
             tw.WriteLine("}");
@@ -625,7 +625,23 @@ namespace ENV.Web
                 return "text";
             }
 
-
+            internal string GetTypeScriptDefinition()
+            {
+                string def = null;
+                if (_col is BoolColumn)
+                    def = "false";
+                else if (_col is NumberColumn)
+                    def = "0";
+                else if (_col is DateColumn)
+                    def = null; 
+                else def = "''";
+                var r = Key;
+                if (def == null)
+                    return r+ "?: " + getColumnType();
+                else
+                    return r + ": " + getColumnType()+" = "+def;
+                
+            }
         }
         List<ColumnInViewModel> _columns = new List<ColumnInViewModel>();
         Dictionary<ColumnBase, ColumnInViewModel> _colMap = new Dictionary<ColumnBase, ColumnInViewModel>();

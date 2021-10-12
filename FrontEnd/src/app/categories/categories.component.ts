@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Categories } from '../models';
+import { Categories } from './categories';
 import { Remult } from 'remult';
 import { GridSettings } from '@remult/angular';
 

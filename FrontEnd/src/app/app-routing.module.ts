@@ -9,8 +9,8 @@ import { ShippersComponent } from './shippers/shippers.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 import { ShowDialogOnErrorErrorHandler } from './common/dialog';
 import { JwtModule } from '@auth0/angular-jwt';
-import { UserService } from './common/sign-in/user.service';
 import { RemultModule } from '@remult/angular';
+import { AuthService } from './common/sign-in/auth.service';
 
 
 
@@ -31,10 +31,10 @@ const routes: Route[] = [
     CommonModule, RouterModule.forRoot(routes),
     RemultModule,
     JwtModule.forRoot({
-      config: { tokenGetter: () => UserService.getToken() }
+      config: { tokenGetter: () => AuthService.fromStorage() }
     })
   ],
-  providers: [UserService, { provide: ErrorHandler, useClass: ShowDialogOnErrorErrorHandler }],
+  providers: [AuthService, { provide: ErrorHandler, useClass: ShowDialogOnErrorErrorHandler }],
   declarations: [],
   exports: [RouterModule, RemultModule]
 })

@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import * as models from './../models';
 
 import { Remult } from 'remult';
 import { SelectPopupComponent } from '../common/select-popup/select-popup.component';
 import { BusyService, getValueList, GridSettings, openDialog, Lookup } from '@remult/angular';
+import { Customers } from '../customers/customers';
+import { Orders } from './orders';
+import { OrderDetails } from './orderDetails';
+import { Products } from '../products/products';
+import { Shippers } from '../shippers/shippers';
 
 
 @Component({
@@ -15,8 +19,8 @@ export class HomeComponent {
   constructor(private remult: Remult, private busyService: BusyService) {
 
   }
-  lookup = new Lookup(this.remult.repo(models.Customers));
-  ordersGrid = new GridSettings(this.remult.repo(models.Orders),
+  lookup = new Lookup(this.remult.repo(Customers));
+  ordersGrid = new GridSettings(this.remult.repo(Orders),
     {
       rowsInPage: 50,
 
@@ -43,7 +47,7 @@ export class HomeComponent {
           getValue: (order) => this.lookup.get(c => c.id.isEqualTo(order.customerID)).companyName,
           click: (order) =>
             openDialog(SelectPopupComponent,
-              popup => popup.config(this.remult.repo(models.Customers),
+              popup => popup.config(this.remult.repo(Customers),
                 {
                   onSelect: selected => { order.customerID = selected.id }
                 })),
@@ -57,18 +61,18 @@ export class HomeComponent {
         {
           field: orders.shipVia,
           width: '150px',
-          valueList:()=> getValueList(this.remult.repo(models.Shippers)),
+          valueList: () => getValueList(this.remult.repo(Shippers)),
         },
         orders.employeeID,
-        orders.requiredDate,
-        orders.shippedDate,
+        orders.requiredDate!,
+        orders.shippedDate!,
         orders.freight,
         orders.shipName,
         orders.shipAddress,
         orders.shipCity,
         orders.shipRegion,
         orders.shipPostalCode,
-        orders.shipCountry,
+        orders.shipCountry
 
       ],
       rowButtons: [
@@ -86,13 +90,13 @@ export class HomeComponent {
   shipInfoArea = this.ordersGrid.addArea({
     numberOfColumnAreas: 2,
     fields: orders => [
-      orders.requiredDate,
-      orders.shippedDate,
+      orders.requiredDate!,
+      orders.shippedDate!,
       orders.shipAddress,
       orders.shipCity
     ]
   });
-  orderDetailsGrid = new GridSettings(this.remult.repo(models.OrderDetails), {
+  orderDetailsGrid = new GridSettings(this.remult.repo(OrderDetails), {
     allowUpdate: true,
     allowDelete: true,
     allowInsert: true,
@@ -101,7 +105,7 @@ export class HomeComponent {
       {
         field: order_details.productID,
         width: '250px',
-        valueList: getValueList(this.remult.repo(models.Products))
+        valueList: getValueList(this.remult.repo(Products))
       }, {
         field: order_details.unitPrice,
         width: '100px'

@@ -5,7 +5,7 @@ import { DialogService } from '../dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { HttpClient } from '@angular/common/http';
-import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -15,11 +15,11 @@ import { UserService } from './user.service';
 export class SignInComponent implements OnInit {
 
   constructor(private dialog: DialogService,
-    private userService: UserService,
+    private auth: AuthService,
     public dialogRef: MatDialogRef<SignInComponent>,
     private http: HttpClient) { }
-  user: string;
-  password: string;
+  user!: string;
+  password!: string;
   ngOnInit() {
   }
   async signIn() {
@@ -30,7 +30,7 @@ export class SignInComponent implements OnInit {
       this.dialog.yesNoQuestion("Invalid sign in information");
     }
     else {
-      this.userService.setToken(token);
+      this.auth.setAuthToken(token);
       this.dialogRef.close();
     }
   }
