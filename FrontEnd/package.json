@@ -4,13 +4,11 @@
   "license": "MIT",
   "scripts": {
     "start": "ng serve",
-    "build": "ng build --prod && npm run copyFilesToMVC",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "copyFilesToMVC": "node   copyFilesToMVC.js",
-    "ngrok": "ngrok start dataApi",
-    "gc": "ng generate component --skipTests=true"
+    "ngrok": "ngrok start dataApi"
   },
   "private": true,
   "dependencies": {
