@@ -23,7 +23,7 @@ export class HomeComponent {
   ordersGrid = new GridSettings(this.remult.repo(Orders),
     {
       rowsInPage: 50,
-
+      knowTotalRows: true,
       numOfColumnsInGrid: 4,
       allowUpdate: true,
       allowInsert: true,

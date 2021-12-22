@@ -161,8 +161,41 @@ namespace ENV.Web
             _bp.Where.Add(_tempFilter);
 
         }
+        Sort _origOrderBy;
 
         internal DataList GetRows(WebRequest req)
+        {
+            long start, numOfRows;
+            setupBp(req, out start, out numOfRows);
+            try
+            {
+                return GetRows(start, numOfRows);
+            }
+            finally
+            {
+                _bp.OrderBy = _origOrderBy;
+                _tempFilter.Clear();
+            }
+        }
+        internal DataItem CountRows(WebRequest req)
+        {
+            long start, numOfRows;
+            setupBp(req, out start, out numOfRows);
+            try
+            {
+                var result = new DataItem();
+                var envE = this.From as ENV.Data.Entity;
+                result.Set("count", envE.CountRows(_bp.Where));
+                return result;
+            }
+            finally
+            {
+                _bp.OrderBy = _origOrderBy;
+                _tempFilter.Clear();
+            }
+        }
+
+        private void setupBp(WebRequest req, out long start, out long numOfRows)
         {
             init();
 
@@ -180,8 +213,8 @@ namespace ENV.Web
                 item.Value.addNullFilter(req[item.Key + "_null"], _tempFilter);
 
             }
-            long start = 0;
-            long numOfRows = 25;
+            start = 0;
+            numOfRows = 25;
             {
                 var limit = req["_limit"];
                 if (!string.IsNullOrEmpty(limit))
@@ -200,7 +233,7 @@ namespace ENV.Web
                         start = (x - 1) * numOfRows;
                 }
             }
-            var ob = _bp.OrderBy;
+            _origOrderBy = _bp.OrderBy;
             var sort = req["_sort"];
             if (!string.IsNullOrEmpty(sort))
             {
@@ -222,16 +255,8 @@ namespace ENV.Web
                 if (orderBy.Segments.Count > 0)
                     _bp.OrderBy = orderBy;
             }
-            try
-            {
-                return GetRows(start, numOfRows);
-            }
-            finally
-            {
-                _bp.OrderBy = ob;
-                _tempFilter.Clear();
-            }
         }
+
         public DataList ExportRows()
         {
             init();

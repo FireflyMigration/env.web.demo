@@ -154,7 +154,7 @@ namespace ENV.Web
 
                                         }
 
-                                        if (responseType.StartsWith("D")||responseType.ToLower().StartsWith("remult"))
+                                        if (responseType.StartsWith("D") || responseType.ToLower().StartsWith("remult"))
                                         {
                                             Response.ContentType = "text/plain";
                                             sw.WriteLine("// /" + name + "?_responseType=" + responseType);
@@ -164,7 +164,7 @@ namespace ENV.Web
                                                 vmc.CreateTypeScriptRemultClass(sw, name);
                                                 Response.ContentType = "application/text";
                                                 name = name[0].ToString().ToLower() + name.Substring(1);
-                                                Response.AddHeader("Content-Disposition", "attachment;filename="+name+".ts");
+                                                Response.AddHeader("Content-Disposition", "attachment;filename=" + name + ".ts");
                                             }
                                             else if (responseType.StartsWith("DCF"))
                                                 vmc.FullColumnList(sw);
@@ -174,7 +174,12 @@ namespace ENV.Web
                                                 vmc.CreateTypeScriptInterface(sw, name, Request.Path);
                                         }
                                         else if (string.IsNullOrEmpty(id))
-                                            vmc.GetRows(Request).ToWriter(w);
+                                        {
+                                            if (Request["__action"] == "count")
+                                                vmc.CountRows(Request).ToWriter(w);
+                                            else
+                                                vmc.GetRows(Request).ToWriter(w);
+                                        }
                                         else
                                             try
                                             {
