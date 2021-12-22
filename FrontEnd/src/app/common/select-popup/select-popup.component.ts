@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { BusyService, DataControlInfo, GridSettings, IDataSettings, openDialog } from '@remult/angular';
-import { Entity, Remult, Filter, Sort, SortSegment, AndFilter, FieldMetadata, Repository } from 'remult';
+import { BusyService, GridSettings, IDataSettings } from '@remult/angular';
+import { Remult, Filter, FieldMetadata, Repository, EntityFilter } from 'remult';
 
 @Component({
   selector: 'app-select-popup',
@@ -31,18 +31,26 @@ export class SelectPopupComponent {
   config<T>(remultForEntity: Repository<T>, settings: IDataSettings<T> & { onSelect: (selected: T) => void }) {
     this.onOk = settings.onSelect;
 
-    let searchWhere = new Filter(x => {
-      if (this.searchField && this.searchText)
-        x.containsCaseInsensitive(this.searchField, this.searchText);
-    });
 
-    if (!settings.where) {
-      settings.where = () => searchWhere;
+    let orig = settings.where;
+    //@ts-ignore
+    settings.where = async () => {
+      let incoming = await Filter.resolve(orig!);
+      let search: EntityFilter<T> = undefined!;
+      if (this.searchField) {
+        //@ts-ignore
+        search = { [this.searchField.key]: { $contains: this.searchText } };
+      }
+      
+      return {
+
+        $and: [
+          search,
+          incoming
+        ]
+      }
     }
-    else {
-      let y = settings.where;
-      settings.where = e => Filter.fromEntityFilter(e, y, () => searchWhere);
-    }
+
     if (!settings.rowsInPage) {
       settings.rowsInPage = 50;
     }
@@ -50,6 +58,7 @@ export class SelectPopupComponent {
     this.settings.reloadData().then(() => {
 
       if (!this.searchField) {
+        
         for (let col of this.settings.columns.items) {
           let colDefs = col.field as FieldMetadata;
           if (col.field && colDefs.valueType === String && colDefs.key != "id" && (!col.inputType || col.inputType == "text")) {

@@ -19,7 +19,7 @@ export class CustomersComponent implements OnInit {
   }
   customers = new GridSettings(this.remult.repo(Customers), {
     allowUpdate: true,
-    orderBy: f => f.companyName,
+    orderBy: { companyName: "asc" },
     rowsInPage: 1000
   });
 
@@ -73,12 +73,12 @@ export class CustomersComponent implements OnInit {
 
     }
   }
-  countriesList :string[]= [];
+  countriesList: string[] = [];
   updateChart() {
     this.pieChartData = [];
     this.pieChartLabels.splice(0);
     this.colors[0].backgroundColor.splice(0);
-    let countries:any = {};
+    let countries: any = {};
     this.countriesList = [];
     this.customers.items.forEach(c => {
       let x = countries[c.country];

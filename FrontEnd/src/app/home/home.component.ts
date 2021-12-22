@@ -30,8 +30,9 @@ export class HomeComponent {
       enterRow: orders => {
         this.busyService.donotWait(async () => {
           await this.orderDetailsGrid.get({
-            where: orderDetails =>
-              orderDetails.orderID.isEqualTo(orders.id),
+            where: {
+              orderID: orders.id
+            },
             limit: 50
           })
         });
@@ -44,7 +45,7 @@ export class HomeComponent {
         },
         {
           field: orders.customerID,
-          getValue: (order) => this.lookup.get(c => c.id.isEqualTo(order.customerID)).companyName,
+          getValue: (order) => this.lookup.get({ id: order.customerID }).companyName,
           click: (order) =>
             openDialog(SelectPopupComponent,
               popup => popup.config(this.remult.repo(Customers),
