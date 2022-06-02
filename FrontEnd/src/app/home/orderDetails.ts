@@ -1,19 +1,19 @@
 // /orderDetails?_responseType=REMULT
 
-import { Field, DateOnlyField, Entity, EntityBase } from 'remult';
+import { Fields, Entity, EntityBase } from 'remult';
 
 @Entity('OrderDetails')
 export class OrderDetails extends EntityBase {
-    @Field()
+    @Fields.integer()
     orderID: number = 0;
-    @Field()
+    @Fields.integer()
     productID: number = 0;
-    @Field()
+    @Fields.number()
     unitPrice: number = 0;
-    @Field()
+    @Fields.number()
     quantity: number = 0;
-    @Field()
+    @Fields.number()
     discount: number = 0;
-    @Field()
+    @Fields.string()
     id: string = '';
 }

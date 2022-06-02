@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 
 import { Remult } from 'remult';
 import { SelectPopupComponent } from '../common/select-popup/select-popup.component';
-import { BusyService, getValueList, GridSettings, openDialog, Lookup } from '@remult/angular';
+import { BusyService,  openDialog, Lookup } from '@remult/angular';
 import { Customers } from '../customers/customers';
 import { Orders } from './orders';
 import { OrderDetails } from './orderDetails';
 import { Products } from '../products/products';
 import { Shippers } from '../shippers/shippers';
+import { getEntityValueList, GridSettings } from '@remult/angular/interfaces';
 
 
 @Component({
@@ -62,7 +63,7 @@ export class HomeComponent {
         {
           field: orders.shipVia,
           width: '150px',
-          valueList: () => getValueList(this.remult.repo(Shippers)),
+          valueList: () => getEntityValueList(this.remult.repo(Shippers)),
         },
         orders.employeeID,
         orders.requiredDate!,
@@ -106,7 +107,7 @@ export class HomeComponent {
       {
         field: order_details.productID,
         width: '250px',
-        valueList: getValueList(this.remult.repo(Products))
+        valueList: getEntityValueList(this.remult.repo(Products))
       }, {
         field: order_details.unitPrice,
         width: '100px'

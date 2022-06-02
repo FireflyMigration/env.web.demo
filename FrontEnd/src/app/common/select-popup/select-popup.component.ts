@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { BusyService, GridSettings, IDataSettings } from '@remult/angular';
+import { BusyService } from '@remult/angular';
+import { GridSettings, IDataSettings } from '@remult/angular/interfaces';
 import { Remult, Filter, FieldMetadata, Repository, EntityFilter } from 'remult';
 
 @Component({
@@ -41,7 +42,7 @@ export class SelectPopupComponent {
         //@ts-ignore
         search = { [this.searchField.key]: { $contains: this.searchText } };
       }
-      
+
       return {
 
         $and: [
@@ -58,7 +59,7 @@ export class SelectPopupComponent {
     this.settings.reloadData().then(() => {
 
       if (!this.searchField) {
-        
+
         for (let col of this.settings.columns.items) {
           let colDefs = col.field as FieldMetadata;
           if (col.field && colDefs.valueType === String && colDefs.key != "id" && (!col.inputType || col.inputType == "text")) {

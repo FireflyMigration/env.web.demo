@@ -22,24 +22,16 @@ import { HomeComponent } from './home/home.component';
 import { CustomersComponent } from './customers/customers.component';
 import { ProductsComponent } from './products/products.component';
 import { FormsModule } from '@angular/forms';
-import { ChartsModule } from 'ng2-charts';
+//import { ChartsModule } from 'ng2-charts';
 import { CategoriesComponent } from './categories/categories.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 import { ShippersComponent } from './shippers/shippers.component';
-
-
 import { SelectPopupComponent } from './common/select-popup/select-popup.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
 import { SignInComponent } from './common/sign-in/sign-in.component';
-
-
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
 import { DialogService } from './common/dialog';
 import { InputAreaComponent } from './common/input-area/input-area.component';
-
-
-
 
 @NgModule({
   declarations: [
@@ -51,13 +43,11 @@ import { InputAreaComponent } from './common/input-area/input-area.component';
     SuppliersComponent,
     ShippersComponent,
     SelectPopupComponent,
-
     SignInComponent,
     YesNoQuestionComponent,
     InputAreaComponent
   ],
   imports: [
-    ChartsModule,
     BrowserModule,
     FormsModule,
     AppRoutingModule,
@@ -76,7 +66,6 @@ import { InputAreaComponent } from './common/input-area/input-area.component';
     MatInputModule,
     MatButtonModule,
     MatMenuModule,
-    
     HttpClientModule
   ],
   providers: [DialogService],

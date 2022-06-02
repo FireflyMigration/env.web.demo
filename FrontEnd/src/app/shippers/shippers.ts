@@ -1,13 +1,13 @@
 // /Shippers?_responseType=REMULT
 
-import { Field, DateOnlyField, Entity, EntityBase } from 'remult';
+import { Field,  Entity, EntityBase, Fields } from 'remult';
 
 @Entity('Shippers')
 export class Shippers extends EntityBase {
-    @Field({ caption: 'ShipperID' })
+    @Fields.integer({ caption: 'ShipperID' })
     id: number = 0;
-    @Field()
+    @Fields.string()
     companyName: string = '';
-    @Field()
+    @Fields.string()
     phone: string = '';
 }

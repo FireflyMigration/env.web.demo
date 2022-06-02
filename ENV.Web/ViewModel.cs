@@ -285,7 +285,7 @@ namespace ENV.Web
             name = name[0].ToString().ToUpper() + name.Substring(1);
 
 
-            tw.WriteLine("import { Field, DateOnlyField, Entity, EntityBase } from 'remult';");
+            tw.WriteLine("import { Fields, Entity, EntityBase } from 'remult';");
             tw.WriteLine("");
             tw.WriteLine("@Entity('" + name + "')");
             tw.WriteLine($@"export class {name} extends EntityBase {{");
@@ -300,9 +300,8 @@ namespace ENV.Web
                     args = "{ " + args + " }";
                 }
                 if (type == "Date")
-                    tw.WriteLine($"    @DateOnlyField({args})");
-                else
-                    tw.WriteLine($"    @Field({args})");
+                    type = "dateOnly";
+                tw.WriteLine($"    @Fields.{type}({args})");
                 tw.WriteLine($"    {item.GetTypeScriptDefinition()};");
 
             }
@@ -591,7 +590,10 @@ namespace ENV.Web
                 if (_col is BoolColumn)
                     return "boolean";
                 else if (_col is NumberColumn)
-                    return "number";
+                    if ((_col as NumberColumn).FormatInfo.DecimalDigits == 0)
+                        return "integer";
+                    else
+                        return "number";
                 else if (_col is DateColumn)
                     return "Date";
                 return "string";
@@ -658,14 +660,14 @@ namespace ENV.Web
                 else if (_col is NumberColumn)
                     def = "0";
                 else if (_col is DateColumn)
-                    def = null; 
+                    def = null;
                 else def = "''";
                 var r = Key;
                 if (def == null)
-                    return r+ "?: " + getColumnType();
+                    return r + "!: " + getColumnType();
                 else
-                    return r + ": " + getColumnType()+" = "+def;
-                
+                    return r + " = " + def;
+
             }
         }
         List<ColumnInViewModel> _columns = new List<ColumnInViewModel>();

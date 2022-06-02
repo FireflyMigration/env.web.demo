@@ -1,29 +1,29 @@
 // /customers?_responseType=REMULT
 
-import { Field, DateOnlyField, Entity, EntityBase } from 'remult';
+import { Fields, Entity, EntityBase } from 'remult';
 
 @Entity('Customers')
 export class Customers extends EntityBase {
-    @Field({ caption: 'CustomerID' })
+    @Fields.string({ caption: 'CustomerID' })
     id: string = '';
-    @Field()
+    @Fields.string()
     companyName: string = '';
-    @Field()
+    @Fields.string()
     contactName: string = '';
-    @Field()
+    @Fields.string()
     contactTitle: string = '';
-    @Field()
+    @Fields.string()
     address: string = '';
-    @Field()
+    @Fields.string()
     city: string = '';
-    @Field()
+    @Fields.string()
     region: string = '';
-    @Field()
+    @Fields.string()
     postalCode: string = '';
-    @Field()
+    @Fields.string()
     country: string = '';
-    @Field()
+    @Fields.string()
     phone: string = '';
-    @Field()
+    @Fields.string()
     fax: string = '';
 }

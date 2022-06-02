@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Remult } from 'remult';
-import { getValueList, GridSettings } from '@remult/angular';
+import {  getEntityValueList, GridSettings } from '@remult/angular/interfaces';
 import { Products } from './products';
 import { Suppliers } from '../suppliers/suppliers';
 import { Categories } from '../categories/categories';
@@ -37,13 +37,13 @@ export class ProductsComponent implements OnInit {
           {
             field: products.supplierID,
             width: '250px',
-            valueList: getValueList(this.remult.repo(Suppliers))
+            valueList: getEntityValueList(this.remult.repo(Suppliers))
 
           },
           {
             field: products.categoryID,
             width: '150px',
-            valueList: getValueList(this.remult.repo(Categories))
+            valueList: getEntityValueList(this.remult.repo(Categories))
           },
 
           products.quantityPerUnit,

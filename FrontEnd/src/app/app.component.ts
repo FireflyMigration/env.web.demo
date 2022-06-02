@@ -51,15 +51,15 @@ export class AppComponent implements OnInit {
 
   routeName(route: Route) {
     let name = route.path;
-    if (route.data && route.data.name)
-      name = route.data.name;
+    if (route.data && route.data['name'])
+      name = route.data['name'];
     return name;
   }
 
   currentTitle() {
     if (this.activeRoute!.snapshot && this.activeRoute!.firstChild)
-      if (this.activeRoute.snapshot.firstChild!.data!.name) {
-        return this.activeRoute.snapshot.firstChild!.data.name;
+      if (this.activeRoute.snapshot.firstChild!.data!['name']) {
+        return this.activeRoute.snapshot.firstChild!.data['name'];
       }
       else {
         if (this.activeRoute.firstChild.routeConfig)

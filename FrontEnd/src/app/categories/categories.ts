@@ -1,13 +1,13 @@
 // /Categories?_responseType=REMULT
 
-import { Field, DateOnlyField, Entity, EntityBase } from 'remult';
+import { Fields, Entity, EntityBase } from 'remult';
 
 @Entity('Categories')
 export class Categories extends EntityBase {
-    @Field({ caption: 'CategoryID' })
+    @Fields.integer({ caption: 'CategoryID' })
     id: number = 0;
-    @Field()
+    @Fields.string()
     categoryName: string = '';
-    @Field()
+    @Fields.string()
     description: string = '';
 }

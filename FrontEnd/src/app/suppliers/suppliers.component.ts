@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Suppliers } from './suppliers';
 import { Remult } from 'remult';
-import { GridSettings } from '@remult/angular';
+import { GridSettings } from '@remult/angular/interfaces';
 
 @Component({
   selector: 'app-suppliers',

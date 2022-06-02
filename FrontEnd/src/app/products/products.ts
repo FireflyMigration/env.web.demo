@@ -1,27 +1,27 @@
 // /products?_responseType=REMULT
 
-import { Field, DateOnlyField, Entity, EntityBase } from 'remult';
+import { Field,  Entity, EntityBase, Fields } from 'remult';
 
 @Entity('Products')
 export class Products extends EntityBase {
-    @Field({ caption: 'ProductID' })
+    @Fields.integer({ caption: 'ProductID' })
     id: number = 0;
-    @Field()
+    @Fields.string()
     productName: string = '';
-    @Field()
+    @Fields.integer()
     supplierID: number = 0;
-    @Field()
+    @Fields.integer()
     categoryID: number = 0;
-    @Field()
+    @Fields.string()
     quantityPerUnit: string = '';
-    @Field()
+    @Fields.integer()
     unitPrice: number = 0;
-    @Field()
+    @Fields.integer()
     unitsInStock: number = 0;
-    @Field()
+    @Fields.integer()
     unitsOnOrder: number = 0;
-    @Field()
+    @Fields.integer()
     reorderLevel: number = 0;
-    @Field()
+    @Fields.boolean()
     discontinued: boolean = false;
 }

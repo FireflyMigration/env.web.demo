@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Remult } from 'remult';
-import * as chart from 'chart.js';
-import { GridSettings } from '@remult/angular';
+//import * as chart from 'chart.js';
+import { GridSettings } from '@remult/angular/interfaces';
 import { Customers } from './customers';
 
 @Component({
@@ -56,16 +56,16 @@ export class CustomersComponent implements OnInit {
       backgroundColor: []
 
     }];
-  public pieChartType: chart.ChartType = 'pie';
+  // public pieChartType: chart.ChartType = 'pie';
 
-  options: chart.ChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    legend: {
-      display: false
-    }
+  // options: chart.ChartOptions = {
+  //   responsive: true,
+  //   maintainAspectRatio: false,
+  //   legend: {
+  //     display: false
+  //   }
 
-  };
+  // };
   filterCountry?: string;
   public chartClicked(e: any): void {
     if (e.active && e.active.length > 0) {
