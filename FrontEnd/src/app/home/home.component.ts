@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Remult } from 'remult';
+import { remult } from 'remult';
 import { SelectPopupComponent } from '../common/select-popup/select-popup.component';
-import { BusyService,  openDialog, Lookup } from '@remult/angular';
+import { BusyService, openDialog, Lookup } from 'common-ui-elements';
 import { Customers } from '../customers/customers';
 import { Orders } from './orders';
 import { OrderDetails } from './orderDetails';
 import { Products } from '../products/products';
 import { Shippers } from '../shippers/shippers';
-import { getEntityValueList, GridSettings } from '@remult/angular/interfaces';
+import { getEntityValueList, GridSettings } from 'common-ui-elements/interfaces';
+import { async } from '@angular/core/testing';
+import { saveToExcel } from '../common-ui-elements/interfaces/src/saveGridToExcel';
 
 
 @Component({
@@ -17,17 +19,23 @@ import { getEntityValueList, GridSettings } from '@remult/angular/interfaces';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  constructor(private remult: Remult, private busyService: BusyService) {
+  constructor(private busyService: BusyService) {
 
   }
-  lookup = new Lookup(this.remult.repo(Customers));
-  ordersGrid = new GridSettings(this.remult.repo(Orders),
+  lookup = new Lookup(remult.repo(Customers));
+  ordersGrid: GridSettings<Orders> = new GridSettings(remult.repo(Orders),
     {
       rowsInPage: 50,
       knowTotalRows: true,
       numOfColumnsInGrid: 4,
       allowUpdate: true,
       allowInsert: true,
+      gridButtons: [{
+        name: "Export to excel",
+        click: async () => {
+          saveToExcel(this.ordersGrid, "orders", this.busyService);
+        }
+      }],
       enterRow: orders => {
         this.busyService.donotWait(async () => {
           await this.orderDetailsGrid.get({
@@ -49,7 +57,7 @@ export class HomeComponent {
           getValue: (order) => this.lookup.get({ id: order.customerID }).companyName,
           click: (order) =>
             openDialog(SelectPopupComponent,
-              popup => popup.config(this.remult.repo(Customers),
+              popup => popup.config(remult.repo(Customers),
                 {
                   onSelect: selected => { order.customerID = selected.id }
                 })),
@@ -63,7 +71,7 @@ export class HomeComponent {
         {
           field: orders.shipVia,
           width: '150px',
-          valueList: () => getEntityValueList(this.remult.repo(Shippers)),
+          valueList: () => getEntityValueList(remult.repo(Shippers)),
         },
         orders.employeeID,
         orders.requiredDate!,
@@ -98,7 +106,7 @@ export class HomeComponent {
       orders.shipCity
     ]
   });
-  orderDetailsGrid = new GridSettings(this.remult.repo(OrderDetails), {
+  orderDetailsGrid = new GridSettings(remult.repo(OrderDetails), {
     allowUpdate: true,
     allowDelete: true,
     allowInsert: true,
@@ -107,7 +115,7 @@ export class HomeComponent {
       {
         field: order_details.productID,
         width: '250px',
-        valueList: getEntityValueList(this.remult.repo(Products))
+        valueList: getEntityValueList(remult.repo(Products))
       }, {
         field: order_details.unitPrice,
         width: '100px'

@@ -44,7 +44,7 @@ $iconWidth:56px;
     min-width:$iconWidth;
     @media(max-width: 720px){
         display:flex;
-        align-item:center;
+        align-items:center;
         justify-content: center;
     }
     mat-icon{

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Suppliers } from './suppliers';
-import { Remult } from 'remult';
-import { GridSettings } from '@remult/angular/interfaces';
+import { remult } from 'remult';
+import { GridSettings } from 'common-ui-elements/interfaces';
 
 @Component({
   selector: 'app-suppliers',
@@ -10,8 +10,8 @@ import { GridSettings } from '@remult/angular/interfaces';
 })
 export class SuppliersComponent implements OnInit {
 
-  constructor(private remult: Remult) { }
-  suppliers = new GridSettings(this.remult.repo(Suppliers),
+  constructor() { }
+  suppliers = new GridSettings(remult.repo(Suppliers),
     {
       rowsInPage: 25,
       allowUpdate: true,

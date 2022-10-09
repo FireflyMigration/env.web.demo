@@ -1,22 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { DataAreaFieldsSetting, DataAreaSettings, IDataAreaSettings } from '@remult/angular/interfaces';
+import { DataAreaFieldsSetting, DataAreaSettings, IDataAreaSettings } from 'common-ui-elements/interfaces';
 import { getFields } from 'remult';
-
-import { DialogService } from '../dialog';
-
-
+import { terms } from '../../terms';
 
 @Component({
-  selector: 'app-input-area',
-  templateUrl: './input-area.component.html',
-  styleUrls: ['./input-area.component.scss']
+  templateUrl: './data-area-dialog.component.html',
+  styleUrls: ['./data-area-dialog.component.scss']
 })
-export class InputAreaComponent implements OnInit {
+export class DataAreaDialogComponent implements OnInit {
   args!: {
     title: string,
     helpText?: string,
-    fields?: () => DataAreaFieldsSetting<any>[];
+    fields?:  DataAreaFieldsSetting<any>[];
     areaSettings?: IDataAreaSettings,
     object?: any,
     ok: () => void,
@@ -24,10 +20,9 @@ export class InputAreaComponent implements OnInit {
     validate?: () => Promise<void>,
     buttons?: button[]
   };
-
+  terms = terms;
   constructor(
-    public dialogRef: MatDialogRef<any>,
-    private dialog: DialogService
+    public dialogRef: MatDialogRef<any>
 
   ) {
 
@@ -39,7 +34,7 @@ export class InputAreaComponent implements OnInit {
     if (this.args.areaSettings)
       this.area = new DataAreaSettings(this.args.areaSettings, undefined, undefined);
     else if (this.args.fields) {
-      this.area = new DataAreaSettings({ fields: () => this.args.fields!() });
+      this.area = new DataAreaSettings({ fields: () => this.args.fields! });
     }
     else if (this.args.object) {
       this.area = new DataAreaSettings({ fields: () => [...getFields(this.args.object)] })

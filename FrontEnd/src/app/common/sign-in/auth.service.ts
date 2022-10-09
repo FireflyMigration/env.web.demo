@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Remult } from 'remult';
+import { remult } from 'remult';
 
 const AUTH_TOKEN_KEY = "authToken";
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    constructor(private remult: Remult) {
+    constructor() {
         let token = AuthService.fromStorage();
         if (token) {
             this.setAuthToken(token);
         }
     }
     setAuthToken(token: string) {
-        this.remult.setUser(new JwtHelperService().decodeToken(token));
+        remult.user = (new JwtHelperService().decodeToken(token));
         sessionStorage.setItem(AUTH_TOKEN_KEY, token);
     }
     static fromStorage(): string {
@@ -22,7 +22,7 @@ export class AuthService {
     }
 
     signOut() {
-        this.remult.setUser(undefined!);
+        remult.user = (undefined!);
         sessionStorage.removeItem(AUTH_TOKEN_KEY);
     }
 }

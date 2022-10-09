@@ -4,14 +4,14 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 
 
-import { Remult } from 'remult';
+import { remult } from 'remult';
 
 
 import { SignInComponent } from './common/sign-in/sign-in.component';
 
-import { DialogService } from './common/dialog';
-import { RouteHelperService } from '@remult/angular';
+import { RouteHelperService } from 'common-ui-elements';
 import { AuthService } from './common/sign-in/auth.service';
+import { UIToolsService } from './common/UIToolsService';
 
 @Component({
   selector: 'app-root',
@@ -27,24 +27,24 @@ export class AppComponent implements OnInit {
     public activeRoute: ActivatedRoute,
     private dialog: MatDialog,
     private routeHelper: RouteHelperService,
-    public dialogService: DialogService,
-    public remult: Remult) {
+    public ui: UIToolsService) {
 
 
   }
+  remult = remult;
   ngOnInit(): void {
-    
+
   }
   signInText() {
     if (this.remult.authenticated())
-      return this.remult.user.name;
+      return this.remult.user!.name;
     return 'Sign in';
   }
   async signIn() {
     if (!this.remult.authenticated()) {
       this.dialog.open(SignInComponent);
     } else {
-      if (await this.dialogService.yesNoQuestion("Would you like to sign out?"))
+      if (await this.ui.yesNoQuestion("Would you like to sign out?"))
         this.auth.signOut();
     }
   }
@@ -82,7 +82,7 @@ export class AppComponent implements OnInit {
   //@ts-ignore ignoring this to match angular 7 and 8
   @ViewChild('sidenav') sidenav: MatSidenav;
   routeClicked() {
-    if (this.dialogService.isScreenSmall())
+    if (this.ui.isScreenSmall())
       this.sidenav.close();
 
   }

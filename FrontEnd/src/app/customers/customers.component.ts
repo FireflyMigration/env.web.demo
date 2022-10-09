@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Remult } from 'remult';
+import { remult } from 'remult';
 //import * as chart from 'chart.js';
-import { GridSettings } from '@remult/angular/interfaces';
+import { GridSettings } from 'common-ui-elements/interfaces';
 import { Customers } from './customers';
 
 @Component({
@@ -11,13 +11,13 @@ import { Customers } from './customers';
 })
 export class CustomersComponent implements OnInit {
 
-  constructor(private remult: Remult) { }
+  constructor() { }
 
   async ngOnInit() {
     await this.customers.reloadData();
     this.updateChart();
   }
-  customers = new GridSettings(this.remult.repo(Customers), {
+  customers = new GridSettings(remult.repo(Customers), {
     allowUpdate: true,
     orderBy: { companyName: "asc" },
     rowsInPage: 1000

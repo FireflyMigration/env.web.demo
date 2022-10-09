@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Shippers } from './shippers';
-import {  Remult } from 'remult';
-import { GridSettings } from '@remult/angular/interfaces';
+import { remult } from 'remult';
+import { GridSettings } from 'common-ui-elements/interfaces';
 
 @Component({
   selector: 'app-shippers',
@@ -10,21 +10,21 @@ import { GridSettings } from '@remult/angular/interfaces';
 })
 export class ShippersComponent implements OnInit {
 
-  constructor(private remult:Remult) { }
-  shippers = new GridSettings(this.remult.repo(Shippers),
-  {
-    allowUpdate:true,
-    allowInsert:true,
-    
-    columnSettings: shippers =>
-    [
-      {
-        field:shippers.id,
-        width:'100px'
-      },
-      shippers.companyName
-    ]
-  });
+  constructor() { }
+  shippers = new GridSettings(remult.repo(Shippers),
+    {
+      allowUpdate: true,
+      allowInsert: true,
+
+      columnSettings: shippers =>
+        [
+          {
+            field: shippers.id,
+            width: '100px'
+          },
+          shippers.companyName
+        ]
+    });
   ngOnInit() {
   }
 

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 
-import { DialogService } from '../dialog';
+
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { UIToolsService } from '../UIToolsService';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,7 +15,7 @@ import { AuthService } from './auth.service';
 })
 export class SignInComponent implements OnInit {
 
-  constructor(private dialog: DialogService,
+  constructor(private ui: UIToolsService,
     private auth: AuthService,
     public dialogRef: MatDialogRef<SignInComponent>,
     private http: HttpClient) { }
@@ -27,7 +28,7 @@ export class SignInComponent implements OnInit {
       return;
     let token: string;
     if (!this.user || this.user.length < 2 || !(token = (await this.doSignIn(this.user, this.password)))) {
-      this.dialog.yesNoQuestion("Invalid sign in information");
+      this.ui.yesNoQuestion("Invalid sign in information");
     }
     else {
       this.auth.setAuthToken(token);

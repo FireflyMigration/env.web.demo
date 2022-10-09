@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { BusyService } from '@remult/angular';
-import { GridSettings, IDataSettings } from '@remult/angular/interfaces';
+import { BusyService } from 'common-ui-elements';
+import { GridSettings, IDataSettings } from 'common-ui-elements/interfaces';
 import { Remult, Filter, FieldMetadata, Repository, EntityFilter } from 'remult';
 
 @Component({
@@ -10,7 +10,7 @@ import { Remult, Filter, FieldMetadata, Repository, EntityFilter } from 'remult'
   styleUrls: ['./select-popup.component.scss']
 })
 export class SelectPopupComponent {
-  constructor(private dialogRef: MatDialogRef<any>, private remult: Remult, private busy: BusyService) {
+  constructor(private dialogRef: MatDialogRef<any>,  private busy: BusyService) {
   }
   search() {
     this.busy.donotWait(async () => {

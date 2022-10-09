@@ -30,8 +30,9 @@ import { SelectPopupComponent } from './common/select-popup/select-popup.compone
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SignInComponent } from './common/sign-in/sign-in.component';
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
-import { DialogService } from './common/dialog';
-import { InputAreaComponent } from './common/input-area/input-area.component';
+import { DataAreaDialogComponent } from './common/data-area-dialog/data-area-dialog.component';
+import { UIToolsService } from './common/UIToolsService';
+import { TextAreaDataControlComponent } from './common/textarea-data-control/textarea-data-control.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { InputAreaComponent } from './common/input-area/input-area.component';
     SelectPopupComponent,
     SignInComponent,
     YesNoQuestionComponent,
-    InputAreaComponent
+    DataAreaDialogComponent,
+    TextAreaDataControlComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +70,7 @@ import { InputAreaComponent } from './common/input-area/input-area.component';
     MatMenuModule,
     HttpClientModule
   ],
-  providers: [DialogService],
+  providers: [UIToolsService],
   bootstrap: [AppComponent],
   entryComponents: [SelectPopupComponent, SignInComponent, YesNoQuestionComponent]
 })
