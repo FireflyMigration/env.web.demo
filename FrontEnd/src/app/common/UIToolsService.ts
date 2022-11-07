@@ -98,6 +98,10 @@ export function extractError(err: any): string {
             }
         }
     }
+    if (err.ModelState) {
+        if (err.Message)
+            return err.Message;
+    }
     if (err.rejection)
         return extractError(err.rejection);//for promise failed errors and http errors
     if (err.message) {
