@@ -23,6 +23,10 @@ namespace ENV.Web
         {
             return ToResult(dl);
         }
+        public static implicit operator DataResult(DataItem dl)
+        {
+            return ToResult(dl);
+        }
         static DataResult ToResult(ISerializedObject r)
         {
             var response = System.Web.HttpContext.Current.Request.Params["_response"] ?? "J";
