@@ -1132,12 +1132,16 @@ namespace ENV.Web
             Validate(col, v => !Time.IsNullOrStartOfDay(v), message);
         }
 
-        public void Exists<T>(TypedColumnBase<T> column, TypedColumnBase<T> equalToColumn, string message = "Was not found in {0}")
+        public void Exists<T>(TypedColumnBase<T> column, TypedColumnBase<T> equalToColumn, FilterBase where = null, string message = "Was not found in {0}")
         {
             if (!(equalToColumn.Entity is ENV.Data.Entity))
                 throw new InvalidOperationException("Invalid entity type");
+            var fc = new FilterCollection();
+            fc.Add(equalToColumn.IsEqualTo(column));
+            if (where != null)
+                fc.Add(where);
 
-            Validate(column, v => ((ENV.Data.Entity)equalToColumn.Entity).Contains(equalToColumn.IsEqualTo(column))
+            Validate(column, v => ((ENV.Data.Entity)equalToColumn.Entity).Contains(fc)
             , string.Format(message, equalToColumn.Entity.Caption));
         }
     }
