@@ -30,7 +30,7 @@ export async function saveToExcel<E = any, T extends GridSettings<E> = GridSetti
     let rowNum = titleRow + 1;
 
 
-    let rows = grid.repository.query(await grid.getFilterWithSelectedRows());
+    let rows = grid.repository.query({ ...await grid.getFilterWithSelectedRows(), pageSize: 1000000 });
     let currentPage = await rows.paginator();
     while (currentPage != null) {
       if (loadPage)
