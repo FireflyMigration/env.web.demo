@@ -1,5 +1,8 @@
 # Deploy the App
 
+### Setup
+Make sure you install https://www.iis.net/downloads/microsoft/url-rewrite on the iis server
+
 ### Step 1
 In the FrontEnd directory run:
 ```
