@@ -136,8 +136,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Angular\" />
     <Folder Include="App_Data\" />
+    <Folder Include="frontend-dist-files\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
