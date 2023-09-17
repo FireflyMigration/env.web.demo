@@ -21,4 +21,24 @@ namespace ENV.Web
             base.OnActionExecuted(filterContext);
         }
     }
+    public class DataCollectorAttribute : ActionFilterAttribute
+    {
+        
+
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            DataCollector.Enabled = true;
+
+            base.OnActionExecuting(filterContext);
+        }
+
+        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            filterContext.Result = DataResult.ToJsonResult(DataCollector.GetResult());
+
+
+
+            base.OnActionExecuted(filterContext);
+        }
+    }
 }

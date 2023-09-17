@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DataControl Code Generator</title>
+  </head>
+  <body>
+    <h1>Update the view and designer files</h1>
+    <input type="file" id="fileInput" multiple />
+    <div>
+      <textarea
+        id="result"
+        style="width: 100%; height: 100%"
+        rows="10"
+      ></textarea>
+    </div>
+
+    <script>
+      // Get a reference to the file input element
+      const fileInput = document.getElementById("fileInput")
+      const result = document.getElementById("result")
+      const DataCollector = "DataCollector."
+
+      // Add an event listener to the file input element
+      fileInput.addEventListener("change", async function () {
+        // Get the selected files
+        const files = [...fileInput.files]
+        let designer = files.find((f) =>
+          f.name.toLocaleLowerCase().endsWith("designer.cs")
+        )
+        let view = files.find((f) => f != designer)
+
+        result.value = analyzeView(
+          await getFileText(view),
+          await getFileText(designer)
+        )
+        result.focus()
+        result.select()
+      })
+
+      function getFileText(file) {
+        return new Promise((res) => {
+          const reader = new FileReader()
+          reader.onload = function (e) {
+            res(e.target.result)
+          }
+          reader.readAsText(file)
+        })
+      }
+
+      function analyzeView(viewFile, designerFile) {
+        const view = viewFile.split("\n")
+        const designer = designerFile.split("\n")
+        let controls = {}
+        let columns = {}
+        let writtenControls = {}
+        let indent = 0
+        let resultText = ""
+
+        readControlProperties()
+        readControlEvents()
+        console.log({ ...controls })
+        writeColumns()
+        writeOtherControls()
+
+        // read properties
+        function readControlProperties() {
+          for (const line of designer.filter((x) => x.includes(" = "))) {
+            let parts = line.split(" = ")
+            let sp = parts[0].split(".")
+            if (sp.length > 2) {
+              let item = parts[0].split(".")[1]
+              let property = sp[2].trim()
+
+              switch (property) {
+                case "Format":
+                  if (!controls[item]) controls[item] = {}
+                  controls[item][property] = parts[1]
+                    .trim()
+                    .replace(/;\s*$/, "")
+                  break
+                case "Data":
+                  if (parts[1].includes("(")) {
+                    if (!controls[item]) controls[item] = {}
+                    let match = /\((.*?)\)/.exec(parts[1])
+                    if (match?.length > 1)
+                      controls[item]["Exp"] =
+                        match[1]
+                          .replace(/this\./g, "")
+                          .replace(/_controller./g, "") + "()"
+
+                    // const expressionTypeMatch = /\.(\w+)\(/.exec(parts[1])
+                    // if (
+                    //   expressionTypeMatch?.length > 1 &&
+                    //   expressionTypeMatch[1] !== "FromText"
+                    // ) {
+                    //   controls[item]["ExpType"] =
+                    //     '"' + expressionTypeMatch[1].replace(/From/g, "") + '"'
+                    // }
+                  } else {
+                    let col = parts[1]
+                      .replace(/this\./g, "")
+                      .replace(/_controller./g, "")
+                      .replace(/;/g, "")
+                      .trim()
+                    // build column tree
+                    let sp = col.split(".")
+                    if (sp.length > 1) {
+                      if (!columns[sp[0]]) columns[sp[0]] = {}
+                      columns[sp[0]][sp[1]] = item
+                    } else columns[sp[0]] = item
+                  }
+              }
+            }
+          }
+        }
+        function readControlEvents() {
+          //read events
+          for (const line of designer.filter((x) => x.includes(" += "))) {
+            let parts = line.split(" += ")
+            let item = parts[0].split(".")[1]
+            let property = parts[0].split(".")[2]
+            if (property) {
+              if (property.startsWith("Bind")) property = property.substring(4)
+              if (property == "Click") continue
+              let match = /\((.*?)\)/.exec(parts[1])
+              let method = ""
+              if (match?.length > 1) method = match[1].replace(/this\./g, "")
+              let index = view.findIndex((x) => x.includes(method))
+              let code = "/* not found */"
+              if (index >= 0 && code.includes("e.Value")) {
+                code = view[index + 2]
+                  .replace(/e.Value = /, "")
+                  .replace(/_controller./g, "")
+                  .replace(/;/g, "")
+                  .trim()
+              }
+              if (!controls[item]) controls[item] = {}
+              controls[item][property] = code
+            }
+          }
+        }
+
+        function writeColumns() {
+          for (const key in columns) {
+            if (Object.hasOwnProperty.call(columns, key)) {
+              const element = columns[key]
+              if (typeof element === "object") {
+                writeCommand(`using (${DataCollector}StartItem("${key}")){`)
+                indent++
+                for (const childKey in element) {
+                  if (Object.hasOwnProperty.call(element, childKey)) {
+                    const childElement = element[childKey]
+                    writeColumnControl(childKey, childElement, key)
+                  }
+                }
+                indent--
+                writeCommand("}")
+              } else writeColumnControl(key, element)
+            }
+          }
+          function writeColumnControl(key, controlKey, parentKey) {
+            let column = key
+            if (parentKey) column = parentKey + "." + column
+            let control = controls[controlKey]
+            writtenControls[controlKey] = true
+            writeControl(key, control, ["Column: " + column])
+          }
+        }
+
+        function writeOtherControls() {
+          for (const key in controls) {
+            if (Object.hasOwnProperty.call(controls, key)) {
+              const control = controls[key]
+              if (!writtenControls[key]) writeControl(key, control)
+            }
+          }
+        }
+
+        function writeControl(key, control, props) {
+          if (!props) props = []
+          if (control) {
+            for (const property in control) {
+              if (Object.hasOwnProperty.call(control, property)) {
+                const value = control[property]
+                props.push(property + ": " + value)
+              }
+            }
+          }
+          writeCommand(
+            `${DataCollector}SetControl("${key}", ${props.join(", ")});`
+          )
+        }
+
+        function writeCommand(what) {
+          for (let index = 0; index < indent; index++) {
+            what = "  " + what
+          }
+          resultText += what + "\r\n"
+          //console.log(what)
+        }
+        return resultText
+      }
+    </script>
+  </body>
+</html>

@@ -33,7 +33,7 @@ namespace ENV.Web
         }
         public  DataItem DataItemFromJsonBody()
         {
-            return DataItem.FromJson(_context.Request.GetRequestInputString());
+            return FromJson.ItemFromJson(_context.Request.GetRequestInputString());
         }
         public  objectType ObjectFromJsonBody<objectType>()
         {

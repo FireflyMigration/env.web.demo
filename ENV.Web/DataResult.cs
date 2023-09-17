@@ -47,7 +47,7 @@ namespace ENV.Web
 
 
 
-        static DataResult ToJsonResult(ISerializedObject r)
+        internal static DataResult ToJsonResult(ISerializedObject r)
         {
 
             return new DataResult(r, (response, sw) =>

@@ -379,7 +379,7 @@ namespace ENV.Web
             PerformInsertOrUpdateOrDelete(Response, vmc, allowed, name, () =>
             {
                 DataItem r;
-                r = action(DataItem.FromJson(Request.GetRequestInputString()));
+                r = action(FromJson.ItemFromJson(Request.GetRequestInputString()));
                 if (r == null && vmc.ModelState.IsValid)
                     vmc.ModelState.Message = "The request in invalid";
 
@@ -442,7 +442,7 @@ namespace ENV.Web
             Request.InputStream.Position = 0;
             using (var sr = new System.IO.StreamReader(Request.InputStream))
             {
-                r = action(DataItem.FromJson(sr.ReadToEnd()));
+                r = action(FromJson.ItemFromJson(sr.ReadToEnd()));
                 if (r == null && vmc.ModelState.IsValid)
                     vmc.ModelState.Message = "The request in invalid";
             }

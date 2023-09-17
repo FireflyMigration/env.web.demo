@@ -10,6 +10,10 @@ using System.Xml;
 using System.Collections;
 using ENV.Utilities;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
+using ENV.Web;
+using ENV;
+using System.Runtime.CompilerServices;
 
 namespace ENV.Web
 {
@@ -104,23 +108,7 @@ namespace ENV.Web
                 return sw.ToString();
             }
         }
-        public static DataItem FromJson(string s)
-        {
-            if (string.IsNullOrEmpty(s))
-                throw new InvalidOperationException("Empty JSON Content - did you forget settings the ContentType:application/json");
-            var di = new DataItem();
-            foreach (var pair in JObject.Parse(s))
-            {
-                object value = pair.Value.ToObject<object>();
-                if (value is JArray)
-                    value = DataList.FromJson(value.ToString());
-                else if (value != null)
-                    value = value.ToString();
-                di.Set(pair.Key, value);
-            }
 
-            return di;
-        }
         class Val
         {
             public string Name { get; set; }
@@ -324,25 +312,57 @@ namespace ENV.Web
     }
     public class JsonISerializedObjectWriter : ISerializedObjectWriter
     {
+        public static bool Condensed = false;
         TextWriter _writer;
-        public JsonISerializedObjectWriter(TextWriter writer)
+        public JsonISerializedObjectWriter(TextWriter writer, int indent = 0)
         {
             _writer = writer;
+            _indent = indent;
+        }
+        int _indent = 0;
+        string NewLine
+        {
+            get
+            {
+                if (Condensed)
+                    return "";
+                return "\n" + new string(' ', _indent * 2);
+            }
+        }
+        string Space
+        {
+            get
+            {
+
+                if (Condensed)
+                    return "";
+                return " ";
+            }
+        }
+        string Indent()
+        {
+            _indent++;
+            return NewLine;
+        }
+        string UnIndent()
+        {
+            _indent--;
+            return NewLine;
         }
         public void WriteEndArray()
         {
-            _writer.Write("]");
+            _writer.Write(UnIndent() + "]");
         }
 
         public void WriteEndObject()
         {
-            _writer.Write("}");
+            _writer.Write(UnIndent() + "}");
         }
         bool _firstObjectInArray = true;
         bool _firstValueInObject = true;
         public void WriteIserializedObject(ISerializedObject value)
         {
-            value.ToWriter(new JsonISerializedObjectWriter(_writer));
+            value.ToWriter(new JsonISerializedObjectWriter(_writer, _indent));
         }
 
         public void WriteName(string name)
@@ -350,13 +370,13 @@ namespace ENV.Web
             if (_firstValueInObject)
                 _firstValueInObject = false;
             else
-                _writer.Write(",");
-            _writer.Write("\"" + name.Replace("\"", "\\\"") + "\":");
+                _writer.Write("," + NewLine);
+            _writer.Write("\"" + name.Replace("\"", "\\\"") + "\":" + Space);
         }
 
         public void WriteStartArray()
         {
-            _writer.Write("[");
+            _writer.Write("[" + Indent());
             _firstObjectInArray = true;
         }
 
@@ -366,8 +386,8 @@ namespace ENV.Web
             if (_firstObjectInArray)
                 _firstObjectInArray = false;
             else
-                _writer.Write(",");
-            _writer.Write("{");
+                _writer.Write("," + NewLine);
+            _writer.Write("{" + Indent());
         }
 
         public void WriteValue(object value)
@@ -624,23 +644,11 @@ namespace ENV.Web
         {
             using (var sw = new StringWriter())
             {
-                ToWriter(new JsonISerializedObjectWriter(sw));
+                ToWriter(new JsonISerializedObjectWriter(sw, 0));
                 return sw.ToString();
             }
         }
-        public static DataList FromJson(string s)
-        {
-            var result = new DataList();
 
-            var jArr = JArray.Parse(s);
-            foreach (var jObj in jArr.Children<JObject>())
-            {
-                var di = DataItem.FromJson(jObj.ToString());
-                result.AddItem(di);
-            }
-
-            return result;
-        }
 
 
         public void ToWriter(ISerializedObjectWriter writer)
@@ -703,173 +711,357 @@ namespace ENV.Web
         public int Count { get { return _list.Count; } }
         public DataItem this[int i] { get { return _list[i]; } }
     }
-    class JsonParser
+    public class DataCollector
     {
-        static void error(char c, object o)
+
+        static ContextStatic<bool> enabled = new ContextStatic<bool>();
+        public static bool Enabled { get { return enabled.Value; } set { enabled.Value = value; } }
+
+
+        public static string ToJson()
         {
-            throw new NotImplementedException(c + " in " + o.GetType());
+            using (var sw = new StringWriter())
+            {
+                var r = instance.Value.getResult();
+                if (r != null)
+                    r.ToWriter(new JsonISerializedObjectWriter(sw));
+                return sw.ToString();
+            }
         }
 
-        public object FromJson(string s)
+
+        public static IDisposable StartItem()
         {
-            var sp = new ENV.Utilities.StringParser();
-            object result = null;
-            sp.Parse(s.Trim(), new valueReader((n, v) => result = v, new EndOfString()));
-            return result;
+            return instance.Value.StartItem();
+        }
+        public static IDisposable StartItem(string name)
+        {
+            var member = StartMember(name);
+            var item = StartItem();
+            return new Disposable(() => { item.Dispose(); member.Dispose(); });
+        }
+        public static IDisposable StartArray(string name)
+        {
+            var member = StartMember(name);
+            var item = StartArray();
+            return new Disposable(() => { item.Dispose(); member.Dispose(); });
+        }
+        public static IDisposable StartArray()
+        {
+            return instance.Value.StartArray();
+        }
+        public static IDisposable StartMember(string name)
+        {
+            return instance.Value.StartMember(name);
+        }
+        public static void Set(string name, object value)
+        {
+            instance.Value.Set(name, value);
         }
 
-        class arrayReader : ENV.Utilities.CharProcessor
-        {
-            DataList _dl = new DataList();
-            Action<DataList> _done;
-            CharProcessor _next;
-            public arrayReader(Action<DataList> done, CharProcessor next)
-            {
-                _done = done;
-                _next = next;
-            }
-            public void Finish()
-            {
-                throw new NotImplementedException();
-            }
 
-            public void Process(char c, SetCharProcessor setState)
+        static ContextStatic<State> instance = new ContextStatic<State>(() => new RootState());
+
+        class ItemState : State
+        {
+            class ObjectMapper
             {
-                switch (c)
+                public string Key;
+                public Dictionary<ColumnBase, string> Columns = new Dictionary<ColumnBase, string>();
+                public ObjectMapper(string key, object entity)
                 {
-                    case '{':
-                        setState(new objectReader(_dl.AddItem, this), false);
-                        break;
-                    case ',':
-                        break;
-                    case ']':
-
-                        _done(_dl);
-                        setState(_next, false);
-                        break;
-                    case ' ':
-                    case '\t':
-                    case '\r':
-                    case '\n':
-                        break;
-                    default:
-                        error(c, this);
-                        break;
+                    Key = key;
+                    foreach (var item in entity.GetType().GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
+                    {
+                        if (typeof(ColumnBase).IsAssignableFrom(item.FieldType))
+                        {
+                            Columns.Add(item.GetValue(entity) as ColumnBase, item.Name);
+                        }
+                    }
                 }
             }
-        }
-        class objectReader : CharProcessor
-        {
-            public DataItem di = new DataItem();
-            Action<DataItem> _done;
-            CharProcessor _nextProcessor;
-            public objectReader(Action<DataItem> done, CharProcessor next)
+            Dictionary<Firefly.Box.Data.Entity, ObjectMapper> _entityKey = new Dictionary<Firefly.Box.Data.Entity, ObjectMapper>();
+            ObjectMapper _localColumns;
+            Dictionary<string, ItemState> _members = new Dictionary<string, ItemState>();
+            public DataItem item = new DataItem();
+            public override void Set(string name, object value)
             {
-                _done = done;
-                _nextProcessor = next;
+                item.Set(name, value);
             }
-            public void Finish()
+            internal override void Set(ColumnBase col)
             {
-                throw new NotImplementedException();
+                var name = col.Name;
+                ObjectMapper o = null;
+                if (col.Entity != null)
+                    _entityKey.TryGetValue(col.Entity, out o);
+                else o = _localColumns;
+                if (o != null)
+                {
+                    if (o.Columns.TryGetValue(col, out name))
+                    {
+                        GetMember(o.Key)
+                            //.GetMember(name)
+                            .Set(name, col.Value);
+                        return;
+                    }
+                }
+
+                Set(name, col.Value);
+            }
+            internal ItemState GetMember(string key)
+            {
+                if (key == "")
+                    return this;
+                ItemState member;
+                if (!_members.TryGetValue(key, out member))
+                {
+                    member = new ItemState();
+                    _members.Add(key, member);
+                    item.Set(key, member.item);
+                }
+                return member;
+            }
+            internal override void MapEntity(Firefly.Box.Data.Entity entity, string key)
+            {
+                this._entityKey.Add(entity, new ObjectMapper(key, entity));
+            }
+            internal override void Map(object controller)
+            {
+                _localColumns = new ObjectMapper("", controller);
+                foreach (var item in controller.GetType().GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
+                {
+                    if (typeof(Firefly.Box.Data.Entity).IsAssignableFrom(item.FieldType))
+                    {
+                        var e = item.GetValue(controller) as Firefly.Box.Data.Entity;
+                        _entityKey.Add(e, new ObjectMapper(item.Name, e));
+                    }
+                }
+
+
+                foreach (var item in controller.GetType().GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
+                {
+                    if ((item.IsPublic || item.IsAssembly) && item.DeclaringType == controller.GetType() && item.GetParameters().Length == 0 && item.ReturnType != typeof(void))
+                    {
+                        Set(item.Name, item.Invoke(controller, new object[0]));
+                    }
+                }
             }
 
-            public void Process(char c, SetCharProcessor setState)
+            public override IDisposable StartMember(string name)
             {
-                switch (c)
+                var member = new RootState();
+                var state = SetState(member);
+                return new Disposable(() =>
                 {
-                    case '}':
-                        _done(di);
-                        setState(_nextProcessor, false);
-                        break;
-                    case ',':
-                        break;
-                    case ' ':
-                    case '\t':
-                    case '\r':
-                    case '\n':
-                        break;
-                    default:
-                        var vr = new valueReader((n, v) => di.Set(n, v), this);
-                        setState(new ReadValueThatMayOrMayNotBeQuoted(vr, ':', vr.setName), c != ',');
-                        break;
+                    item.Set(name, member.getResult());
+                    state.Dispose();
+                });
+            }
+            public override ISerializedObject getResult()
+            {
+                return item;
+            }
+            
+        }
+
+        class State
+        {
+            public virtual ISerializedObject getResult()
+            {
+                throw new InvalidException();
+            }
+
+            class InvalidException : System.InvalidOperationException
+            {
+
+                public InvalidException() : base("Not valid For " + instance.Value.ToString())
+                {
                 }
             }
 
 
+            public virtual IDisposable StartItem()
+            {
+                throw new InvalidException();
+            }
+            public virtual IDisposable StartArray()
+            {
+                throw new InvalidException();
+            }
+            public virtual IDisposable StartMember(string name)
+            {
+                throw new InvalidException();
+            }
+            public virtual void Set(string name, object value)
+            {
+                throw new InvalidException();
+            }
+
+            internal virtual void MapEntity(Firefly.Box.Data.Entity entity, string key)
+            {
+                throw new InvalidException();
+            }
+
+            internal virtual void Set(ColumnBase col)
+            {
+                throw new InvalidException();
+            }
+
+            internal virtual void Map(object controller)
+            {
+                throw new InvalidException();
+            }
         }
-        class valueReader : CharProcessor
+
+        class RootState : State
         {
-
-            CharProcessor _next;
-            Action<string, object> _done;
-            public valueReader(Action<string, object> done, CharProcessor next)
+            public State _myRoot;
+            public override IDisposable StartItem()
             {
-                _done = done;
-                _next = next;
+                if (_myRoot != null)
+                    throw new Exception("There is already a root item");
+                _myRoot = new ItemState();
+                return SetState(_myRoot);
             }
-            public void Finish()
+            public override IDisposable StartArray()
             {
-                throw new NotImplementedException();
+                if (_myRoot != null)
+                    throw new Exception("There is already a root item");
+                _myRoot = new ArrayState();
+                return SetState(_myRoot);
             }
 
-            public void Process(char c, SetCharProcessor setState)
+            public override ISerializedObject getResult()
             {
-                switch (c)
-                {
-                    case '{':
-                        setState(new objectReader(s => _done(_name, s), _next), false);
-                        break;
-                    case '[':
-                        setState(new arrayReader(s => _done(_name, s), _next), false);
-                        break;
-                    case ':':
-                        break;
-                    case ' ':
-                    case '\t':
-                    case '\r':
-                    case '\n':
-                        break;
-                    default:
-
-                        setState(new ReadValueThatMayOrMayNotBeQuoted(_next, new char[] { ',', '}' }, s => _done(_name,
-                            s.Replace("\\n", "\n")
-                            .Replace("\\r", "\r")
-                            .Replace("\\t", "\t"))), true);
-                        break;
-                }
+                if (_myRoot != null)
+                    return _myRoot.getResult();
+                return null;
             }
-            string _name;
-            internal void setName(string obj)
+
+        }
+
+
+
+        class ArrayState : State
+        {
+            DataList _array = new DataList();
+            public override IDisposable StartItem()
             {
-                _name = obj;
+                var result = new ItemState();
+                _array.AddItem(result.item);
+                return SetState(result);
+
+            }
+            public override ISerializedObject getResult()
+            {
+                return _array;
+            }
+
+        }
+
+
+
+        static IDisposable SetState(State state)
+        {
+            var prev = instance.Value;
+            instance.Value = state;
+            return new Disposable(() => instance.Value = prev);
+        }
+
+        public static void Set(params ColumnBase[] columns)
+        {
+            foreach (var col in columns)
+            {
+                instance.Value.Set(col);
             }
         }
 
+        public static void MapEntity(Firefly.Box.Data.Entity entity, string key)
+        {
+            instance.Value.MapEntity(entity, key);
+        }
+
+        public static void Map(object controller)
+        {
+            instance.Value.Map(controller);
+        }
+        //public static void Controls(System.Windows.Forms.Control view)
+        //{
+        //    foreach (System.Windows.Forms.Control c in view.Controls)
+        //    {
+        //        var ic = c as Firefly.Box.UI.Advanced.InputControlBase;
+        //        if (ic != null)
+        //        {
+        //            var col = Common.GetColumn(ic);
+        //            if (col != null)
+        //            {
+        //                Set(col);
+        //            }
+
+        //        }
+        //        Controls(c);
+        //    }
+        //}
+
+        public static void SetControl(string key, ColumnBase Column = null, string Format = null, object Exp = null)
+        {
+            using (StartItem(key))
+            {
+                if (Column != null)
+                {
+                    Set("value", Column);
+                    Set("text", Column.ToString(Format));
+                }
+                if (Exp != null)
+                {
+                    Set("value", Exp);
+                    {
+                        var d = Exp as Date; ;
+                        if (d != null)
+                        {
+                            Set("text", d.ToString(Format));
+                        }
+                    }
+                    {
+                        var d = Exp as Number;
+                        if (d != null)
+                        {
+                            Set("text", d.ToString(Format));
+                        }
+                    }
+                    {
+                        var d = Exp as Time;
+                        if (d != null)
+                        {
+                            Set("text", d.ToString(Format));
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+        internal static ISerializedObject GetResult()
+        {
+            return instance.Value.getResult();
+        }
+
+        class Disposable : IDisposable
+        {
+            Action _dispose;
+            public Disposable(Action dispose)
+            {
+                _dispose = dispose;
+            }
+            public void Dispose()
+            {
+                _dispose();
+            }
+        }
 
     }
-}
-namespace ENV.Web.DataListHelpers
-{
-    public static class EntityHelper
-    {
-        public static string ExportToJson(this ENV.Data.Entity entity, FilterBase where = null, Sort orderBy = null, params ColumnBase[] columns)
-        {
-            var vmc = new ViewModel
-            {
-                From = entity
-            };
-            if (where != null)
-                vmc.Where.Add(where);
-            if (orderBy != null)
-                vmc.OrderBy = orderBy;
-            return vmc.ExportRows().ToJson();
-        }
-        public static void ImportFromJson(this ENV.Data.Entity entity, string json, bool ignoreDuplicateRows = false)
-        {
-            var vmc = new ViewModel { From = entity };
-            var dl = DataList.FromJson(json);
-            vmc.ImportRows(dl, ignoreDuplicateRows: ignoreDuplicateRows);
 
-        }
-    }
 }
+
+

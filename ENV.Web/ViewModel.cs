@@ -1147,3 +1147,29 @@ namespace ENV.Web
     }
 
 }
+
+namespace ENV.Web.DataListHelpers
+{
+    public static class EntityHelper
+    {
+        public static string ExportToJson(this ENV.Data.Entity entity, FilterBase where = null, Sort orderBy = null, params ColumnBase[] columns)
+        {
+            var vmc = new ViewModel
+            {
+                From = entity
+            };
+            if (where != null)
+                vmc.Where.Add(where);
+            if (orderBy != null)
+                vmc.OrderBy = orderBy;
+            return vmc.ExportRows().ToJson();
+        }
+        public static void ImportFromJson(this ENV.Data.Entity entity, string json, bool ignoreDuplicateRows = false)
+        {
+            var vmc = new ViewModel { From = entity };
+            var dl = FromJson.ListFromJson(json);
+            vmc.ImportRows(dl, ignoreDuplicateRows: ignoreDuplicateRows);
+
+        }
+    }
+}
