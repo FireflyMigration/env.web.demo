@@ -129,7 +129,7 @@
               if (match?.length > 1) method = match[1].replace(/this\./g, "")
               let index = view.findIndex((x) => x.includes(method))
               let code = "/* not found */"
-              if (index >= 0 && code.includes("e.Value")) {
+              if (index >= 0 && !code.includes("e.Value")) {
                 code = view[index + 2]
                   .replace(/e.Value = /, "")
                   .replace(/_controller./g, "")
