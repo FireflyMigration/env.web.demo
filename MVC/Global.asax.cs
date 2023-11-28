@@ -11,6 +11,7 @@ using JWT.Serializers;
 using Newtonsoft.Json;
 using System.Security.Principal;
 using System.Configuration;
+using MVC.Controllers;
 
 namespace MVC
 {
@@ -66,6 +67,7 @@ namespace MVC
         protected void Application_BeginRequest(object sender, System.EventArgs e)
         {
             Firefly.Box.Context.Current.SetNonUIThread();
+            myWrapper.Run(() => { });
             _profilerContext = ENV.Utilities.Profiler.StartContextAndSaveOnEnd(() => ENV.ProgramCollection.CollectRequestPArametersForProfiler(), () => VirtualPathUtility.MakeRelative("~", Request.Url.AbsolutePath).Replace("/", "_") + "_" + Firefly.Box.Date.Now.ToString("YYYYMMDD") + "_" + ENV.UserMethods.Instance.mTime().ToString());
 
         }

@@ -1,6 +1,9 @@
 ﻿using ENV.Web;
+using Northwind;
+using System;
 using System.Net;
 using System.Web.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MVC.Controllers
 {
@@ -61,13 +64,31 @@ namespace MVC.Controllers
         }
         public string DoSomething()
         {
+            return "test" + Application.Instance.SomeTextColumnThatIsUpdatedOnStartOfApplication;
             return "Hello World " + ENV.Security.UserManager.CurrentUser.Name;
+        }
+        public string DoSomething1() { 
+            return myWrapper.Run(()=>"test" + Application.Instance.SomeTextColumnThatIsUpdatedOnStartOfApplication)
         }
 
         public ActionResult Login(string userName)
         {
             var payload = new JwtUserInfo(userName, userName, "Admin", "Login");
             return Json(MvcApplication.Jwt.GetToken(payload));
+        }
+    }
+    public class myWrapper : Northwind.BusinessProcessBase
+    {
+
+        public static T Run<T>(Func<T> what)
+        {
+            T result = default(T);
+            new myWrapper().ForFirstRow(() => result= what());
+            return result;
+        }
+        public static void Run(Action what)
+        {
+            new myWrapper().ForFirstRow(() => what());
         }
     }
 }
