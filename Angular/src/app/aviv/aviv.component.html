@@ -1,0 +1,20 @@
+<p>aviv works!</p>
+<table border="1">
+  <tr *ngFor="let order of orders | async">
+    <td>
+      {{ order.id }}
+    </td>
+    <td>
+      <input [(ngModel)]="order.orderDate" type="date" />
+    </td>
+    <td>
+      <input [(ngModel)]="order.customerID" type="text" />
+    </td>
+    <td>
+      <button (click)="save(order)">Save</button>
+    </td>
+    <td>
+      <a href="/home/avivPrint?orderId={{ order.id }}" target="_blank">Print</a>
+    </td>
+  </tr>
+</table>
