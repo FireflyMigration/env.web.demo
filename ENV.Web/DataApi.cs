@@ -462,7 +462,7 @@ namespace ENV.Web
     <li><strong>_sort</strong> - Sort Columns</li>
     <li><strong>_order</strong> - Sort Direction</li>
     <li><strong>__action</strong> - count => return the number of rows based on the filter</li>
-    <li><strong>_gt, _gte, _lt, _lte, _ne, _st (starts with), _contains</strong> - Filter Data Options</li>
+    <li><strong>.gt, .gte, .lt, .lte, .ne, .st (starts with), .contains</strong> - Filter Data Options</li>
 </ul>";
     }
     class NotFoundException : Exception

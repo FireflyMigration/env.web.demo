@@ -203,14 +203,14 @@ namespace ENV.Web
             foreach (var item in _colsPerKey)
             {
                 item.Value.addFilter(req[item.Key], _tempFilter, new equalToFilter());
-                item.Value.addFilter(req[item.Key + "_gt"], _tempFilter, new greater());
-                item.Value.addFilter(req[item.Key + "_gte"], _tempFilter, new greaterEqual());
-                item.Value.addFilter(req[item.Key + "_lt"], _tempFilter, new lesser());
-                item.Value.addFilter(req[item.Key + "_lte"], _tempFilter, new lessOrEqual());
-                item.Value.addFilter(req[item.Key + "_ne"], _tempFilter, new different());
-                item.Value.addFilter(req[item.Key + "_contains"], _tempFilter, new contains());
-                item.Value.addFilter(req[item.Key + "_st"], _tempFilter, new startsWith());
-                item.Value.addNullFilter(req[item.Key + "_null"], _tempFilter);
+                item.Value.addFilter(req[item.Key + ".gt"], _tempFilter, new greater());
+                item.Value.addFilter(req[item.Key + ".gte"], _tempFilter, new greaterEqual());
+                item.Value.addFilter(req[item.Key + ".lt"], _tempFilter, new lesser());
+                item.Value.addFilter(req[item.Key + ".lte"], _tempFilter, new lessOrEqual());
+                item.Value.addFilter(req[item.Key + ".ne"], _tempFilter, new different());
+                item.Value.addFilter(req[item.Key + ".contains"], _tempFilter, new contains());
+                item.Value.addFilter(req[item.Key + ".st"], _tempFilter, new startsWith());
+                item.Value.addNullFilter(req[item.Key + ".null"], _tempFilter);
 
             }
             start = 0;
