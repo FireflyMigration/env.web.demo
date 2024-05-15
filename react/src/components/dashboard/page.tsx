@@ -19,20 +19,9 @@ export default function DashboardPage() {
   return (
     <>
       <div className="md:hidden">
-        <img
-          src="/examples/dashboard-light.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="block dark:hidden"
-        />
-        <img
-          src="/examples/dashboard-dark.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="hidden dark:block"
-        />
+        <h2 className="text-3xl font-bold tracking-tight">
+          Too narrow for Dashboard
+        </h2>
       </div>
       <div className="hidden flex-col md:flex">
         <div className="border-b">

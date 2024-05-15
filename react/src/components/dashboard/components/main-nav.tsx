@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { aButtonWasClicked } from '../../../winforms-bridge/dotnet'
 
 export function MainNav({
   className,
@@ -16,8 +17,10 @@ export function MainNav({
         Overview
       </a>
       <a
-        href="/examples/dashboard"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        onClick={() => {
+          aButtonWasClicked('Customers')
+        }}
       >
         Customers
       </a>
