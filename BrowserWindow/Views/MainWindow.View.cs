@@ -22,6 +22,7 @@ namespace BrowserWindow.Views
         {
             InitializeComponent();
             FitToMDI = true;
+
             var browser = new ChromiumWebBrowser(@"http://localhost:5173/");
             //   browser.RequestHandler = new CustomRequestHandler(@"http://127.0.0.1:5173/", @"C:\try\t61\vite-project\dist");
             var loaded = false;
@@ -46,21 +47,33 @@ namespace BrowserWindow.Views
         public static void RunMenu()
         {
             new myUIC().Run();
-            //Common.RunOnNewThread(() =>
-            //{
-            //});
+            Common.RunOnNewThread(() =>
+            {
+            });
         }
         class myUIC : UIControllerBase
         {
             MainWindowView _view;
             public myUIC()
             {
-                
+                Handlers.Add(Command.Exit).Invokes += e =>
+                {
+
+                };
+                Handlers.Add(Command.CloseForm).Invokes += e =>
+                {
+
+                };
+                Handlers.Add(Command.CloseForm).Invokes += e =>
+                {
+
+                };
             }
 
             protected override void OnLoad()
             {
                 View = () => _view = new MainWindowView();
+                KeepViewVisibleAfterExit = true;
             }
             public void Run()
             {
