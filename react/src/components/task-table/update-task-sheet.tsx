@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet'
-import { Task } from '../../model/task.ts'
+import { Task } from '../../model-remult/task.ts'
 import { getErrorMessage } from '../../lib/utils.ts'
 import { TaskForm } from './task-form.tsx'
 import { repo } from 'remult'

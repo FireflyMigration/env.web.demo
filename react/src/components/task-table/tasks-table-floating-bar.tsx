@@ -22,7 +22,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Task } from '../../model/task.ts'
+import { Task } from '../../model-remult/task.ts'
 import { getValueList, repo } from 'remult'
 import { toast } from 'sonner'
 import { getErrorMessage } from '../../lib/utils.ts'

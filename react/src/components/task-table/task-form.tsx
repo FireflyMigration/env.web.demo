@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Task } from '../../model/task.ts'
+import { Task } from '../../model-remult/task.ts'
 import { getValueList, repo } from 'remult'
 import { repoResolver } from '../../lib/repo-resolver.ts'
 import { fieldsOf } from '../../lib/use-remult-react-table.ts'

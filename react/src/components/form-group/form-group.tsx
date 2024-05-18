@@ -3,7 +3,7 @@ import { capitalize } from '../../lib/utils.ts'
 import { CheckboxInput, NormalInput } from './NormalInput.tsx'
 import { useMemo, useState } from 'react'
 import { selectFrom } from './selectFrom.tsx'
-import { Customers } from '../../model/customer.ts'
+import { Customers } from '../../model-remult/customer.ts'
 import {
   IdSelectValueType,
   IdValueSelect,

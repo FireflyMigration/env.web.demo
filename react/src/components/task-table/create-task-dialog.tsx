@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 
-import { Task } from '../../model/task.ts'
+import { Task } from '../../model-remult/task.ts'
 import { repo, type ErrorInfo } from 'remult'
 import { TaskForm } from './task-form.tsx'
 

@@ -1,5 +1,5 @@
 import { getValueList, repo } from 'remult'
-import { Task } from '../../model/task.ts'
+import { Task } from '../../model-remult/task.ts'
 import React from 'react'
 import {
   DropdownMenu,

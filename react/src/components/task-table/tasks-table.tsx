@@ -5,7 +5,7 @@ import {
   buildFilterColumns,
   selectColumn,
 } from '../data-table/data-table.tsx'
-import { Task } from '../../model/task.ts'
+import { Task } from '../../model-remult/task.ts'
 import { useMemo } from 'react'
 import { Badge } from '../ui/badge.tsx'
 import { CreateTaskDialog } from './create-task-dialog.tsx'
