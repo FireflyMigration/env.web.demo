@@ -15,9 +15,7 @@ import {
 } from '@/components/ui/table'
 
 import { DataTablePagination } from './data-table-pagination'
-import { getValueList, type Repository } from 'remult'
-import { fieldsOf } from '../../lib/use-remult-react-table.ts'
-import { DataTableColumnHeader } from './data-table-column-header.tsx'
+
 import { DataTableAdvancedToolbar } from './data-table-advanced-toolbar.tsx'
 import type { DataTableFilterField } from '../../types/index.ts'
 import { Checkbox } from '../ui/checkbox.tsx'
@@ -62,7 +60,7 @@ export function DataTable<TData>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   )
@@ -81,7 +79,7 @@ export function DataTable<TData>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
@@ -135,46 +133,4 @@ export function selectColumn<entityType>(): ColumnDef<entityType> {
     enableSorting: false,
     enableHiding: false,
   }
-}
-
-export function buildColumns<entityType>(
-  repo: Repository<entityType>,
-  ...fields: (string & keyof entityType)[]
-): ColumnDef<entityType, unknown>[] {
-  return fieldsOf(repo, ...fields).map((field) => {
-    return {
-      accessorKey: field.key,
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={field.caption} />
-      ),
-      cell: (info) => (
-        <div className="w-20"> {field.displayValue(info.row.original)}</div>
-      ),
-      meta: {
-        field: field,
-      },
-    }
-  })
-}
-
-export function buildFilterColumns<entityType>(
-  repo: Repository<entityType>,
-  ...fields: (string & keyof entityType)[]
-): DataTableFilterField<entityType>[] {
-  return fieldsOf(repo, ...fields).map((field) => ({
-    caption: field.caption,
-    key: field.key as keyof entityType,
-    placeholder: field.caption,
-    options: getValueList(field)?.map((value) =>
-      typeof value === 'string'
-        ? {
-            caption: field.options.displayValue?.(undefined!, value) || value,
-            id: value,
-          }
-        : {
-            caption: value.caption,
-            id: value.id,
-          },
-    ),
-  }))
 }

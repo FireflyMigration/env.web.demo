@@ -9,7 +9,7 @@ import {
   IdValueSelect,
 } from '../task-table/id-value-select.tsx'
 
-type FieldConfig = (
+export type FieldConfig = (
   | { type: 'text' | 'number' | 'checkbox' }
   | ({ type: 'selectId' } & IdSelectValueType)
 ) & {

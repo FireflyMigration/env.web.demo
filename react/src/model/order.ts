@@ -1,3 +1,5 @@
+import { dataApiFor } from '../lib/env-web/data-api-for'
+
 export interface Order {
   id?: number
   customerID?: string
@@ -15,10 +17,4 @@ export interface Order {
   shipCountry?: string
 }
 
-export const orderConfig: EntityConfig<Order> = {
-  key: 'orders',
-}
-export type EntityConfig<T> = {
-  key: string
-}
-
+export const orderApi = dataApiFor<Order>('orders')

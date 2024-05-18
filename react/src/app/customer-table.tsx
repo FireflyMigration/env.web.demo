@@ -1,8 +1,6 @@
 import { repo } from 'remult'
 import {
   DataTable,
-  buildColumns,
-  buildFilterColumns,
   selectColumn,
 } from '@/components//data-table/data-table.tsx'
 import { useMemo } from 'react'
@@ -15,6 +13,10 @@ import {
 } from '@tanstack/react-table'
 import { useRemultReactTableServerSidePagingSortingAndFiltering } from '../lib/use-remult-react-table'
 import { Customers } from '../model-remult/customer'
+import {
+  buildColumns,
+  buildFilterColumns,
+} from '../components/data-table/data-table-remult-utils'
 
 export const customerRepo = repo(Customers)
 const fieldsOnTable: (keyof Customers)[] = [
