@@ -1,7 +1,4 @@
-import {
-  IdSelectValueType,
-  IdValueSelectProps,
-} from '../task-table/id-value-select'
+import { IdSelectValueType } from '../task-table/id-value-select'
 import { ClassType, repo } from 'remult'
 
 export function selectFrom<T>(type: ClassType<T>) {
@@ -12,6 +9,7 @@ export function selectFrom<T>(type: ClassType<T>) {
     .find((f) => f.valueType == String && f.key != idField)?.key as keyof T
 
   return {
+    type: 'selectId',
     getOptions: async (search: string) =>
       (
         await r.find({
@@ -20,7 +18,7 @@ export function selectFrom<T>(type: ClassType<T>) {
           where: { [captionField]: { $contains: search } },
         })
       ).map((c) => ({ id: c[idField], caption: c[captionField] })),
-    getIdDescription: async (id: string) =>
+    displayValue: async (id: string) =>
       (
         await r.findId(
           //@ts-ignore

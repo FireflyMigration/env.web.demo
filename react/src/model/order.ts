@@ -1,4 +1,6 @@
 import { dataApiFor } from '../lib/env-web/data-api-for'
+import { selectFrom } from '../lib/env-web/select-from'
+import { customerApi } from './customer'
 
 export interface Order {
   id?: number
@@ -17,4 +19,11 @@ export interface Order {
   shipCountry?: string
 }
 
-export const orderApi = dataApiFor<Order>('orders')
+export const orderApi = dataApiFor<Order>('orders', {
+  fieldsConfig: {
+    orderDate: {
+      type: 'date',
+    },
+    customerID: selectFrom(customerApi, 'companyName'),
+  },
+})

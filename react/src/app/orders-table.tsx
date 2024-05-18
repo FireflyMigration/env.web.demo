@@ -7,7 +7,7 @@ import { useDataApiReactTable } from '../lib/env-web/use-data-api-react-table'
 
 export default function OrdersTable() {
   const t = useDataApiReactTable(orderApi, {
-    columns: ['id', 'customerID'],
+    columns: ['id', 'customerID', 'orderDate'],
   })
 
   const table = useReactTable({

@@ -1,10 +1,5 @@
 import { repo } from 'remult'
-import {
-  DataTable,
-  buildColumns,
-  buildFilterColumns,
-  selectColumn,
-} from '../data-table/data-table.tsx'
+import { DataTable, selectColumn } from '../data-table/data-table.tsx'
 import { Task } from '../../model-remult/task.ts'
 import { useMemo } from 'react'
 import { Badge } from '../ui/badge.tsx'
@@ -18,6 +13,10 @@ import {
 } from '@tanstack/react-table'
 import { TaskRowAction } from './task-row-actions.tsx'
 import { TasksTableFloatingBar } from './tasks-table-floating-bar.tsx'
+import {
+  buildColumns,
+  buildFilterColumns,
+} from '../data-table/data-table-remult-utils.tsx'
 
 export const taskRepo = repo(Task)
 function TasksTable() {
@@ -48,7 +47,7 @@ function TasksTable() {
                   </span>
                 </div>
               ),
-            } satisfies ColumnDef<Task>)
+            } as ColumnDef<Task>)
           : c
       ),
       {

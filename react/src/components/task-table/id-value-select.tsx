@@ -20,12 +20,12 @@ import { ValueListItem } from 'remult'
 import { FieldInGroupProps } from '../form-group/form-group'
 export type IdValueSelectProps = {
   getOptions: (search: string) => Promise<ValueListItem[]>
-  getIdDescription: (id: string) => Promise<string>
+  displayValue: (id: string) => Promise<string>
 } & FieldInGroupProps
 
 export function IdValueSelect({
   getOptions,
-  getIdDescription,
+  displayValue: getIdDescription,
   value,
   setValue,
 }: IdValueSelectProps) {
@@ -93,5 +93,5 @@ export function IdValueSelect({
 }
 export type IdSelectValueType = Pick<
   IdValueSelectProps,
-  'getOptions' | 'getIdDescription'
->
+  'getOptions' | 'displayValue'
+> & { type: 'selectId' }

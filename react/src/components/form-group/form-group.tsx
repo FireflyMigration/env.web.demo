@@ -10,11 +10,12 @@ import {
 } from '../task-table/id-value-select.tsx'
 
 export type FieldConfig = (
-  | { type: 'text' | 'number' | 'checkbox' }
-  | ({ type: 'selectId' } & IdSelectValueType)
+  | { type: 'text' | 'number' | 'checkbox' | 'date' }
+  | IdSelectValueType
 ) & {
   caption: string
   key: string
+  displayValue: (val: any) => string | Promise<string>
 }
 
 const config: Record<string, Partial<FieldConfig>> = {
@@ -27,10 +28,7 @@ const config: Record<string, Partial<FieldConfig>> = {
   active: {
     type: 'checkbox',
   },
-  customer: {
-    type: 'selectId',
-    ...selectFrom(Customers),
-  },
+  customer: selectFrom(Customers),
 }
 export type FieldInGroupProps = {
   field: FieldConfig

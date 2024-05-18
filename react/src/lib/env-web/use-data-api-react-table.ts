@@ -43,7 +43,7 @@ export function useDataApiReactTable<entityType>(
     const _sort = sorting.map((x) => x.id).join(',')
     const _order = sorting.map((x) => (x.desc ? 'desc' : 'asc')).join(',')
     dataApi
-      .find({
+      .getMany({
         _limit: pageSize,
         _page: pageIndex + 1,
         ...where,
