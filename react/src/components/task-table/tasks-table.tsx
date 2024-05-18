@@ -78,7 +78,6 @@ function TasksTable() {
         <TasksTableFloatingBar table={table} reloadData={t.reloadData} />
       }
     >
-      <h1>123</h1>
       <CreateTaskDialog onAdd={(newTask) => t.addRow(newTask)} />
     </DataTable>
   )
