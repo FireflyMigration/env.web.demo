@@ -11,14 +11,29 @@ import {
 import { EntityError } from '../lib/env-web/data-api-for'
 import { useError } from './dialog/useQuestion'
 
+type FieldsConfigToValuesType<
+  ConfigType extends Record<string, Partial<FieldConfig>>
+> = {
+  [k in keyof ConfigType]: ConfigType[k]['type'] extends 'checkbox'
+    ? boolean
+    : ConfigType[k]['type'] extends 'number'
+    ? number
+    : ConfigType[k]['type'] extends 'date'
+    ? Date
+    : string
+}
+
 export function useFormDialog() {
   const dialog = useDialog()
-  return function <T>(args: {
+  return function <
+    ConfigType extends Record<string, Partial<FieldConfig>>
+  >(args: {
     title?: string
-    fields: Record<keyof T, Partial<FieldConfig>>
-    defaultValues?: T
-    onOk: (value: T) => void | Promise<void>
+    fields: ConfigType
+    defaultValues?: FieldsConfigToValuesType<ConfigType>
+    onOk: (value: FieldsConfigToValuesType<ConfigType>) => void | Promise<void>
   }) {
+    type T = FieldsConfigToValuesType<ConfigType>
     dialog((resolve) => {
       const [state, setState] = useState<T>(args.defaultValues ?? ({} as T))
       const [error, setError] = useState<EntityError<T>>()
