@@ -18,7 +18,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Button } from '../ui/button.tsx'
 import { toast } from 'sonner'
 import { getErrorMessage } from '../../lib/utils.ts'
-import { useRemultReactTableServerSidePagingSortingAndFiltering } from '../../lib/use-remult-react-table.ts'
+import { useRemultReactTableServerSidePagingSortingAndFiltering } from '../../lib/remult-lib/use-remult-react-table.ts'
 
 import type { Row } from '@tanstack/react-table'
 import { UpdateTaskSheet } from './update-task-sheet.tsx'

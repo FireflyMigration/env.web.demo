@@ -1,9 +1,8 @@
 import { Label } from '../ui/label.tsx'
 import { capitalize } from '../../lib/utils.ts'
 import { CheckboxInput, NormalInput } from './NormalInput.tsx'
-import { useMemo, useState } from 'react'
-import { selectFrom } from './selectFrom.tsx'
-import { Customers } from '../../model-remult/customer.ts'
+import { useMemo } from 'react'
+
 import {
   IdSelectValueType,
   IdValueSelect,
@@ -18,32 +17,22 @@ export type FieldConfig = (
   displayValue: (val: any) => string | Promise<string>
 }
 
-const config: Record<string, Partial<FieldConfig>> = {
-  title: { type: 'text', caption: 'Title', key: 'title' },
-  name: {},
-  lastName: {},
-  age: {
-    type: 'number',
-  },
-  active: {
-    type: 'checkbox',
-  },
-  customer: selectFrom(Customers),
-}
 export type FieldInGroupProps = {
   field: FieldConfig
   value: string
   setValue: (newValue: string) => void
 }
 
-export default function FormGroup() {
-  const [state, setState] = useState<Record<string, string>>({})
-
+export default function FormGroup(props: {
+  fields: Record<string, Partial<FieldConfig>>
+  state: Record<string, string>
+  setState: (newState: Record<string, string>) => void
+}) {
   const fields = useMemo(() => {
     const result: FieldConfig[] = []
-    for (const key in config) {
-      if (Object.prototype.hasOwnProperty.call(config, key)) {
-        const element = config[key]
+    for (const key in props.fields) {
+      if (Object.prototype.hasOwnProperty.call(props.fields, key)) {
+        const element = props.fields[key]
         result.push({
           type: 'text',
           caption: capitalize(key),
@@ -60,8 +49,9 @@ export default function FormGroup() {
       {fields.map((field) => {
         const args: FieldInGroupProps = {
           field,
-          value: state[field.key] || '',
-          setValue: (value) => setState({ ...state, [field.key]: value }),
+          value: props.state[field.key] || '',
+          setValue: (value) =>
+            props.setState({ ...props.state, [field.key]: value }),
         }
         function RenderField() {
           if (field.type)
@@ -82,7 +72,7 @@ export default function FormGroup() {
           </div>
         )
       })}
-      <pre>{JSON.stringify(state, undefined, 2)}</pre>
+      {/* <pre>{JSON.stringify(props.state, undefined, 2)}</pre> */}
     </div>
   )
 }

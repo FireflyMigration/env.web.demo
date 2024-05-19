@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import { IdValueSelect } from './task-table/id-value-select'
 import { Customers } from '../model-remult/customer'
-import { selectFrom } from './form-group/selectFrom'
-import FormGroup from './form-group/form-group'
+import { Button } from './ui/button'
+import { selectFrom } from '../lib/env-web/select-from'
+import { customerApi } from '../model/customer'
+import { useFormDialog } from './useFormDialog'
+import { orderApi } from '../model/order'
 import CustomerTable from '../app/customer-table'
-import OrdersTable from '../app/orders-table'
 
 export default function Test() {
-  return <OrdersTable />
+  return <CustomerTable />
 }

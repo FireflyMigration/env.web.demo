@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Repository, getValueList } from "remult"
-import { fieldsOf } from "../../lib/use-remult-react-table"
+import { fieldsOf } from "../../lib/remult-lib/use-remult-react-table"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableFilterField } from "../../types"
 

@@ -8,7 +8,7 @@ export function buildColumns<entityType>(
   api: DataApi<entityType>,
   ...fields: (string & keyof entityType)[]
 ): ColumnDef<entityType, unknown>[] {
-  return api.mapFields(...fields).map((field) => {
+  return api.toFieldsArray(...fields).map((field) => {
     return {
       accessorKey: field.key,
       header: ({ column }) => (
@@ -35,7 +35,7 @@ export function buildFilterColumns<entityType>(
   ...fields: (string & keyof entityType)[]
 ): DataTableFilterField<entityType>[] {
   return api
-    .mapFields(...fields)
+    .toFieldsArray(...fields)
     .filter((x) => x.type === 'text')
     .map((field) => ({
       caption: field.caption,

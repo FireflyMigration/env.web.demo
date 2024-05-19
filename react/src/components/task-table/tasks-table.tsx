@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { Badge } from '../ui/badge.tsx'
 import { CreateTaskDialog } from './create-task-dialog.tsx'
 import React from 'react'
-import { useRemultReactTableServerSidePagingSortingAndFiltering } from '../../lib/use-remult-react-table.ts'
+import { useRemultReactTableServerSidePagingSortingAndFiltering } from '../../lib/remult-lib/use-remult-react-table.ts'
 import {
   ColumnDef,
   getCoreRowModel,
