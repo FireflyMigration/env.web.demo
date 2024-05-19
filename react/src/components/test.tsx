@@ -5,7 +5,8 @@ import { customerApi } from '../model/customer'
 import { useFormDialog } from './useFormDialog'
 import { orderApi } from '../model/order'
 import CustomerTable from '../app/customer-table'
+import TestShowYoni from './test-show-yoni'
 
 export default function Test() {
-  return <CustomerTable />
+  return <TestShowYoni />
 }
