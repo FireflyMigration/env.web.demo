@@ -2,7 +2,9 @@ import { FieldConfig } from '../../components/form-group/form-group'
 
 import { capitalize } from '../utils'
 
-export function dataApiFor<T extends { id?: string }>(
+export type EntityWithId = { id?: string | number }
+
+export function dataApiFor<T extends EntityWithId>(
   key: string,
   options?: {
     fieldsConfig: {
@@ -44,7 +46,7 @@ export function dataApiFor<T extends { id?: string }>(
     async post(item: T) {
       return postOrPut<T>('', 'POST', item)
     },
-    async put(id: string, item: T) {
+    async put(id: string | number, item: T) {
       return postOrPut<T>('/' + id, 'PUT', item)
     },
     async delete(id: string) {
@@ -82,9 +84,7 @@ export function dataApiFor<T extends { id?: string }>(
   }
 }
 
-export type DataApi<T extends { id?: string }> = ReturnType<
-  typeof dataApiFor<T>
->
+export type DataApi<T extends EntityWithId> = ReturnType<typeof dataApiFor<T>>
 
 export const dataApiUrl = '/dataApi/'
 

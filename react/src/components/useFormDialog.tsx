@@ -18,9 +18,9 @@ type FieldsConfigToValuesType<
     ? boolean
     : ConfigType[k]['type'] extends 'number'
     ? number
-    : ConfigType[k]['type'] extends 'date'
-    ? Date
-    : string
+    : // : ConfigType[k]['type'] extends 'date'
+      // ? Date
+      string
 }
 
 export function useFormDialog() {

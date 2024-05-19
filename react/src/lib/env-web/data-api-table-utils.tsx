@@ -1,10 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { DataApi } from './data-api-for'
+import { DataApi, EntityWithId } from './data-api-for'
 import { DataTableColumnHeader } from '../../components/data-table/data-table-column-header'
 import { DataTableFilterField } from '../../types'
 import { useEffect, useState } from 'react'
 
-export function buildColumns<entityType>(
+export function buildColumns<entityType extends EntityWithId>(
   api: DataApi<entityType>,
   ...fields: (string & keyof entityType)[]
 ): ColumnDef<entityType, unknown>[] {
@@ -30,7 +30,7 @@ export function buildColumns<entityType>(
   })
 }
 
-export function buildFilterColumns<entityType>(
+export function buildFilterColumns<entityType extends EntityWithId>(
   api: DataApi<entityType>,
   ...fields: (string & keyof entityType)[]
 ): DataTableFilterField<entityType>[] {

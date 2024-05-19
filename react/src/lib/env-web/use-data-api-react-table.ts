@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-table'
 import React, { useEffect, useMemo } from 'react'
 
-export function useDataApiReactTable<T extends { id: string }>(
+export function useDataApiReactTable<T extends EntityWithId>(
   dataApi: DataApi<T>,
   options: {
     columns: (string & keyof T)[]
@@ -79,10 +79,10 @@ export function useDataApiReactTable<T extends { id: string }>(
                 title: 'Edit',
                 defaultValues: row.original,
                 fields: dataApi.toFields(...options.columns) as any,
-                onOk: async (val: T) => {
+                onOk: async (val) => {
                   replaceRow(
                     row.original,
-                    await dataApi.put(row.original.id, val)
+                    await dataApi.put(row.original.id!, val as T)
                   )
                 },
               })
@@ -102,10 +102,10 @@ export function useDataApiReactTable<T extends { id: string }>(
         },
       } satisfies ColumnDef<T>,
     ]
-  }, [options.columns])
+  }, [JSON.stringify(options.columns)])
   const filterFields = useMemo(
     () => buildFilterColumns(dataApi, ...options.columns),
-    [options.columns]
+    [JSON.stringify(options.columns)]
   )
   return {
     tableProps: {
@@ -139,7 +139,7 @@ export function useDataApiReactTable<T extends { id: string }>(
 
 import '@tanstack/react-table'
 import { FieldConfig } from '../../components/form-group/form-group'
-import { DataApi, DataApiWhere } from './data-api-for'
+import { DataApi, DataApiWhere, EntityWithId } from './data-api-for'
 import { buildColumns, buildFilterColumns } from './data-api-table-utils'
 import { TaskRowAction } from '../../components/task-table/task-row-actions'
 import RowActions from '../../components/data-table/data-table-row-actions'
