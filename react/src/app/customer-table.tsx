@@ -25,11 +25,13 @@ export default function CustomerTable() {
             fields: customerApi.toFields(
               'id',
               'companyName',
-              'contactName'
+              'contactName',
+              'contactName',
+              'contactTitle',
+              'country'
             ) as any,
             onOk: async (customer: Customer) => {
-              const result = await customerApi.post(customer)
-              console.log(result)
+              t.addRow(await customerApi.post(customer))
             },
           })
         }}

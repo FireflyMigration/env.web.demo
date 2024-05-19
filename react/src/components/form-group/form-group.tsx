@@ -7,6 +7,7 @@ import {
   IdSelectValueType,
   IdValueSelect,
 } from '../task-table/id-value-select.tsx'
+import { EntityError } from '../../lib/env-web/data-api-for.ts'
 
 export type FieldConfig = (
   | { type: 'text' | 'number' | 'checkbox' | 'date' }
@@ -27,6 +28,8 @@ export default function FormGroup(props: {
   fields: Record<string, Partial<FieldConfig>>
   state: Record<string, string>
   setState: (newState: Record<string, string>) => void
+  error: EntityError<any> | undefined
+  setError: (e: EntityError<any>) => void
 }) {
   const fields = useMemo(() => {
     const result: FieldConfig[] = []
@@ -47,11 +50,19 @@ export default function FormGroup(props: {
   return (
     <div className="flex flex-col gap-4">
       {fields.map((field) => {
+        const fieldError = props.error?.errors?.[field.key]
         const args: FieldInGroupProps = {
           field,
           value: props.state[field.key] || '',
-          setValue: (value) =>
-            props.setState({ ...props.state, [field.key]: value }),
+          setValue: (value) => {
+            props.setState({ ...props.state, [field.key]: value })
+            if (fieldError) {
+              props.setError({
+                ...props.error!,
+                errors: { ...props.error!.errors, [field.key]: undefined },
+              })
+            }
+          },
         }
         function RenderField() {
           if (field.type)
@@ -66,9 +77,15 @@ export default function FormGroup(props: {
         }
 
         return (
-          <div className="grid w-full  items-center gap-1.5">
-            <Label htmlFor={field.key}>{field.caption}</Label>
+          <div className="grid w-full  items-center gap-1.5" key={field.key}>
+            <Label
+              htmlFor={field.key}
+              className={fieldError ? 'text-destructive' : undefined}
+            >
+              {field.caption}
+            </Label>
             {RenderField()}
+            {fieldError && <div className="text-destructive">{fieldError}</div>}
           </div>
         )
       })}

@@ -30,6 +30,33 @@ export default function useQuestion() {
           </DialogFooter>
         </div>
       ),
-      false,
+      false
+    )
+}
+
+export function useError() {
+  const dialog = useDialog()
+  return ({
+    title,
+    message: description,
+  }: {
+    title?: string
+    message: string
+  }) =>
+    dialog(
+      (resolve) => (
+        <div>
+          <DialogHeader>
+            <DialogTitle>{title ?? 'Error'}</DialogTitle>
+            <DialogDescription>{description}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:space-x-0">
+            <DialogClose asChild>
+              <Button variant="destructive">Ok</Button>
+            </DialogClose>
+          </DialogFooter>
+        </div>
+      ),
+      false
     )
 }

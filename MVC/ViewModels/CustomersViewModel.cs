@@ -22,8 +22,9 @@ namespace MVC.ViewModels
         }
         protected override void OnSavingRow()
         {
+            ModelState.Required(Customers.CustomerID);
             ModelState.Required(Customers.CompanyName);
-            ModelState.Exists(Customers.CustomerID, new Northwind.Models.Customers().CustomerID);
+            
 
             if (Customers.CustomerID.WasChanged)
                 if (Customers.Contains(Customers.CustomerID.IsEqualTo(Customers.CustomerID.Value)))

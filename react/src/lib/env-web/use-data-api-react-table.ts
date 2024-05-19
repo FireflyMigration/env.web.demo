@@ -1,4 +1,5 @@
 import {
+  ColumnDef,
   type ColumnFiltersState,
   type PaginationState,
   type RowData,
@@ -6,16 +7,16 @@ import {
 } from '@tanstack/react-table'
 import React, { useEffect, useMemo } from 'react'
 
-export function useDataApiReactTable<entityType>(
-  dataApi: DataApi<entityType>,
+export function useDataApiReactTable<T extends { id: string }>(
+  dataApi: DataApi<T>,
   options: {
-    columns: (string & keyof entityType)[]
+    columns: (string & keyof T)[]
   }
 ) {
   const [refresh, setRefresh] = React.useState({})
   const [columnFilters, onColumnFiltersChange] =
     React.useState<ColumnFiltersState>([])
-  const [data, setData] = React.useState<entityType[]>([])
+  const [data, setData] = React.useState<T[]>([])
   const [rowCount, setRowCount] = React.useState(0)
   const [{ pageIndex, pageSize }, onPaginationChange] =
     React.useState<PaginationState>({
@@ -56,8 +57,51 @@ export function useDataApiReactTable<entityType>(
       })
       .then(setData)
   }, [pageIndex, pageSize, sorting, where, refresh])
+  const replaceRow = (originalRow: T, newRow: T) => {
+    setData((data) => data.map((row) => (row === originalRow ? newRow : row)))
+  }
+
+  const removeRow = (row: T) => {
+    setData((data) => data.filter((r) => r !== row))
+    setRowCount(rowCount - 1)
+  }
   const columns = useMemo(() => {
-    return buildColumns(dataApi, ...options.columns)
+    return [
+      ...buildColumns(dataApi, ...options.columns),
+      {
+        id: 'actions',
+        cell: function Cell({ row }) {
+          const question = useQuestion()
+          const form = useFormDialog()
+          return RowActions({
+            edit: async () => {
+              form({
+                title: 'Edit',
+                defaultValues: row.original,
+                fields: dataApi.toFields(...options.columns) as any,
+                onOk: async (val: T) => {
+                  replaceRow(
+                    row.original,
+                    await dataApi.put(row.original.id, val)
+                  )
+                },
+              })
+            },
+            deleteRow: async () => {
+              if (
+                await question({
+                  title: 'Delete',
+                  description: 'Are you sure you want to delete?',
+                })
+              ) {
+                await dataApi.delete((row.original as any).id)
+                removeRow(row.original)
+              }
+            },
+          })
+        },
+      } satisfies ColumnDef<T>,
+    ]
   }, [options.columns])
   const filterFields = useMemo(
     () => buildFilterColumns(dataApi, ...options.columns),
@@ -82,18 +126,9 @@ export function useDataApiReactTable<entityType>(
     },
     filterFields,
 
-    addRow: (row: entityType) => {
+    addRow: (row: T) => {
       setData((data) => [row, ...data])
       setRowCount(rowCount + 1)
-    },
-
-    replaceRow: (originalRow: entityType, newRow: entityType) => {
-      setData((data) => data.map((row) => (row === originalRow ? newRow : row)))
-    },
-
-    removeRow: (row: entityType) => {
-      setData((data) => data.filter((r) => r !== row))
-      setRowCount(rowCount - 1)
     },
 
     reloadData: () => {
@@ -106,6 +141,10 @@ import '@tanstack/react-table'
 import { FieldConfig } from '../../components/form-group/form-group'
 import { DataApi, DataApiWhere } from './data-api-for'
 import { buildColumns, buildFilterColumns } from './data-api-table-utils'
+import { TaskRowAction } from '../../components/task-table/task-row-actions'
+import RowActions from '../../components/data-table/data-table-row-actions'
+import useQuestion from '../../components/dialog/useQuestion'
+import { useFormDialog } from '../../components/useFormDialog'
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
