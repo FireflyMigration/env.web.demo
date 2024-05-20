@@ -2,17 +2,17 @@
 //@ts-ignore
 declare const CefSharp
 //@ts-ignore
-declare const dotnet
-
-let returnMockData = false
+declare const dotnetBridge
 //@ts-ignore
-if (window.cefSharp) CefSharp.BindObjectAsync('dotnet')
-else returnMockData = true
-
-export async function aButtonWasClicked(text: string): Promise<void> {
-  if (returnMockData) {
-    alert('Menu opened ' + text)
-    return
-  }
-  return dotnet.test()
-}
+if (window.cefSharp) CefSharp.BindObjectAsync('dotnetBridge')
+//@ts-ignore
+export const dotnet = window.cefSharp
+  ? (new Proxy(
+      {},
+      {
+        get: (target, p) => {
+          return dotnetBridge[p]
+        },
+      }
+    ) as any)
+  : undefined

@@ -8,6 +8,7 @@ import DashboardPage from './components/dashboard/page.tsx'
 import { TooltipProvider } from './components/ui/tooltip.tsx'
 import { cn } from './lib/utils.ts'
 import { useFormDialog } from './components/useFormDialog.tsx'
+import { dotnet } from './winforms-bridge/dotnet.ts'
 
 function App() {
   const form = useFormDialog()
@@ -73,6 +74,13 @@ function App() {
                 >
                   Print Orders
                 </Link>
+                {dotnet && (
+                  <button className="text-sm font-medium transition-colors hover:text-primary" onClick={()=>{
+                    dotnet?.showOrders()
+                  }}>
+                    Orders Screen
+                  </button>
+                )}
               </nav>
               <div className="ml-auto flex items-center space-x-4">
                 <UserNav />

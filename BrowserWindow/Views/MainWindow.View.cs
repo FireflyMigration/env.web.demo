@@ -18,10 +18,11 @@ namespace BrowserWindow.Views
     partial class MainWindowView : ENV.UI.Form
     {
 
-        public MainWindowView()
+        public MainWindowView(object operations)
         {
             InitializeComponent();
             FitToMDI = true;
+            TitleBar = false;
 
             var browser = new ChromiumWebBrowser(@"http://localhost:5173/");
             //   browser.RequestHandler = new CustomRequestHandler(@"http://127.0.0.1:5173/", @"C:\try\t61\vite-project\dist");
@@ -30,49 +31,39 @@ namespace BrowserWindow.Views
             {
                 if (!loaded)
                 {
-                    browser.ShowDevTools();
+                    //browser.ShowDevTools();
                 }
                 loaded = true;
             };
             this.Controls.Add(browser);
-            //  browser.JavascriptObjectRepository.NameConverter = new CefSharp.JavascriptBinding.CamelCaseJavascriptNameConverter();
-            browser.JavascriptObjectRepository.Register("dotnet", new Test(), isAsync: true, options: BindingOptions.DefaultBinder);
+            browser.JavascriptObjectRepository.NameConverter = new CefSharp.JavascriptBinding.CamelCaseJavascriptNameConverter();
+            browser.JavascriptObjectRepository.Register("dotnetBridge", operations, isAsync: true, options: BindingOptions.DefaultBinder);
         }
 
 
 
     }
+}
+namespace BrowserWindow
+{
     public class MainWindow
     {
-        public static void RunMenu()
+        public static void RunMenu(object operations)
         {
-            new myUIC().Run();
-            Common.RunOnNewThread(() =>
-            {
-            });
+            new myUIC(operations).Run();
+
         }
         class myUIC : UIControllerBase
         {
-            MainWindowView _view;
-            public myUIC()
+            object _operations;
+            public myUIC(object operations)
             {
-                Handlers.Add(Command.Exit).Invokes += e =>
-                {
-
-                };
-                Handlers.Add(Command.CloseForm).Invokes += e =>
-                {
-
-                };
-                Handlers.Add(Command.CloseForm).Invokes += e =>
-                {
-
-                };
+                _operations = operations;
             }
 
             protected override void OnLoad()
             {
-                View = () => _view = new MainWindowView();
+                View = () => new Views.MainWindowView(_operations);
                 KeepViewVisibleAfterExit = true;
             }
             public void Run()
