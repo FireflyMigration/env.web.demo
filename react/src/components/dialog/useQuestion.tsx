@@ -5,8 +5,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { useDialog } from './dialog-context.tsx'
 import { Button } from '../ui/button.tsx'
+import { useDialog } from './dialog-context.tsx'
 
 export default function useQuestion() {
   const dialog = useDialog()
@@ -44,7 +44,7 @@ export function useError() {
     message: string
   }) =>
     dialog(
-      (resolve) => (
+      () => (
         <div>
           <DialogHeader>
             <DialogTitle>{title ?? 'Error'}</DialogTitle>

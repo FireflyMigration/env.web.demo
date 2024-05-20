@@ -98,7 +98,7 @@ export type DataApiRequest = {
 export type DataApiWhere<T> = {
   [p in keyof T]?: string
 }
-export async function dataApiGet<T>(key: string, params: DataApiRequest) {
+export async function dataApiGet(key: string, params: DataApiRequest) {
   return fetch(
     dataApiUrl +
       key +

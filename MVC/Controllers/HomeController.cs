@@ -1,4 +1,5 @@
 ﻿using ENV.Web;
+using Firefly.Box;
 using System.Net;
 using System.Web.Mvc;
 
@@ -58,6 +59,12 @@ namespace MVC.Controllers
         public void Print(int id)
         {
             new Northwind.Orders.Print_Order().Run(id);
+        }
+        [PrintToPDF]
+        public void OrdersReport(string fromDate, string toDate)
+        {
+            new Northwind.Orders.Print_Orders().Run(Date.Parse(fromDate, "YYYY-MM-DD"), Date.Parse(toDate, "YYYY-MM-DD"));
+
         }
         public string DoSomething()
         {

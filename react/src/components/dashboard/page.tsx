@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -6,8 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CalendarDateRangePicker } from './components/date-range-picker'
 
 import { Overview } from './components/overview'
 import { RecentSales } from './components/recent-sales'

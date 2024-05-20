@@ -1,6 +1,6 @@
-import { Button } from './ui/button'
 import { selectFrom } from '../lib/env-web/select-from'
 import { customerApi } from '../model/customer'
+import { Button } from './ui/button'
 import { useFormDialog } from './useFormDialog'
 
 export default function TestShowYoni() {
@@ -18,7 +18,7 @@ export default function TestShowYoni() {
             customer: selectFrom(customerApi, 'companyName'),
           },
 
-          onOk: (val) => {},
+          onOk: () => {},
         })
       }}
     >

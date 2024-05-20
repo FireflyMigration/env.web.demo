@@ -1,7 +1,6 @@
-import * as React from 'react'
+import { Checkbox } from '../ui/checkbox.tsx'
 import { Input } from '../ui/input.tsx'
 import { FieldInGroupProps } from './form-group.tsx'
-import { Checkbox } from '../ui/checkbox.tsx'
 
 export function NormalInput({ field, value, setValue }: FieldInGroupProps) {
   return (
@@ -14,7 +13,7 @@ export function NormalInput({ field, value, setValue }: FieldInGroupProps) {
   )
 }
 
-export function CheckboxInput({ field, value, setValue }: FieldInGroupProps) {
+export function CheckboxInput({ value, setValue }: FieldInGroupProps) {
   return (
     <Checkbox
       checked={value == 'true'}

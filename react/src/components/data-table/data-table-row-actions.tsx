@@ -1,12 +1,11 @@
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { Button } from '../ui/button.tsx';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu.tsx'
-import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { Button } from '../ui/button.tsx'
+  DropdownMenuTrigger
+} from '../ui/dropdown-menu.tsx';
 
 export default function RowActions({
   actions,
