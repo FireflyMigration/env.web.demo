@@ -9,11 +9,9 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Button } from '../ui/button.tsx'
 
 export default function RowActions({
-  edit,
-  deleteRow,
+  actions,
 }: {
-  edit: VoidFunction
-  deleteRow: VoidFunction
+  actions: { text: string; onClick: VoidFunction }[]
 }) {
   return (
     <>
@@ -28,10 +26,9 @@ export default function RowActions({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuItem onSelect={() => edit()}>Edit</DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => deleteRow()}>
-            Delete
-          </DropdownMenuItem>
+          {actions.map((a) => (
+            <DropdownMenuItem onSelect={a.onClick}>{a.text}</DropdownMenuItem>
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

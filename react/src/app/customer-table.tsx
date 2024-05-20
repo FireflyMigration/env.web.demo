@@ -7,7 +7,7 @@ import { useFormDialog } from '../components/useFormDialog'
 
 export default function CustomerTable() {
   const t = useDataApiReactTable(customerApi, {
-    columns: ['id', 'companyName'],
+    columns: ['id', 'companyName', 'address', 'city', 'phone'],
   })
 
   const table = useReactTable({
@@ -25,10 +25,9 @@ export default function CustomerTable() {
             fields: customerApi.toFields(
               'id',
               'companyName',
-              'contactName',
-              'contactName',
-              'contactTitle',
-              'country'
+              'address',
+              'city',
+              'phone'
             ) as any,
             onOk: async (customer: Customer) => {
               t.addRow(await customerApi.post(customer))

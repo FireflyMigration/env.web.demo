@@ -9,6 +9,11 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  server: { proxy: { '/dataApi': 'http://localhost:56557' } },
+  server: {
+    proxy: {
+      '/dataApi': 'http://localhost:56557',
+      '/home': 'http://localhost:56557',
+    },
+  },
   build: { outDir: '../mvc/frontend-dist-files' },
 })

@@ -11,6 +11,7 @@ export function useDataApiReactTable<T extends EntityWithId>(
   dataApi: DataApi<T>,
   options: {
     columns: (string & keyof T)[]
+    rowActions?: { text: string; onClick: (item: T) => void }[]
   }
 ) {
   const [refresh, setRefresh] = React.useState({})
@@ -74,30 +75,42 @@ export function useDataApiReactTable<T extends EntityWithId>(
           const question = useQuestion()
           const form = useFormDialog()
           return RowActions({
-            edit: async () => {
-              form({
-                title: 'Edit',
-                defaultValues: row.original,
-                fields: dataApi.toFields(...options.columns) as any,
-                onOk: async (val) => {
-                  replaceRow(
-                    row.original,
-                    await dataApi.put(row.original.id!, val as T)
-                  )
+            actions: [
+              {
+                text: 'Edit',
+                onClick: () => {
+                  form({
+                    title: 'Edit',
+                    defaultValues: row.original,
+                    fields: dataApi.toFields(...options.columns) as any,
+                    onOk: async (val) => {
+                      replaceRow(
+                        row.original,
+                        await dataApi.put(row.original.id!, val as T)
+                      )
+                    },
+                  })
                 },
-              })
-            },
-            deleteRow: async () => {
-              if (
-                await question({
-                  title: 'Delete',
-                  description: 'Are you sure you want to delete?',
-                })
-              ) {
-                await dataApi.delete((row.original as any).id)
-                removeRow(row.original)
-              }
-            },
+              },
+              {
+                text: 'Delete',
+                onClick: async () => {
+                  if (
+                    await question({
+                      title: 'Delete',
+                      description: 'Are you sure you want to delete?',
+                    })
+                  ) {
+                    await dataApi.delete((row.original as any).id)
+                    removeRow(row.original)
+                  }
+                },
+              },
+              ...(options.rowActions ?? []).map((action) => ({
+                text: action.text,
+                onClick: () => action.onClick(row.original),
+              })),
+            ],
           })
         },
       } satisfies ColumnDef<T>,

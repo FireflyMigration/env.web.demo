@@ -24,6 +24,15 @@ export const orderApi = dataApiFor<Order>('orders', {
     orderDate: {
       type: 'date',
     },
-    customerID: selectFrom(customerApi, 'companyName'),
+    requiredDate: {
+      type: 'date',
+    },
+    shippedDate: {
+      type: 'date',
+    },
+    customerID: {
+      ...selectFrom(customerApi, 'companyName'),
+      caption: 'Customer',
+    },
   },
 })
