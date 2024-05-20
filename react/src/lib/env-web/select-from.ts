@@ -19,8 +19,8 @@ export function selectFrom<T extends { id?: string }>(
         })
       ).map((item) => ({
         //@ts-ignore
-        id: item.id,
-        caption: item[descriptionField],
+        id: item.id!,
+        caption: item[descriptionField]?.toString(),
       })),
     displayValue: async (id) =>
       (await api.getMany({ where: { id } }))?.[0]?.[

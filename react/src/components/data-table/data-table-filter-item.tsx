@@ -69,9 +69,10 @@ export function DataTableFilterItem<TData>({
       filterValue = selectedOperator.process(filterValues)
     else if (debounceValue) {
       filterValue = selectedOperator.process(debounceValue)
-    } else if (selectedOperator.applyWhenNoValue) {
-      filterValue = selectedOperator.process('')
-    }
+    } 
+    // else if (selectedOperator.applyWhenNoValue) {
+    //   filterValue = selectedOperator.process('')
+    // }
     column?.setFilterValue(filterValue ? [filterValue] : undefined)
   }, [filterValues, selectedOperator, debounceValue])
 

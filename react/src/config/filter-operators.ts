@@ -1,5 +1,3 @@
-import type { ContainsStringValueFilter, ValueFilter } from 'remult'
-
 export type DataTableConfig = typeof dataTableConfig
 
 export type FilterOperator = {
@@ -11,7 +9,7 @@ const selectableOperators = [
   { label: 'Is', process: (val: any) => val },
   {
     label: 'Is not',
-    process: (val: any) => ({ $ne: val }) satisfies ValueFilter<any>,
+    process: (val: any) => ({ $ne: val }),
   },
   {
     label: 'Is empty',
@@ -20,7 +18,7 @@ const selectableOperators = [
   },
   {
     label: 'Is not empty',
-    process: (_: any) => ({ $ne: null }) satisfies ValueFilter<any>,
+    process: (_: any) => ({ $ne: null }),
     applyWhenNoValue: true,
   },
 ] satisfies FilterOperator[]
@@ -28,13 +26,11 @@ export const dataTableConfig = {
   comparisonOperators: [
     {
       label: 'Contains',
-      process: (val: any) =>
-        ({ $contains: val }) satisfies ContainsStringValueFilter,
+      process: (val: any) => ({ $contains: val }),
     },
     {
       label: 'Does not contain',
-      process: (val: any) =>
-        ({ $notContains: val }) satisfies ContainsStringValueFilter,
+      process: (val: any) => ({ $notContains: val }),
     },
     ...selectableOperators,
   ],

@@ -16,7 +16,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { ValueListItem } from 'remult'
+export type ValueListItem = {
+  id?: string
+  caption?: string
+}
 import { FieldInGroupProps } from '../form-group/form-group'
 export type IdValueSelectProps = {
   getOptions: (search: string) => Promise<ValueListItem[]>
