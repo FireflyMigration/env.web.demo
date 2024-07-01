@@ -1,5 +1,5 @@
 import { Filter, EntityFilter, FindOptions, Repository } from 'remult'
-import { __updateEntityBasedOnWhere } from 'remult/internals'
+import { __updateEntityBasedOnWhere, actionInfo } from 'remult/internals'
 
 export class Lookup<entityType> {
   constructor(private repository: Repository<entityType>) {}
@@ -55,14 +55,14 @@ export class Lookup<entityType> {
       res.promise = Promise.resolve(res)
       return res
     } else {
-      res.promise = this.repository.find(find).then((r) => {
+      res.promise = actionInfo.runActionWithoutBlockingUI (()=> this.repository.find(find).then((r) => {
         res!.loading = false
         if (r.length > 0) {
           res!.value = r[0]
           res!.found = true
         }
         return res!
-      })
+      }))
     }
     return res
   }

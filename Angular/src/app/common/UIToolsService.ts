@@ -153,6 +153,15 @@ export function extractError(err: any): string {
       }
     }
   }
+  if (err.ModelState) {
+    if (err.Message) return err.Message;
+    for (const key in err.ModelState) {
+      if (err.modelState.hasOwnProperty(key)) {
+        const element = err.ModelState[key];
+        return key + ': ' + element;
+      }
+    }
+  }
   if (err.rejection) return extractError(err.rejection); //for promise failed errors and http errors
   if (err.httpStatusCode == 403) return 'אינך מורשה פעולה זו';
   if (err.message) {
