@@ -1,0 +1,6 @@
+{
+  "/dataApi": {
+    "target": "http://localhost:56557",
+    "secure": false
+  }
+}
