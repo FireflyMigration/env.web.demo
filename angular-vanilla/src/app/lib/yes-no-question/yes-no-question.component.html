@@ -1,0 +1,14 @@
+<div>
+  <h3 mat-dialog-title>{{ args.message }}</h3>
+
+  <mat-dialog-actions>
+    @if(args.isAQuestion){
+    <button mat-raised-button color="warning" (click)="closeDialog()">
+      No
+    </button>
+    <button mat-flat-button color="primary" (click)="select()">Yes</button>
+    } @else {
+    <button mat-flat-button color="primary" (click)="close()">Ok</button>
+    }
+  </mat-dialog-actions>
+</div>

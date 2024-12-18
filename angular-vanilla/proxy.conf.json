@@ -2,5 +2,9 @@
   "/dataApi": {
     "target": "http://localhost:56557",
     "secure": false
+  },
+  "/appApi": {
+    "target": "http://localhost:56557",
+    "secure": false
   }
 }

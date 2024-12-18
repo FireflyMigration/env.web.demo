@@ -1,0 +1,12 @@
+<h3 mat-dialog-title>{{ args.title }}</h3>
+
+<mat-dialog-content>
+  <app-dynamic-form [settings]="settings" [showSubmit]="false" />
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button type="button" mat-raised-button (click)="closeDialog()">
+    Cancel
+  </button>
+
+  <button mat-raised-button color="accent" (click)="confirm()">Submit</button>
+</mat-dialog-actions>

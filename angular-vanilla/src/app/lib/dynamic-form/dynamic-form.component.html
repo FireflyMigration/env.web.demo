@@ -1,0 +1,47 @@
+<form
+  [formGroup]="settings.dynamicForm"
+  (ngSubmit)="onSubmit()"
+  style="
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 8px;
+    gap: 8px;
+  "
+>
+  @for (field of settings.formFields; track field.key) { @if (field.type ===
+  'text' || field.type === 'email'||field.type==='password') {
+  <mat-form-field appearance="outline">
+    <mat-label>{{ field.label }}</mat-label>
+    <input
+      matInput
+      [formControlName]="field.key"
+      [type]="field.type"
+      [placeholder]="field.label"
+    />
+  </mat-form-field>
+  } @else if (field.type === 'checkbox') {
+  <mat-checkbox [formControlName]="field.key">{{ field.label }}</mat-checkbox>
+  } @else if (field.type === 'select') {
+  <mat-form-field appearance="outline">
+    <mat-label>{{ field.label }}</mat-label>
+    <mat-select [formControlName]="field.key">
+      @for (option of field.options; track option) {
+      <mat-option [value]="option">{{ option }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  } @if (settings.dynamicForm.get(field.key)?.invalid &&
+  settings.dynamicForm.get(field.key)?.touched) {
+  <mat-error>{{ field.label }} is required</mat-error>
+  } } @if(showSubmit){
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    [disabled]="settings.dynamicForm.invalid"
+  >
+    Submit
+  </button>
+  }
+</form>
