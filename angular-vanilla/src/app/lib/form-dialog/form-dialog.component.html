@@ -8,5 +8,14 @@
     Cancel
   </button>
 
-  <button mat-raised-button color="accent" (click)="confirm()">Submit</button>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="confirm()"
+    [disabled]="submitting"
+  >
+    @if (!submitting){ Submit }@else{
+    <mat-spinner [diameter]="20" />
+    }
+  </button>
 </mat-dialog-actions>

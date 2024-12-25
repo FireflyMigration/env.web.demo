@@ -1,4 +1,6 @@
 import { dataApiFor } from '../lib/data-api-for';
+import { selectFrom } from '../lib/select-from';
+import { customersApi } from './Customer';
 
 export interface Order {
   id?: number;
@@ -18,5 +20,12 @@ export interface Order {
 }
 
 export const ordersApi = dataApiFor<Order>('orders', {
-  fieldsConfig: {},
+  fieldsConfig: {
+    orderDate: { type: 'date' },
+    customerID: {
+      label: 'Customer',
+      ...selectFrom(customersApi, 'companyName'),
+    },
+  },
 });
+ordersApi.getMany({ _order: 'asc', _sort: 'orderDate' });

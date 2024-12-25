@@ -21,9 +21,7 @@ export class YesNoQuestionComponent implements OnInit, WantsToCloseDialog {
   ngOnInit() {
     if (this.args.isAQuestion === undefined) this.args.isAQuestion = true;
   }
-  close() {
-    this.close();
-  }
+
   select() {
     this.closeDialog();
     this.okPressed = true;

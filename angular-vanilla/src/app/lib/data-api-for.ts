@@ -1,9 +1,4 @@
-import {
-  fieldConfigFor,
-  type FieldConfig,
-  type FieldsConfig,
-} from './field-config';
-import { capitalize } from './utils';
+import { fieldConfigFor, type FieldsConfig } from './field-config';
 
 export type EntityWithId = { id?: string | number };
 
@@ -66,9 +61,32 @@ export function dataApiFor<T extends EntityWithId>(
   }
 }
 
+export async function postApi<returnType>(
+  url: string,
+  body?: any
+): Promise<returnType> {
+  return fetch(appApiUrl + url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : '',
+  }).then((response) => {
+    if (response.ok) {
+      return response.json();
+    } else throw new Error(response.statusText);
+  });
+}
+export function openPdf(url: string, params?: any) {
+  let theUrl = appApiUrl + url;
+  if (params) {
+    theUrl += '?' + new URLSearchParams(params).toString();
+  }
+  window.open(theUrl, '_blank');
+}
+
 export type DataApi<T extends EntityWithId> = ReturnType<typeof dataApiFor<T>>;
 
-export const dataApiUrl = '/dataApi/';
+export const dataApiUrl = '/dataApi/',
+  appApiUrl = '/appApi/';
 
 export type DataApiRequest = {
   __action?: 'count';
@@ -77,8 +95,9 @@ export type DataApiRequest = {
   _sort?: string;
   _order?: string;
 };
+
 export type DataApiWhere<T> = {
-  [p in keyof T]?: string;
+  [p in keyof T]?: T[p];
 };
 export async function dataApiGet(key: string, params: DataApiRequest) {
   return fetch(

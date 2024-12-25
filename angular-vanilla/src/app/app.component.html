@@ -1,4 +1,17 @@
-<mat-card style="max-width: 400px; margin: 16px" appearance="outlined">
-  <app-dynamic-form [settings]="login" />
-</mat-card>
-<app-data-grid [settings]="grid" />
+@if (auth.currentUser){ Hello {{ auth.currentUser.name }}!
+
+<button mat-button (click)="auth.signOut()">Sign out</button> } @else{
+<button mat-button (click)="auth.signIn()">Sign in</button>
+
+}
+<table>
+  @for(item of orders$ |async ;track $index){
+  <tr>
+    <td>{{ item.customerID }}</td>
+    <td>{{ item.id }}</td>
+    <td>{{ item.orderDate | dateFormat }}</td>
+  </tr>
+  }
+</table>
+
+<router-outlet />

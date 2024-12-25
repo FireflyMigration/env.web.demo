@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, forwardRef, inject, Input } from '@angular/core';
 import {
   fieldConfigFor,
   type FieldConfig,
@@ -11,12 +11,18 @@ import {
   type FormGroup,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { UIService } from '../ui.service';
+import { EntityError } from '../data-api-for';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { SelectIdFieldComponent } from '../select-id-field/select-id-field.component';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -28,7 +34,11 @@ import { UIService } from '../ui.service';
     MatSelectModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatDatepickerModule,
+    MatIconModule,
+    SelectIdFieldComponent,
   ],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './dynamic-form.component.html',
   styleUrl: './dynamic-form.component.scss',
 })
@@ -48,8 +58,23 @@ export class DynamicFormComponent<T> {
 
 export class DynamicFormSettings<T> {
   ui!: UIService;
-  doOnSubmit() {
-    this.options.onSubmit(this.dynamicForm.value);
+  async doOnSubmit() {
+    try {
+      await this.options.onSubmit(this.dynamicForm.value);
+    } catch (e) {
+      if (e instanceof EntityError) {
+        for (const field of this.formFields) {
+          if (e.errors?.[field.key]) {
+            this.dynamicForm.get(field.key)?.setErrors({
+              error: e.errors[field.key],
+            });
+          }
+          this.ui.info(e.message);
+        }
+      } else if (e instanceof Error) {
+        this.ui.info(e.message);
+      }
+    }
   }
   constructor(private options: DynamicFormSettingsOptions<T>) {
     this.formFields = fieldConfigFor<T>(options.fieldsConfig).toFieldsArray();
@@ -74,6 +99,12 @@ export class DynamicFormSettings<T> {
       ];
     });
     this.dynamicForm = fb.group(group);
+  }
+  getFieldErrorText(field: FieldConfig) {
+    const error = this.dynamicForm.get(field.key)?.errors;
+    return (
+      (error?.['required'] && field.label + ' is required') ?? error?.['error']
+    );
   }
 }
 

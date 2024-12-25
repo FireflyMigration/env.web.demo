@@ -31,7 +31,17 @@ export class DataGridComponent<T extends EntityWithId> {
     this.settings.loadData();
   }
   getRowDisplayData(row: DataGridRow<T>, column: FieldConfig) {
-    return row.row[column.key as keyof T];
+    const val = row.row[column.key as keyof T];
+    let display = row.columnsDisplayValues[column.key];
+    if (!display) {
+      display = { value: 'loading' };
+      async function displayTheValue() {
+        display.value = (await column.displayValue(val)) ?? '';
+      }
+      displayTheValue();
+      row.columnsDisplayValues[column.key] = display;
+    }
+    return display.value;
   }
   @Input() settings!: DataGridSettings<T>;
   ngOnInit() {
@@ -80,7 +90,7 @@ export class DataGridSettings<T extends EntityWithId> {
             _limit: this.pageSize,
             _page: this.pageIndex,
           })
-          .then((y) => y.map((x) => ({ row: x }))),
+          .then((y) => y.map((x) => ({ row: x, columnsDisplayValues: {} }))),
         this.api.count(),
       ]);
     } finally {
@@ -89,4 +99,7 @@ export class DataGridSettings<T extends EntityWithId> {
   }
 }
 
-type DataGridRow<T> = { row: T };
+type DataGridRow<T> = {
+  row: T;
+  columnsDisplayValues: Record<string, { value: string }>;
+};

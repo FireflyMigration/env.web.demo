@@ -6,7 +6,6 @@ import {
 } from '@angular/material/dialog';
 import { YesNoQuestionComponent } from './yes-no-question/yes-no-question.component';
 import type { DynamicFormSettingsOptions } from './dynamic-form/dynamic-form.component';
-import { FormDialogComponent } from './form-dialog/form-dialog.component';
 
 @Injectable({
   providedIn: 'root',
@@ -30,11 +29,13 @@ export class UIService {
   }
   async formDialog<T>(
     options: {
-      title: string;
+      title?: string;
     } & DynamicFormSettingsOptions<T>
   ) {
     return await this.openDialog(
-      FormDialogComponent,
+      (
+        await import('./form-dialog/form-dialog.component')
+      ).FormDialogComponent,
       (d) => (d.args = options)
     );
   }

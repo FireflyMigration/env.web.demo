@@ -1,21 +1,26 @@
-import { capitalize } from './utils';
+import type { IdSelectFieldConfig } from './select-from';
+import { capitalize, makeTitle } from './utils';
 
-export type FieldConfig = {
-  type:
-    | 'text'
-    | 'number'
-    | 'checkbox'
-    | 'date'
-    | 'email'
-    | 'select'
-    | 'password';
-} & {
+export type FieldConfig = (
+  | {
+      type:
+        | 'text'
+        | 'number'
+        | 'checkbox'
+        | 'date'
+        | 'email'
+        | 'select'
+        | 'password';
+    }
+  | IdSelectFieldConfig
+) & {
   label: string;
   key: string;
-  //displayValue: (val: any) => string | Promise<string>;
+  displayValue: (val: any) => string | Promise<string | undefined>;
   required: boolean;
   options?: string[];
   defaultValue?: any;
+  _nonPromiseDisplayValue?: (val: any) => string;
 };
 
 export type FieldsConfig<T> = {
@@ -29,15 +34,16 @@ export function fieldConfigFor<T>(fieldsConfig: FieldsConfig<T>) {
     for (const key of fields) {
       let basic = {
         type: 'text',
-        label: capitalize(key),
+        label: makeTitle(key),
         key,
-        //      displayValue: (x) => x,
+        displayValue: (x) => x,
       } as FieldConfig;
       let field = fieldsConfig[key];
       if (field?.type === 'date') {
-        // basic.displayValue = (d) =>
-        //   new Date(d?.toString()).toLocaleDateString();
+        basic.displayValue = (d) =>
+          new Date(d?.toString()).toLocaleDateString();
       }
+
       //@ts-ignore
       result.push({ ...basic, ...field });
     }
