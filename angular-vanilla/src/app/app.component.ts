@@ -16,10 +16,4 @@ import type { DataApiWhere } from './lib/data-api-for';
 })
 export class AppComponent {
   auth = inject(AuthService);
-  ngOnInit() {}
-  orders$ = from(
-    ordersApi.getMany({
-      where: {},
-    })
-  );
 }

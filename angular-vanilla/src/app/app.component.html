@@ -4,14 +4,5 @@
 <button mat-button (click)="auth.signIn()">Sign in</button>
 
 }
-<table>
-  @for(item of orders$ |async ;track $index){
-  <tr>
-    <td>{{ item.customerID }}</td>
-    <td>{{ item.id }}</td>
-    <td>{{ item.orderDate | dateFormat }}</td>
-  </tr>
-  }
-</table>
 
 <router-outlet />

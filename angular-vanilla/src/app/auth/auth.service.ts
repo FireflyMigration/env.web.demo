@@ -20,7 +20,6 @@ export class AuthService {
       },
       onSubmit: async (signInInfo) => {
         this.currentUser = await postApi('auth/login', signInInfo);
-        console.log(this.currentUser);
       },
       title: 'Sign In',
     });
