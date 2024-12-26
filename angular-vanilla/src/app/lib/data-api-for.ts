@@ -15,14 +15,15 @@ export function dataApiFor<T extends EntityWithId>(
   return {
     key,
     async count(where?: DataApiWhere<T>) {
-      return (await dataApiGet(key, { ...where, __action: 'count' }))
-        .count as number;
+      return (
+        await dataApiGet(key, { ...buildWhere(where), __action: 'count' })
+      ).count as number;
     },
     async getMany(
       options: Omit<DataApiRequest, '__action'> & { where?: DataApiWhere<T> }
     ) {
       const { where, ...op } = options;
-      return (await dataApiGet(key, { ...op, ...where })) as T[];
+      return (await dataApiGet(key, { ...op, ...buildWhere(where) })) as T[];
     },
     async post(item: T) {
       return postOrPut<T>('', 'POST', item);
@@ -71,6 +72,7 @@ export async function postApi<returnType>(
     body: body ? JSON.stringify(body) : '',
   }).then((response) => {
     if (response.ok) {
+      if (response.headers.get('Content-Length') === '0') return null;
       return response.json();
     } else throw new Error(response.statusText);
   });
@@ -97,8 +99,58 @@ export type DataApiRequest = {
 };
 
 export type DataApiWhere<T> = {
-  [p in keyof T]?: T[p];
+  [p in keyof T]?: T[p] extends string | undefined
+    ? ComparisonFilter<T[p]> | { contains?: string } | T[p]
+    : T[p] extends number | undefined
+    ? ComparisonFilter<T[p]> | T[p]
+    : T[p];
 };
+export interface ComparisonFilter<T> {
+  gt?: T;
+  gte?: T;
+  lt?: T;
+  lte?: T;
+  ne?: T;
+}
+
+interface testWhere {
+  s1?: string;
+  s2?: string;
+  s3?: string;
+  n1?: number;
+  n2?: number;
+  n3?: number;
+  b1?: boolean;
+  b2?: boolean;
+}
+let test: DataApiWhere<testWhere> = {
+  s1: 'a',
+  s2: { gt: 'a' },
+  s3: { contains: 'a' },
+  n1: 1,
+  //@ts-expect-error
+  n2: '1',
+  n3: { gt: 1 },
+  b1: true,
+};
+
+function buildWhere<T>(filter?: DataApiWhere<T>) {
+  let result: any = {};
+  for (const key in filter) {
+    if (Object.prototype.hasOwnProperty.call(filter, key)) {
+      const element = filter[key];
+      if (typeof element === 'object') {
+        for (const op in element) {
+          if (Object.prototype.hasOwnProperty.call(element, op)) {
+            const value = element[op];
+            result[key + '.' + op] = value;
+          }
+        }
+      } else result[key] = element;
+    }
+  }
+  return result;
+}
 export async function dataApiGet(key: string, params: DataApiRequest) {
   return fetch(
     dataApiUrl +

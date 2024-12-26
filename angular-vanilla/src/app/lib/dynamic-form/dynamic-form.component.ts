@@ -58,8 +58,11 @@ export class DynamicFormComponent<T> {
 
 export class DynamicFormSettings<T> {
   ui!: UIService;
+
+  submitting = false;
   async doOnSubmit() {
     try {
+      this.submitting = true;
       await this.options.onSubmit(this.dynamicForm.value);
     } catch (e) {
       if (e instanceof EntityError) {
@@ -74,6 +77,8 @@ export class DynamicFormSettings<T> {
       } else if (e instanceof Error) {
         this.ui.info(e.message);
       }
+    } finally {
+      this.submitting = false;
     }
   }
   constructor(private options: DynamicFormSettingsOptions<T>) {

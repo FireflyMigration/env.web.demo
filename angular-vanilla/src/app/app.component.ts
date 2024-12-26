@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { from } from 'rxjs';
 import { ordersApi } from './models/Order';
 import { DateFormatPipe } from './lib/date-format.pipe';
+import type { DataApiWhere } from './lib/data-api-for';
 
 @Component({
   selector: 'app-root',

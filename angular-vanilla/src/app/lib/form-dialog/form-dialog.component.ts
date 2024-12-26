@@ -26,7 +26,6 @@ export class FormDialogComponent implements WantsToCloseDialog {
     title?: string;
   } & DynamicFormSettingsOptions<any>;
   settings!: DynamicFormSettings<any>;
-  submitting = false;
   ngOnInit() {
     this.settings = new DynamicFormSettings({
       ...this.args,
@@ -37,11 +36,6 @@ export class FormDialogComponent implements WantsToCloseDialog {
     });
   }
   async confirm() {
-    try {
-      this.submitting = true;
-      await this.settings.doOnSubmit();
-    } finally {
-      this.submitting = false;
-    }
+    await this.settings.doOnSubmit();
   }
 }

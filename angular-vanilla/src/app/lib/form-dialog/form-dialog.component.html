@@ -12,9 +12,9 @@
     mat-raised-button
     color="accent"
     (click)="confirm()"
-    [disabled]="submitting"
+    [disabled]="settings.submitting"
   >
-    @if (!submitting){ Submit }@else{
+    @if (!settings.submitting){ Submit }@else{
     <mat-spinner [diameter]="20" />
     }
   </button>
