@@ -1,0 +1,7 @@
+@if (auth.currentUser){ Hello {{ auth.currentUser.name }}!
+<button mat-button (click)="auth.signOut()">Sign out</button>
+} @else {
+<button mat-button (click)="auth.signIn()">Sign in</button>
+}
+
+<router-outlet />

@@ -7,21 +7,12 @@ namespace MVC.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
+
         public void Run(string prgname)
         {
             Northwind.Application.Instance.ProcessWebRequest(prgname);
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
         DataResult ToJson(ENV.Data.Entity e)
         {
             return new ViewModel(e).ExportRows();
@@ -49,12 +40,7 @@ namespace MVC.Controllers
             }
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
 
-            return View();
-        }
         [ENV.Web.PrintToPDF]
         public void Print(int id)
         {
@@ -71,10 +57,5 @@ namespace MVC.Controllers
             return "Hello World " + ENV.Security.UserManager.CurrentUser.Name;
         }
 
-        public ActionResult Login(string userName)
-        {
-            var payload = new JwtUserInfo(userName, userName, "Admin", "Login");
-            return Json(MvcApplication.Jwt.GetToken(payload));
-        }
     }
 }

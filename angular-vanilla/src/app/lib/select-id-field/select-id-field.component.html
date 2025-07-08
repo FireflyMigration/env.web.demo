@@ -1,0 +1,18 @@
+<mat-form-field appearance="outline">
+  <input
+    type="text"
+    matInput
+    [formControl]="searchControl"
+    [matAutocomplete]="auto"
+  />
+  <mat-label>{{ label }}</mat-label>
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="displayFn"
+    (optionSelected)="theFormControl.setValue($event.option.value.id)"
+  >
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+      {{ option.caption }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

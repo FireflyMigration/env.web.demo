@@ -1,0 +1,49 @@
+<mat-progress-bar
+  [mode]="settings.loading ? 'query' : 'determinate'"
+></mat-progress-bar>
+
+<table matSort (matSortChange)="sortData($event)" style="width: 100%">
+  <thead>
+    @if(settings.options.rowActions){
+    <th></th>
+    } @for (item of settings.columns; track $index) {
+    <th [mat-sort-header]="item.key">{{ item.label }}</th>
+    }
+  </thead>
+
+  <tbody>
+    @for (row of settings.rows; track $index) {
+    <tr>
+      @if(settings.options.rowActions){
+      <td>
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          aria-label="row-menu"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          @for(button of settings.options.rowActions;track $index){
+          <button mat-menu-item (click)="handleRowAction($event, row, button)">
+            <mat-icon>{{ button.icon }}</mat-icon>
+            <span>{{ button.text }}</span>
+          </button>
+          }
+        </mat-menu>
+      </td>
+      } @for (column of settings.columns; track $index) {
+      <td>{{ getRowDisplayData(row, column) }}</td>
+      }
+    </tr>
+    }
+  </tbody>
+</table>
+<mat-paginator
+  (page)="handlePageEvent($event)"
+  [length]="settings.totalRows"
+  [pageSize]="settings.pageSize"
+  [pageSizeOptions]="[10, 25, 50]"
+  [pageIndex]="settings.pageIndex"
+  aria-label="Select page"
+></mat-paginator>
