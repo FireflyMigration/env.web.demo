@@ -15,7 +15,10 @@ export class ShippersComponent implements OnInit {
     {
       allowUpdate: true,
       allowInsert: true,
-
+      rowButtons: [{
+        name: 'click me',
+        click: r => alert('You clicked ' + r.companyName)
+      }],
       columnSettings: shippers =>
         [
           {
