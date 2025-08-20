@@ -9,6 +9,7 @@ import { TooltipProvider } from './components/ui/tooltip.tsx'
 import { cn } from './lib/utils.ts'
 import { useFormDialog } from './components/useFormDialog.tsx'
 import { dotnet } from './winforms-bridge/dotnet.ts'
+import DemoComponent from './app/demo.tsx'
 
 function App() {
   const form = useFormDialog()
@@ -63,7 +64,7 @@ function App() {
                       onOk: (value) => {
                         window.open(
                           '/home/ordersReport?' +
-                            new URLSearchParams(value).toString(),
+                          new URLSearchParams(value).toString(),
                           '_blank'
                         )
                       },
@@ -74,8 +75,11 @@ function App() {
                 >
                   Print Orders
                 </Link>
+                <Link to="/demo"
+                  className="text-sm font-medium transition-colors hover:text-primary"
+                >Demo</Link>
                 {dotnet && (
-                  <button className="text-sm font-medium transition-colors hover:text-primary" onClick={()=>{
+                  <button className="text-sm font-medium transition-colors hover:text-primary" onClick={() => {
                     dotnet?.showOrders()
                   }}>
                     Orders Screen
@@ -91,6 +95,7 @@ function App() {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/customers" element={<CustomerTable />} />
             <Route path="/orders" element={<OrdersTable />} />
+            <Route path="/demo" element={<DemoComponent />} />
           </Routes>
         </div>
       </TooltipProvider>
