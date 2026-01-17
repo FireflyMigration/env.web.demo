@@ -15,7 +15,7 @@ namespace ENV.Web
         IMyHttpContext _context;
         public WebHelper(bool postOnly=false) {
             
-            _context = new HttpContextBridgeToIHttpContext(System.Web.HttpContext.Current, postOnly, null);
+            _context = new HttpContextBridgeToIHttpContext(ENV.IO.WebContext.Current.Value, postOnly, null);
         }
         
         

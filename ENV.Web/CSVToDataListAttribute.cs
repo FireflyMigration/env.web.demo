@@ -1,5 +1,10 @@
 ﻿using System;
+#if NET6_0_OR_GREATER
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Http;
+#else
 using System.Web.Mvc;
+#endif
 using Firefly.Box;
 using ENV.IO;
 using System.Text;
@@ -25,8 +30,21 @@ namespace ENV.Web
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
+#if NET6_0_OR_GREATER
+            DataList r = _printCapture.GetDataList();
+            var response = filterContext.HttpContext.Response;
+            response.ContentType = "application/json";
+            using (var sw = new System.IO.StringWriter())
+            {
+                var writer = new JsonISerializedObjectWriter(sw);
+                r.ToWriter(writer);
+                writer.Dispose();
+                response.WriteAsync(sw.ToString()).Wait();
+            }
+#else
             DataResult r = _printCapture.GetDataList();
             r.DoResult(filterContext.HttpContext.Response);
+#endif
 
             base.OnActionExecuted(filterContext);
         }

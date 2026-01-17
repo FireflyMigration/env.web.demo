@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.1.11304.174 d18.0
+VisualStudioVersion = 18.1.11304.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind", "Northwind\Northwind.csProj", "{E68F89C2-006F-4F04-8277-B9BC71D47500}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserWindow", "BrowserWindow\BrowserWindow.csproj", "{66906370-142F-4295-AF67-D0E26B8B20CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.Products", "Northwind.Products\Northwind.Products.csproj", "{F2669BF4-F696-84D2-3A1D-FF76111FFF3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCore", "WebCore\WebCore.csproj", "{2B47A010-1C1E-6A7F-703D-5BDA4F878BB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{F2669BF4-F696-84D2-3A1D-FF76111FFF3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2669BF4-F696-84D2-3A1D-FF76111FFF3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2669BF4-F696-84D2-3A1D-FF76111FFF3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B47A010-1C1E-6A7F-703D-5BDA4F878BB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B47A010-1C1E-6A7F-703D-5BDA4F878BB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B47A010-1C1E-6A7F-703D-5BDA4F878BB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B47A010-1C1E-6A7F-703D-5BDA4F878BB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
-﻿using Firefly.Box;
+﻿using ENV.IO;
+using Firefly.Box;
 using Firefly.Box.Testing;
 using System;
 using System.Collections.Generic;
@@ -81,13 +82,13 @@ namespace ENV.Web
         public void ProcessRequestAspx()
         {
             PrgnameTypeRequest = true;
-            var r = System.Web.HttpContext.Current.Request;
+            var r = WebContext.Current.Value;
             ProcessRequest(r[ApiParameterName], r[IdParameterName]);
 
         }
         public void ProcessRequest(string name, string id = null)
         {
-            ProcessRequest(name, id, new HttpContextBridgeToIHttpContext(HttpContext.Current, PostOnly, HttpMethodParamName));
+            ProcessRequest(name, id, new HttpContextBridgeToIHttpContext(WebContext.Current.Value, PostOnly, HttpMethodParamName));
         }
         void ProcessRequest(string name, string id, IMyHttpContext context)
         {
@@ -96,7 +97,7 @@ namespace ENV.Web
             try
             {
                 Firefly.Box.Context.Current.SetNonUIThread();
-                var responseType = (System.Web.HttpContext.Current.Request.Params["_response"] ?? "J").ToUpper();
+                var responseType = (context.GetRequestParam("_response") ?? "J").ToUpper();
 
                 if (!PrgnameTypeRequest && !PostOnly)
                 {//fix id stuff
@@ -420,8 +421,8 @@ namespace ENV.Web
 
             if (!vmc.ModelState.IsValid)
             {
-                Response.Write(vmc.ModelState.ToJson());
                 Response.StatusCode = 400;
+                Response.Write(vmc.ModelState.ToJson());
             }
             else if (r != null)
                 Response.Write(r.ToJson());
@@ -431,11 +432,12 @@ namespace ENV.Web
         private static void MethodNotAllowed(WebResponse Response, ViewModel vmc, string name)
         {
             vmc.ModelState.AddError($"The requested resource does not support method '{name}'.");
-            Response.Write(vmc.ModelState.ToJson());
             Response.StatusCode = 405;
+            Response.Write(vmc.ModelState.ToJson());
             return;
         }
-
+#if NET6_0_OR_GREATER
+#else
         private static DataItem DoIt(System.Web.HttpRequest Request, ViewModel vmc, Func<DataItem, DataItem> action)
         {
             DataItem r;
@@ -449,7 +451,7 @@ namespace ENV.Web
 
             return r;
         }
-
+#endif
         private static void ResponseIsHtml(WebResponse Response)
         {
             Response.ContentType = "text/html";

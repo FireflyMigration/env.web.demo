@@ -8,6 +8,8 @@ using System.Xml;
 using ENV.Web;
 namespace ENV.Web
 {
+#if NET6_0_OR_GREATER
+#else
     public class DataResult : System.Web.Mvc.ActionResult
     {
         ISerializedObject _r;
@@ -109,4 +111,5 @@ namespace ENV.Web
             }
         }
     }
+#endif
 }

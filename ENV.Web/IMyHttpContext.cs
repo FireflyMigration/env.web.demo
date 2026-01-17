@@ -1,4 +1,6 @@
 ﻿
+using ENV.IO;
+
 namespace ENV.Web
 {
     interface IMyHttpContext
@@ -24,18 +26,19 @@ namespace ENV.Web
         void AddHeader(string name, string value);
         void Write(string what);
     }
+
     class HttpContextBridgeToIHttpContext : IMyHttpContext
     {
-        System.Web.HttpContext _current;
+        IWebContext _current;
 
-        
-        public HttpContextBridgeToIHttpContext(System.Web.HttpContext current,bool postOnly, string HttpMethodParamName)
+
+        public HttpContextBridgeToIHttpContext(IWebContext current, bool postOnly, string HttpMethodParamName)
         {
             _current = current;
-            Request = new WebReqestBridgeToRequest(current.Request, HttpMethodParamName);
+            Request = new WebReqestBridgeToRequest(current, HttpMethodParamName);
             if (postOnly)
                 Request = new PostOnlyWebRequest(Request);
-            Response = new WebResponseBridgeToResponse(current.Response);
+            Response = new WebResponseBridgeToResponse(current);
         }
 
         public WebRequest Request { get; private set; }
@@ -44,25 +47,22 @@ namespace ENV.Web
 
         public string GetRequestParam(string key)
         {
-            return _current.Request.Params[key];
+            return _current[key];
         }
     }
     internal class WebReqestBridgeToRequest : WebRequest
     {
-        System.Web.HttpRequest _request;
+        IWebContext _request;
         string _httpMethodParamName;
-        public WebReqestBridgeToRequest(System.Web.HttpRequest request,string httpMethodParamName)
+        public WebReqestBridgeToRequest(IWebContext request, string httpMethodParamName)
         {
             _request = request;
             _httpMethodParamName = httpMethodParamName;
         }
         public string GetRequestInputString()
         {
-            _request.InputStream.Position = 0;
-            using (var sr = new System.IO.StreamReader(_request.InputStream))
-            {
-                return sr.ReadToEnd();
-            }
+
+            return _request.GetRequestBody();
 
         }
 
@@ -71,7 +71,7 @@ namespace ENV.Web
             get
             {
                 if (!string.IsNullOrEmpty(_httpMethodParamName))
-                    return this[_httpMethodParamName]??"get";
+                    return this[_httpMethodParamName] ?? "get";
                 return _request.HttpMethod;
             }
         }
@@ -84,9 +84,9 @@ namespace ENV.Web
     }
     internal class WebResponseBridgeToResponse : WebResponse
     {
-        System.Web.HttpResponse _response;
+        IWebContext _response;
 
-        public WebResponseBridgeToResponse(System.Web.HttpResponse response)
+        public WebResponseBridgeToResponse(IWebContext response)
         {
             _response = response;
         }
@@ -106,6 +106,7 @@ namespace ENV.Web
 
 
     }
+
     class PostOnlyWebRequest : WebRequest
     {
         WebRequest _request;

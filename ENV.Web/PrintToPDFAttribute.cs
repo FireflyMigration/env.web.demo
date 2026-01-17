@@ -1,5 +1,10 @@
 ﻿using ENV.Printing;
+#if NET6_0_OR_GREATER
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc;
+#else
 using System.Web.Mvc;
+#endif
 namespace ENV.Web
 {
     public class PrintToPDFAttribute : ActionFilterAttribute
@@ -21,6 +26,8 @@ namespace ENV.Web
             base.OnActionExecuted(filterContext);
         }
     }
+#if NET6_0_OR_GREATER
+#else
     public class DataCollectorAttribute : ActionFilterAttribute
     {
         
@@ -41,4 +48,5 @@ namespace ENV.Web
             base.OnActionExecuted(filterContext);
         }
     }
+#endif
 }
